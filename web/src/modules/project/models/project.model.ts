@@ -40,7 +40,6 @@ export type Project = {
   /** Link chi tiet du an (trang ngoai hoac noi bo) */
   detailUrl: string;
   isHot: boolean;
-  isFavorite: boolean;
   publishedAt: string;
 };
 

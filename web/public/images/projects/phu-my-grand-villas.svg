@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Phối cảnh minh họa dự án Phú Mỹ Grand Villas">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#3a1f52"/>
+<stop offset="55%" stop-color="#8e4a7d"/>
+<stop offset="100%" stop-color="#f0a98c"/>
+</linearGradient>
+<radialGradient id="glow" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#ffd0a1" stop-opacity="0.75"/>
+<stop offset="100%" stop-color="#ffd0a1" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#6b3b6a"/>
+<stop offset="100%" stop-color="#33203f"/>
+</linearGradient>
+<radialGradient id="vignette" cx="50%" cy="45%" r="75%">
+<stop offset="60%" stop-color="#000" stop-opacity="0"/>
+<stop offset="100%" stop-color="#000" stop-opacity="0.4"/>
+</radialGradient>
+</defs>
+<rect width="800" height="500" fill="url(#sky)"/>
+<circle cx="230.5" cy="106.8" r="150" fill="url(#glow)"/>
+<circle cx="230.5" cy="106.8" r="30" fill="#ffd0a1" opacity="0.9"/>
+<ellipse cx="273" cy="108.7" rx="107.8" ry="12.5" fill="#fff" opacity="0.1"/><ellipse cx="268.5" cy="61" rx="81" ry="19.6" fill="#fff" opacity="0.2"/><ellipse cx="341.5" cy="96.3" rx="89.1" ry="13.1" fill="#fff" opacity="0.1"/><ellipse cx="304.4" cy="150.7" rx="50.3" ry="17.2" fill="#fff" opacity="0.1"/><ellipse cx="477" cy="53.9" rx="94.7" ry="19.7" fill="#fff" opacity="0.2"/>
+<polygon points="0,500 0,310 80,301.1 160,308.4 240,316.6 320,268.8 400,292.2 480,262.7 560,284.8 640,298 720,297.7 800,278.4 800,500" fill="#5b3160" opacity="0.85"/>
+<rect x="-10" y="284.4" width="92.9" height="65.6" fill="#241531"/><polygon points="-16,284.4 36.5,258.7 88.9,284.4" fill="#33203f"/><rect x="2" y="298.4" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="28" y="298.4" width="10" height="12" fill="#ffd0a1" opacity="0.6"/><rect x="54" y="298.4" width="10" height="12" fill="#ffd0a1" opacity="0.6"/><rect x="113.8" y="290.7" width="109.6" height="59.3" fill="#241531"/><polygon points="107.8,290.7 168.6,252.7 229.4,290.7" fill="#33203f"/><rect x="125.8" y="304.7" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="151.8" y="304.7" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="177.8" y="304.7" width="10" height="12" fill="#ffd0a1" opacity="0.8"/><rect x="203.8" y="304.7" width="10" height="12" fill="#ffd0a1" opacity="0.7"/><rect x="257.9" y="283.4" width="85.9" height="66.6" fill="#241531"/><polygon points="251.9,283.4 300.8,250.1 349.8,283.4" fill="#33203f"/><rect x="269.9" y="297.4" width="10" height="12" fill="#ffd0a1" opacity="0.6"/><rect x="295.9" y="297.4" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="321.9" y="297.4" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="375.6" y="285.2" width="115" height="64.8" fill="#241531"/><polygon points="369.6,285.2 433.1,249.4 496.6,285.2" fill="#33203f"/><rect x="387.6" y="299.2" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="413.6" y="299.2" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="439.6" y="299.2" width="10" height="12" fill="#ffd0a1" opacity="0.7"/><rect x="465.6" y="299.2" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="510" y="286" width="78.6" height="64" fill="#241531"/><polygon points="504,286 549.3,248.3 594.6,286" fill="#33203f"/><rect x="522" y="300" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="548" y="300" width="10" height="12" fill="#ffd0a1" opacity="0.7"/><rect x="574" y="300" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="628.6" y="272.6" width="87.4" height="77.4" fill="#241531"/><polygon points="622.6,272.6 672.3,244.2 722,272.6" fill="#33203f"/><rect x="640.6" y="286.6" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="666.6" y="286.6" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="692.6" y="286.6" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="744.7" y="296" width="100.6" height="54" fill="#241531"/><polygon points="738.7,296 795,272.8 851.3,296" fill="#33203f"/><rect x="756.7" y="310" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="782.7" y="310" width="10" height="12" fill="#ffd0a1" opacity="0.7"/><rect x="808.7" y="310" width="10" height="12" fill="#ffd0a1" opacity="0.5"/>
+<rect x="0" y="400" width="800" height="100" fill="url(#water)"/>
+<rect x="0" y="400" width="800" height="2" fill="#fff" opacity="0.18"/>
+<rect x="476.7" y="345.2" width="4" height="26" fill="#241531" opacity="0.9"/><circle cx="478.7" cy="334.4" r="18" fill="#4a5f3a" opacity="0.95"/><rect x="97.1" y="322.6" width="4" height="39" fill="#241531" opacity="0.9"/><circle cx="99.1" cy="306.4" r="27" fill="#4a5f3a" opacity="0.95"/><rect x="137.4" y="324.9" width="4" height="33.8" fill="#241531" opacity="0.9"/><circle cx="139.4" cy="310.9" r="23.4" fill="#4a5f3a" opacity="0.95"/><rect x="776" y="323.1" width="4" height="33.8" fill="#241531" opacity="0.9"/><circle cx="778" cy="309.1" r="23.4" fill="#4a5f3a" opacity="0.95"/><rect x="56.2" y="341.9" width="4" height="20.8" fill="#241531" opacity="0.9"/><circle cx="58.2" cy="333.3" r="14.4" fill="#4a5f3a" opacity="0.95"/><rect x="623.7" y="348.3" width="4" height="23.4" fill="#241531" opacity="0.9"/><circle cx="625.7" cy="338.6" r="16.2" fill="#4a5f3a" opacity="0.95"/><rect x="9.6" y="337.8" width="4" height="31.2" fill="#241531" opacity="0.9"/><circle cx="11.6" cy="324.8" r="21.6" fill="#4a5f3a" opacity="0.95"/><rect x="230.3" y="342.3" width="4" height="26" fill="#241531" opacity="0.9"/><circle cx="232.3" cy="331.5" r="18" fill="#4a5f3a" opacity="0.95"/><rect x="166.4" y="333" width="4" height="33.8" fill="#241531" opacity="0.9"/><circle cx="168.4" cy="319" r="23.4" fill="#4a5f3a" opacity="0.95"/>
+<rect width="800" height="500" fill="url(#vignette)"/>
+</svg>

@@ -4,15 +4,17 @@ import Link from 'next/link';
 import { FiExternalLink, FiMapPin } from 'react-icons/fi';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import PlaceholderThumb from '@/common/components/PlaceholderThumb';
+import { useFavorites } from '../hooks/useFavorites';
 import { SEGMENT_LABELS, type Project } from '../models/project.model';
 
 type ProjectCardProps = {
   project: Project;
-  isFavorite: boolean;
-  onToggleFavorite: (publicId: string) => void;
 };
 
-const ProjectCard = ({ project, isFavorite, onToggleFavorite }: ProjectCardProps) => {
+const ProjectCard = ({ project }: ProjectCardProps) => {
+  const { isFavorite: checkFavorite, toggle } = useFavorites();
+  const isFavorite = checkFavorite(project.publicId);
+
   const segmentBadgeClass =
     project.segment === 'cao-tang'
       ? 'bg-navy-600 text-white'
@@ -24,11 +26,19 @@ const ProjectCard = ({ project, isFavorite, onToggleFavorite }: ProjectCardProps
         <Link href={project.detailUrl} className="block h-full w-full">
           <PlaceholderThumb
             seed={project.publicId}
-            label={project.name}
             src={project.thumbnailUrl || undefined}
-            alt={`Ảnh dự án ${project.name}`}
+            alt={`Phối cảnh dự án ${project.name}`}
             className="transition duration-500 group-hover:scale-105"
           />
+
+          {/* Lop phu toi dan tu duoi len de chu luon doc duoc tren moi anh */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent"
+          />
+          <span className="pointer-events-none absolute inset-x-0 bottom-0 px-4 pb-3 text-center text-lg font-bold uppercase leading-tight tracking-wide text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+            {project.name}
+          </span>
         </Link>
 
         <span
@@ -39,7 +49,7 @@ const ProjectCard = ({ project, isFavorite, onToggleFavorite }: ProjectCardProps
 
         <button
           type="button"
-          onClick={() => onToggleFavorite(project.publicId)}
+          onClick={() => toggle(project.publicId)}
           aria-pressed={isFavorite}
           aria-label={
             isFavorite

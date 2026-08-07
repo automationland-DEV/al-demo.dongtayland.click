@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Phối cảnh minh họa dự án Green Harbor Hạ Long">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#3a1f52"/>
+<stop offset="55%" stop-color="#8e4a7d"/>
+<stop offset="100%" stop-color="#f0a98c"/>
+</linearGradient>
+<radialGradient id="glow" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#ffd0a1" stop-opacity="0.75"/>
+<stop offset="100%" stop-color="#ffd0a1" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#6b3b6a"/>
+<stop offset="100%" stop-color="#33203f"/>
+</linearGradient>
+<radialGradient id="vignette" cx="50%" cy="45%" r="75%">
+<stop offset="60%" stop-color="#000" stop-opacity="0"/>
+<stop offset="100%" stop-color="#000" stop-opacity="0.4"/>
+</radialGradient>
+</defs>
+<rect width="800" height="500" fill="url(#sky)"/>
+<circle cx="481.9" cy="155.8" r="150" fill="url(#glow)"/>
+<circle cx="481.9" cy="155.8" r="30" fill="#ffd0a1" opacity="0.9"/>
+<ellipse cx="497.5" cy="116" rx="108.7" ry="21.2" fill="#fff" opacity="0.2"/><ellipse cx="501.7" cy="45.9" rx="79.1" ry="20.3" fill="#fff" opacity="0.2"/><ellipse cx="282.9" cy="41.8" rx="62.8" ry="14.4" fill="#fff" opacity="0.2"/><ellipse cx="603" cy="61" rx="63.2" ry="10.7" fill="#fff" opacity="0.1"/><ellipse cx="615.4" cy="82.6" rx="74.5" ry="18.4" fill="#fff" opacity="0.2"/>
+<polygon points="0,500 0,317.1 80,290.2 160,302.1 240,273.5 320,323.9 400,266 480,269.6 560,293.7 640,314.2 720,329.9 800,317.1 800,500" fill="#5b3160" opacity="0.85"/>
+<rect x="-10" y="284" width="108.6" height="66" fill="#241531"/><polygon points="-16,284 44.3,247.5 104.6,284" fill="#33203f"/><rect x="2" y="298" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="28" y="298" width="10" height="12" fill="#ffd0a1" opacity="0.8"/><rect x="54" y="298" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="80" y="298" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="115.7" y="288.2" width="100.7" height="61.8" fill="#241531"/><polygon points="109.7,288.2 166,262.2 222.4,288.2" fill="#33203f"/><rect x="127.7" y="302.2" width="10" height="12" fill="#ffd0a1" opacity="0.6"/><rect x="153.7" y="302.2" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="179.7" y="302.2" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="245.1" y="282.6" width="92.6" height="67.4" fill="#241531"/><polygon points="239.1,282.6 291.4,257.9 343.7,282.6" fill="#33203f"/><rect x="257.1" y="296.6" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="283.1" y="296.6" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="309.1" y="296.6" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="362.9" y="278.4" width="106.9" height="71.6" fill="#241531"/><polygon points="356.9,278.4 416.4,243.1 475.8,278.4" fill="#33203f"/><rect x="374.9" y="292.4" width="10" height="12" fill="#ffd0a1" opacity="0.8"/><rect x="400.9" y="292.4" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="426.9" y="292.4" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="452.9" y="292.4" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="491.6" y="274.1" width="86.4" height="75.9" fill="#241531"/><polygon points="485.6,274.1 534.8,243.5 584,274.1" fill="#33203f"/><rect x="503.6" y="288.1" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="529.6" y="288.1" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="555.6" y="288.1" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="616.9" y="273.2" width="120.5" height="76.8" fill="#241531"/><polygon points="610.9,273.2 677.2,244 743.4,273.2" fill="#33203f"/><rect x="628.9" y="287.2" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="654.9" y="287.2" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="680.9" y="287.2" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="706.9" y="287.2" width="10" height="12" fill="#ffd0a1" opacity="0.5"/><rect x="762.9" y="297.1" width="97.3" height="52.9" fill="#241531"/><polygon points="756.9,297.1 811.6,274.3 866.2,297.1" fill="#33203f"/><rect x="774.9" y="311.1" width="10" height="12" fill="#ffd0a1" opacity="0.4"/><rect x="800.9" y="311.1" width="10" height="12" fill="#ffd0a1" opacity="0.8"/><rect x="826.9" y="311.1" width="10" height="12" fill="#ffd0a1" opacity="0.7"/>
+<rect x="0" y="400" width="800" height="100" fill="url(#water)"/>
+<rect x="0" y="400" width="800" height="2" fill="#fff" opacity="0.18"/>
+<rect x="739.2" y="353.7" width="4" height="28.6" fill="#241531" opacity="0.9"/><circle cx="741.2" cy="341.8" r="19.8" fill="#4a5f3a" opacity="0.95"/><rect x="174.2" y="357.8" width="4" height="26" fill="#241531" opacity="0.9"/><circle cx="176.2" cy="347" r="18" fill="#4a5f3a" opacity="0.95"/><rect x="242.6" y="349.4" width="4" height="36.4" fill="#241531" opacity="0.9"/><circle cx="244.6" cy="334.3" r="25.2" fill="#4a5f3a" opacity="0.95"/><rect x="341.8" y="342.2" width="4" height="33.8" fill="#241531" opacity="0.9"/><circle cx="343.8" cy="328.2" r="23.4" fill="#4a5f3a" opacity="0.95"/><rect x="607.7" y="339.2" width="4" height="31.2" fill="#241531" opacity="0.9"/><circle cx="609.7" cy="326.2" r="21.6" fill="#4a5f3a" opacity="0.95"/><rect x="652.5" y="337.2" width="4" height="23.4" fill="#241531" opacity="0.9"/><circle cx="654.5" cy="327.5" r="16.2" fill="#4a5f3a" opacity="0.95"/><rect x="642" y="344.7" width="4" height="23.4" fill="#241531" opacity="0.9"/><circle cx="644" cy="335" r="16.2" fill="#4a5f3a" opacity="0.95"/><rect x="328.2" y="336.2" width="4" height="36.4" fill="#241531" opacity="0.9"/><circle cx="330.2" cy="321.1" r="25.2" fill="#4a5f3a" opacity="0.95"/><rect x="678.1" y="343.6" width="4" height="26" fill="#241531" opacity="0.9"/><circle cx="680.1" cy="332.8" r="18" fill="#4a5f3a" opacity="0.95"/>
+<rect width="800" height="500" fill="url(#vignette)"/>
+</svg>
