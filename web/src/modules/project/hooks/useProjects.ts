@@ -2,6 +2,7 @@
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ProjectService } from '../services/project.service';
+import type { ProjectDetail, UnitQuery } from '../models/project-detail.model';
 import type { ProjectQuery } from '../models/project.model';
 
 /**
@@ -30,4 +31,25 @@ export const useProjectHighlights = () =>
     queryKey: ['project-highlights'],
     queryFn: () => ProjectService.highlights(),
     staleTime: 5 * 60 * 1000,
+  });
+
+/**
+ * `initialProject` do route (server component) doc san va truyen xuong, nen
+ * HTML tra ve tu server da co du noi dung - quan trong voi SEO trang chi tiet.
+ * Khong co no thi lan tai dau chi ra khung xuong.
+ */
+export const useProjectDetail = (slug: string, initialProject?: ProjectDetail) =>
+  useQuery({
+    queryKey: ['project-detail', slug] as const,
+    queryFn: () => ProjectService.detail(slug),
+    initialData: initialProject,
+    staleTime: 5 * 60 * 1000,
+  });
+
+export const useProjectUnits = (slug: string, query: UnitQuery) =>
+  useQuery({
+    queryKey: ['project-units', slug, query] as const,
+    queryFn: () => ProjectService.units(slug, query),
+    // Giu bang hang cu khi doi trang/loc de bang khong nhay ve rong
+    placeholderData: keepPreviousData,
   });

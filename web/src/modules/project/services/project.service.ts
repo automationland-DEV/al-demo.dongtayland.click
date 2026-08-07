@@ -10,11 +10,18 @@
  * Khong component hay hook nao duoc doc mock truc tiep - moi thu di qua day,
  * nen viec doi sang API that chi cham vao dung file nay.
  */
+import { getProjectDetail, getProjectUnits } from '../mocks/project-detail.mock';
 import {
   MOCK_DEVELOPERS,
   MOCK_PROJECTS,
   MOCK_REGIONS,
 } from '../mocks/projects.mock';
+import type {
+  PaginatedUnits,
+  ProjectDetail,
+  ProjectUnit,
+  UnitQuery,
+} from '../models/project-detail.model';
 import {
   PROPERTY_TYPE_LABELS,
   STATUS_LABELS,
@@ -52,6 +59,22 @@ const matchesQuery = (project: Project, query: ProjectQuery): boolean => {
     `${project.name} ${project.tagline} ${project.address} ${project.developerName}`,
   );
   return haystack.includes(keyword);
+};
+
+/** Khong sua mang goc: bang hang duoc cache va dung lai giua cac lan goi */
+const sortUnits = (units: ProjectUnit[], sort: UnitQuery['sort']): ProjectUnit[] => {
+  switch (sort) {
+    case 'gia-tang':
+      return [...units].sort((a, b) => a.listedPrice - b.listedPrice);
+    case 'gia-giam':
+      return [...units].sort((a, b) => b.listedPrice - a.listedPrice);
+    case 'dien-tich-tang':
+      return [...units].sort((a, b) => a.landArea - b.landArea);
+    case 'dien-tich-giam':
+      return [...units].sort((a, b) => b.landArea - a.landArea);
+    default:
+      return units;
+  }
 };
 
 export const ProjectService = {
@@ -125,5 +148,51 @@ export const ProjectService = {
         projects: newest.slice(0, 5).map(({ publicId, slug, name }) => ({ publicId, slug, name })),
       },
     ]);
+  },
+
+  /**
+   * Chi tiet mot du an. Tra ve null khi khong co slug do - trang goi
+   * notFound() de Next tra dung 404 thay vi trang trong.
+   *
+   * KHI CO BACKEND: GET /projects/:slug
+   */
+  detail: async (slug: string): Promise<ProjectDetail | null> =>
+    delay(getProjectDetail(slug)),
+
+  /**
+   * Bang hang cua mot du an. Tach khoi `detail` vi mot du an co the co hang
+   * nghin can - loc, sap xep va phan trang deu se do backend lam.
+   *
+   * KHI CO BACKEND: GET /projects/:slug/units?page=&limit=&sort=...
+   */
+  units: async (slug: string, query: UnitQuery): Promise<PaginatedUnits> => {
+    const all = getProjectUnits(slug);
+
+    // Bo loc lay tu chinh bang hang nen khong bao gio hien lua chon rong ket qua
+    const facets = {
+      phaseNames: [...new Set(all.map((unit) => unit.phaseName))],
+      propertyTypeLabels: [...new Set(all.map((unit) => unit.propertyTypeLabel))],
+      directions: [...new Set(all.map((unit) => unit.direction))],
+    };
+
+    const matched = all.filter((unit) => {
+      if (query.phaseName && unit.phaseName !== query.phaseName) return false;
+      if (query.propertyTypeLabel && unit.propertyTypeLabel !== query.propertyTypeLabel)
+        return false;
+      if (query.direction && unit.direction !== query.direction) return false;
+      if (query.status && unit.status !== query.status) return false;
+      return true;
+    });
+
+    const sorted = sortUnits(matched, query.sort);
+    const start = (query.page - 1) * query.limit;
+
+    return delay({
+      units: sorted.slice(start, start + query.limit),
+      total: sorted.length,
+      page: query.page,
+      limit: query.limit,
+      facets,
+    });
   },
 };

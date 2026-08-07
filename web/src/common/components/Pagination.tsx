@@ -8,7 +8,7 @@ import {
   FiChevronsRight,
 } from 'react-icons/fi';
 
-const PAGE_SIZE_OPTIONS = [12, 24, 48];
+const DEFAULT_PAGE_SIZE_OPTIONS = [12, 24, 48];
 
 type PaginationProps = {
   currentPage: number;
@@ -17,6 +17,9 @@ type PaginationProps = {
   limit: number;
   onPageChange: (page: number) => void;
   onLimitChange: (limit: number) => void;
+  /** Nhan cho trinh doc man hinh - moi bang tren trang can mot nhan rieng */
+  label?: string;
+  pageSizeOptions?: number[];
 };
 
 /** Sinh day trang co dau "..." khi qua nhieu trang */
@@ -47,6 +50,8 @@ const Pagination = ({
   limit,
   onPageChange,
   onLimitChange,
+  label = 'Phân trang danh sách dự án',
+  pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
 }: PaginationProps) => {
   const pages = useMemo(
     () => buildPages(currentPage, totalPages),
@@ -55,7 +60,7 @@ const Pagination = ({
 
   return (
     <nav
-      aria-label="Phân trang danh sách dự án"
+      aria-label={label}
       className="flex flex-wrap items-center justify-center gap-2 py-6"
     >
       <button
@@ -119,13 +124,13 @@ const Pagination = ({
       </button>
 
       <label className="ml-2 flex items-center gap-2 text-theme-sm text-gray-500">
-        <span className="sr-only">Số dự án mỗi trang</span>
+        <span className="sr-only">Số dòng mỗi trang</span>
         <select
           value={limit}
           onChange={(event) => onLimitChange(Number(event.target.value))}
           className="h-9 rounded border border-gray-300 bg-white px-2 text-theme-sm text-gray-700 outline-none transition focus:border-brand-400 focus:shadow-focus-ring"
         >
-          {PAGE_SIZE_OPTIONS.map((option) => (
+          {pageSizeOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>

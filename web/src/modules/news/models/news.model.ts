@@ -5,6 +5,8 @@ export type NewsArticle = {
   publicId: string;
   slug: string;
   title: string;
+  /** Doan mo dau - the tin tuc nho tren trang danh sach khong hien truong nay */
+  excerpt: string;
   category: NewsCategory;
   thumbnailUrl: string;
   publishedAt: string;

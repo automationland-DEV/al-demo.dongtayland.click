@@ -128,9 +128,17 @@ of the repo's conventions — see the `realestate-domain` skill for the target
 model and build order.
 
 `web/` is the newest app and currently runs on **mock data**: the project list
-page is complete UI-side, backed by `web/src/modules/project/services/project.service.ts`,
+page and the project detail page (`/du-an/[slug]`, 11 tabs) are complete
+UI-side, both backed by `web/src/modules/project/services/project.service.ts`,
 which reads from `mocks/` behind an API-shaped interface. When the backend
 `projects` endpoints land, only that one file changes.
+
+Detail-page specifics: `models/project-detail.model.ts` is the contract for all
+11 tabs; the active tab lives in `?tab=`. The bảng hàng (`quy-can`) is a
+**separate paginated call** (`ProjectService.units`), not part of `ProjectDetail`,
+because one project can hold hundreds of units. The route server-reads the
+project and passes it to the client component as `initialData`, so the detail
+HTML is server-rendered for SEO.
 
 ## Skills
 
