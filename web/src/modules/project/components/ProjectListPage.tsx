@@ -242,6 +242,9 @@ const ProjectListPage = () => {
           values={filterValues}
           options={options}
           isLoadingOptions={optionsQuery.isLoading}
+          activeCount={activeChips.length}
+          resultCount={total}
+          onClearAll={clearAllFilters}
           onChange={handleFilterChange}
         />
       </div>

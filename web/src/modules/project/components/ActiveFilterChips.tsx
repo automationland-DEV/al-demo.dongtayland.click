@@ -18,7 +18,7 @@ const ActiveFilterChips = ({ chips, onRemove, onClearAll }: ActiveFilterChipsPro
   if (chips.length === 0) return null;
 
   return (
-    <div className="mb-4 flex flex-wrap items-center gap-2">
+    <div className="mx-auto mb-4 flex max-w-5xl flex-wrap items-center justify-center gap-2">
       <span className="text-theme-xs font-medium uppercase tracking-wide text-gray-400">
         Đang lọc
       </span>
