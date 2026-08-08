@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import SiteHeader from '@/common/layout/SiteHeader';
 import SiteFooter from '@/common/layout/SiteFooter';
 import BackToTop from '@/common/components/BackToTop';
+import ChatWidget from '@/modules/chat/components/ChatWidget';
 import QueryProvider from '@/common/providers/QueryProvider';
 
-// globals.css khai bao --font-sans la Inter; khong nap o day thi trang roi ve
-// Helvetica/Arial va lech han voi thiet ke.
-const inter = Inter({
+
+const openSans = Open_Sans({
   subsets: ['latin', 'vietnamese'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-open-sans',
 });
 
 export const metadata: Metadata = {
@@ -31,13 +31,23 @@ export default function RootLayout({
   return (
     // suppressHydrationWarning: cac extension trinh duyet (Bitdefender...) chen
     // thuoc tinh vao <html>/<body> truoc khi React hydrate -> bao lech gia.
-    <html lang="vi" className={inter.variable} suppressHydrationWarning>
+    // data-scroll-behavior: globals.css dat scroll-behavior:smooth cho <html>,
+    // khien ca cu nhay ve dau trang khi doi route cung bi lam muot - trang giat
+    // mot nhip va thoang hien nham phan noi dung. Thuoc tinh nay bao cho Next
+    // biet smooth la co y, de no tat tam trong luc chuyen trang roi bat lai.
+    <html
+      lang="vi"
+      className={openSans.variable}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className="flex min-h-screen flex-col" suppressHydrationWarning>
         <QueryProvider>
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
           <BackToTop />
+          <ChatWidget />
         </QueryProvider>
       </body>
     </html>
