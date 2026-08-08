@@ -1,14 +1,21 @@
 /**
  * Cac manh giao dien lap lai nhieu lan tren trang chi tiet du an.
  *
- * Gom o mot cho vi thiet ke dung lai chung: tieu de can giua, panel xanh ngoc,
- * khung anh bo goc, nut play. Sua o day la sua ca 11 tab.
+ * QUAN TRONG: ten export va chu ky prop cua 7 manh duoi day la GIAO KEO voi ca
+ * 11 tab. Doi hinh thuc thoai mai, nhung doi ten hay doi prop la vo het cac tab.
+ *
+ * Ngon ngu thi giac (ban thiet ke moi):
+ *  - Noi dung nam trong the trang co vien mo va bong nhe, thay cho mang mau dac.
+ *  - Nhan manh bang GACH MAU ben trai + chu navy, thay cho kieu can giua cu:
+ *    mat doc quet theo mot le doc duy nhat nen nhanh hon.
+ *  - Mang mau toi chi danh cho panel ke chuyen (JadePanel), va la dai chuyen mau
+ *    navy -> jade cho co chieu sau thay vi mot mau xanh phang.
  */
 import type { ReactNode } from 'react';
 import { FiPlay } from 'react-icons/fi';
 import PlaceholderThumb from '@/common/components/PlaceholderThumb';
 
-/** Tieu de can giua kem dong mo ta - dung cho Mat bang, San pham, Tien ich... */
+/** Tieu de muc - can trai, co gach mau dan truoc */
 export const SectionHeading = ({
   title,
   subtitle,
@@ -16,13 +23,23 @@ export const SectionHeading = ({
   title: string;
   subtitle?: string;
 }) => (
-  <div className="mb-6 text-center">
-    <h2 className="text-xl font-bold text-jade-600">{title}</h2>
-    {subtitle && <p className="mt-1 text-theme-sm text-gray-500">{subtitle}</p>}
+  <div className="mb-6 flex items-start gap-3">
+    <span aria-hidden className="brand-gradient mt-1 h-9 w-1 shrink-0 rounded-full" />
+    <div className="min-w-0">
+      <h2 className="text-xl font-bold tracking-tight text-navy-800 sm:text-2xl">
+        {title}
+      </h2>
+      {subtitle && <p className="mt-1 text-theme-sm text-gray-500">{subtitle}</p>}
+    </div>
   </div>
 );
 
-/** Panel nen xanh ngoc, chiem tron chieu ngang khu noi dung */
+/**
+ * Panel toi mau cho cac khoi ke chuyen (gioi thieu, thong so, ket bai).
+ *
+ * Van giu ten JadePanel vi 11 tab dang goi, nhung nen gio la dai chuyen mau
+ * navy -> jade kem mot vong vien sang ben trong cho bot phang.
+ */
 export const JadePanel = ({
   children,
   className = '',
@@ -31,15 +48,21 @@ export const JadePanel = ({
   className?: string;
 }) => (
   <section
-    className={`overflow-hidden rounded-xl bg-linear-to-br from-jade-600 via-jade-500 to-jade-600 p-6 shadow-panel sm:p-8 ${className}`}
+    className={`relative overflow-hidden rounded-2xl bg-linear-to-br from-navy-800 via-navy-700 to-jade-700 p-6 shadow-panel ring-1 ring-white/10 sm:p-8 ${className}`}
   >
-    {children}
+    {/* Quang sang goc tren phai cho mang mau co chieu sau */}
+    <span
+      aria-hidden
+      className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-jade-400/20 blur-3xl"
+    />
+    <div className="relative">{children}</div>
   </section>
 );
 
-/** Tieu de vang trong panel xanh, co gach chan ngan ben duoi */
+/** Tieu de vang ben trong panel toi mau */
 export const PanelTitle = ({ children }: { children: ReactNode }) => (
-  <h2 className="mb-4 inline-block border-b-2 border-gold-400 pb-1.5 text-lg font-bold text-gold-300">
+  <h2 className="mb-4 flex items-center gap-2.5 text-lg font-bold text-gold-300">
+    <span aria-hidden className="h-5 w-1 shrink-0 rounded-full bg-gold-400" />
     {children}
   </h2>
 );
@@ -63,7 +86,9 @@ export const MediaFrame = ({
   ratio?: string;
   className?: string;
 }) => (
-  <div className={`relative ${ratio} w-full overflow-hidden rounded-lg bg-gray-100 ${className}`}>
+  <div
+    className={`relative ${ratio} w-full overflow-hidden rounded-xl bg-gray-100 ${className}`}
+  >
     <PlaceholderThumb seed={seed} src={src || undefined} alt={alt} label={label} />
   </div>
 );
@@ -72,7 +97,11 @@ export const MediaFrame = ({
 export const PlayOverlay = ({ label }: { label: string }) => (
   <span className="absolute inset-0 flex items-center justify-center">
     <span
-      className="flex h-14 w-14 items-center justify-center rounded-full bg-jade-700/80 text-white shadow-card-hover transition group-hover:scale-110 group-hover:bg-jade-600"
+      aria-hidden
+      className="absolute h-16 w-16 rounded-full bg-white/25 blur-md transition group-hover:bg-white/40"
+    />
+    <span
+      className="relative flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-jade-700 shadow-card-hover transition duration-300 group-hover:scale-110 group-hover:bg-white"
       aria-hidden
     >
       <FiPlay className="ml-0.5 text-xl" />
@@ -96,7 +125,11 @@ export const CarouselDots = ({
   if (count <= 1) return null;
 
   return (
-    <div className="mt-5 flex items-center justify-center gap-2" role="tablist" aria-label={label}>
+    <div
+      className="mt-6 flex items-center justify-center gap-2"
+      role="tablist"
+      aria-label={label}
+    >
       {Array.from({ length: count }).map((_, index) => (
         <button
           key={index}
@@ -105,8 +138,8 @@ export const CarouselDots = ({
           aria-selected={index === current}
           aria-label={`Trang ${index + 1}`}
           onClick={() => onSelect(index)}
-          className={`h-2 rounded-full transition-all ${
-            index === current ? 'w-6 bg-jade-500' : 'w-2 bg-gray-300 hover:bg-gray-400'
+          className={`h-2 rounded-full transition-all duration-300 ${
+            index === current ? 'brand-gradient w-8' : 'w-2 bg-gray-300 hover:bg-gray-400'
           }`}
         />
       ))}
@@ -116,7 +149,7 @@ export const CarouselDots = ({
 
 /** Trang thai rong dung chung cho cac tab chua co du lieu */
 export const TabEmptyState = ({ message }: { message: string }) => (
-  <div className="rounded-lg border border-dashed border-gray-300 bg-white p-12 text-center">
+  <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-14 text-center">
     <p className="text-theme-sm text-gray-500">{message}</p>
   </div>
 );

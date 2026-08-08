@@ -2,14 +2,7 @@
 
 import { useState } from 'react';
 import { FiPhone } from 'react-icons/fi';
-import {
-  HiOutlineBanknotes,
-  HiOutlineMap,
-  HiOutlineUserGroup,
-} from 'react-icons/hi2';
-import type { ReactNode } from 'react';
-import type { ProjectDetail, ProjectStat } from '../../../models/project-detail.model';
-import ProjectHeroCarousel from '../ProjectHeroCarousel';
+import type { ProjectDetail } from '../../../models/project-detail.model';
 import {
   CarouselDots,
   JadePanel,
@@ -19,12 +12,6 @@ import {
   SectionHeading,
 } from '../shared';
 
-const STAT_ICONS: Record<ProjectStat['key'], ReactNode> = {
-  scale: <HiOutlineMap aria-hidden />,
-  capital: <HiOutlineBanknotes aria-hidden />,
-  population: <HiOutlineUserGroup aria-hidden />,
-};
-
 const PRODUCTS_PER_PAGE = 3;
 const AMENITIES_PER_PAGE = 4;
 
@@ -33,25 +20,6 @@ const paginate = <T,>(items: T[], size: number): T[][] =>
   Array.from({ length: Math.ceil(items.length / size) }, (_, page) =>
     items.slice(page * size, page * size + size),
   );
-
-const StatCards = ({ stats }: { stats: ProjectStat[] }) => (
-  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-    {stats.map((stat) => (
-      <div
-        key={stat.key}
-        className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-card"
-      >
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-jade-50 text-2xl text-jade-500">
-          {STAT_ICONS[stat.key]}
-        </span>
-        <div className="min-w-0">
-          <p className="text-theme-xs uppercase tracking-wide text-gray-500">{stat.label}</p>
-          <p className="truncate text-xl font-bold text-accent-500">{stat.value}</p>
-        </div>
-      </div>
-    ))}
-  </div>
-);
 
 /** Panel xanh: chu ben trai, o video ben phai - dung cho ca khoi mo va khoi ket */
 const StoryPanel = ({
@@ -93,9 +61,8 @@ const OverviewTab = ({ project }: { project: ProjectDetail }) => {
 
   return (
     <div className="space-y-12">
-      <ProjectHeroCarousel slides={project.hero} projectName={project.name} />
-
-      <StatCards stats={project.stats} />
+      {/* Bang anh hero va dai chi so da chuyen len ProjectHero o dau trang -
+          chung thuoc ve ca trang chu khong rieng tab nay. */}
 
       {/* Tong quan du an: thong so ben trai, phoi canh ben phai */}
       <JadePanel>

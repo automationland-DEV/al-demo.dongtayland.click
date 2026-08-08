@@ -10,7 +10,8 @@ import {
   type ProjectDetail,
   type ProjectDetailTabKey,
 } from '../../models/project-detail.model';
-import ProjectDetailHeader from './ProjectDetailHeader';
+import ProjectHero from './ProjectHero';
+import ProjectSidebar from './ProjectSidebar';
 import ProjectTabNav from './ProjectTabNav';
 import DocumentsTab from './tabs/DocumentsTab';
 import FloorPlanTab from './tabs/FloorPlanTab';
@@ -26,15 +27,25 @@ import UnitsTab from './tabs/UnitsTab';
 
 const TAB_PARAM = 'tab';
 
+/**
+ * Cac tab can tron chieu ngang, khong kem cot phai.
+ *
+ * Bang hang co 11 cot, ban do mat bang va anh 360 deu la khoi tuong tac lon -
+ * ep chung vao 2/3 chieu rong se phai cuon ngang lien tuc. Cac tab con lai la
+ * noi dung doc nen hep bot lai con de doc hon, vi dong chu ngan di.
+ */
+const WIDE_TABS = new Set<ProjectDetailTabKey>([
+  'mat-bang-quy-can',
+  'quy-can',
+  'anh-360',
+]);
+
 const DetailSkeleton = () => (
-  <div className="site-container py-8">
-    <div className="mb-6 h-24 animate-pulse rounded-lg bg-gray-100" />
-    <div className="mb-6 h-11 animate-pulse rounded bg-gray-100" />
-    <div className="mb-6 aspect-21/9 w-full animate-pulse rounded-xl bg-gray-100" />
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <div key={index} className="h-20 animate-pulse rounded-xl bg-gray-100" />
-      ))}
+  <div>
+    <div className="h-[66vh] min-h-110 w-full animate-pulse bg-gray-200" />
+    <div className="site-container py-10">
+      <div className="mb-6 h-11 w-full animate-pulse rounded-full bg-gray-100" />
+      <div className="h-96 w-full animate-pulse rounded-2xl bg-gray-100" />
     </div>
   </div>
 );
@@ -49,7 +60,7 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const tabsRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Tab nam tren URL nen refresh, nut Back va link chia se deu ra dung tab
   const currentTab = parseTabKey(searchParams.get(TAB_PARAM));
@@ -69,7 +80,7 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
 
       // Doi tab ma giu nguyen vi tri cuon se roi vao giua mot tab ngan, nhin
       // nhu trang bi vo - keo ve dau vung noi dung.
-      tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
     [pathname, router, searchParams],
   );
@@ -79,11 +90,13 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
   if (detailQuery.isError) {
     return (
       <div className="site-container py-16 text-center">
-        <p className="mb-4 text-theme-sm text-error-600">Không tải được thông tin dự án.</p>
+        <p className="mb-4 text-theme-sm text-error-600">
+          Không tải được thông tin dự án.
+        </p>
         <button
           type="button"
           onClick={() => detailQuery.refetch()}
-          className="rounded-md bg-brand-500 px-4 py-2 text-theme-sm font-semibold text-white transition hover:bg-brand-600"
+          className="rounded-full bg-brand-500 px-5 py-2.5 text-theme-sm font-semibold text-white transition hover:bg-brand-600"
         >
           Thử lại
         </button>
@@ -99,7 +112,7 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
         <p className="mb-4 text-theme-sm text-gray-500">Không tìm thấy dự án này.</p>
         <Link
           href="/du-an"
-          className="rounded-md border border-gray-300 px-4 py-2 text-theme-sm font-medium text-gray-700 transition hover:border-brand-400 hover:text-brand-600"
+          className="rounded-full border border-gray-300 px-5 py-2.5 text-theme-sm font-medium text-gray-700 transition hover:border-brand-400 hover:text-brand-600"
         >
           Về danh sách dự án
         </Link>
@@ -107,35 +120,52 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
     );
   }
 
-  return (
-    <div className="pb-14">
-      <ProjectDetailHeader name={project.name} />
+  const isWide = WIDE_TABS.has(currentTab);
 
-      {/* scroll-mt tru cho header dinh o tren, neu khong tab bi che mat */}
-      <div ref={tabsRef} className="mt-5 scroll-mt-16">
+  const tabContent = (
+    <>
+      {currentTab === 'tong-quan' && <OverviewTab project={project} />}
+      {currentTab === 'vi-tri' && (
+        <LocationTab
+          location={project.location}
+          name={project.name}
+          seed={project.publicId}
+        />
+      )}
+      {currentTab === 'phan-khu' && <PhasesTab project={project} />}
+      {currentTab === 'mat-bang-quy-can' && <FloorPlanTab planMap={project.planMap} />}
+      {currentTab === 'quy-can' && <UnitsTab slug={slug} />}
+      {currentTab === 'anh-360' && <Photo360Tab project={project} />}
+      {currentTab === 'dao-tao' && <TrainingTab project={project} />}
+      {currentTab === 'chinh-sach-ban-hang' && (
+        <SalesPolicyTab salesPolicy={project.salesPolicy} projectName={project.name} />
+      )}
+      {currentTab === 'tien-do' && <ProgressTab project={project} />}
+      {currentTab === 'tai-lieu' && <DocumentsTab project={project} />}
+      {currentTab === 'tin-tuc' && <ProjectNewsTab project={project} />}
+    </>
+  );
+
+  return (
+    <div className="pb-16">
+      <ProjectHero project={project} />
+
+      <div className="mt-8">
         <ProjectTabNav current={currentTab} onChange={changeTab} />
       </div>
 
-      <div className="site-container pt-8">
-        {currentTab === 'tong-quan' && <OverviewTab project={project} />}
-        {currentTab === 'vi-tri' && (
-          <LocationTab
-            location={project.location}
-            name={project.name}
-            seed={project.publicId}
-          />
+      {/* scroll-mt tru cho ca SiteHeader (64px) lan thanh tab dinh (~60px) */}
+      <div ref={contentRef} className="site-container scroll-mt-32 pt-8">
+        {isWide ? (
+          tabContent
+        ) : (
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+            <div className="min-w-0 lg:col-span-8 xl:col-span-9">{tabContent}</div>
+            <div className="lg:col-span-4 xl:col-span-3">
+              <ProjectSidebar project={project} />
+            </div>
+          </div>
         )}
-        {currentTab === 'phan-khu' && <PhasesTab project={project} />}
-        {currentTab === 'mat-bang-quy-can' && <FloorPlanTab planMap={project.planMap} />}
-        {currentTab === 'quy-can' && <UnitsTab slug={slug} />}
-        {currentTab === 'anh-360' && <Photo360Tab project={project} />}
-        {currentTab === 'dao-tao' && <TrainingTab project={project} />}
-        {currentTab === 'chinh-sach-ban-hang' && (
-          <SalesPolicyTab salesPolicy={project.salesPolicy} projectName={project.name} />
-        )}
-        {currentTab === 'tien-do' && <ProgressTab project={project} />}
-        {currentTab === 'tai-lieu' && <DocumentsTab project={project} />}
-        {currentTab === 'tin-tuc' && <ProjectNewsTab project={project} />}
       </div>
     </div>
   );
