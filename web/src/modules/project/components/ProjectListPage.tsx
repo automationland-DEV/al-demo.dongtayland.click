@@ -45,13 +45,21 @@ const EMPTY_OPTIONS = {
   statuses: [],
 };
 
+
+const GRID_CLASS = 'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3';
+
+/** Phai giu dung hinh dang ProjectCard (anh - ten - hang 3 nut) de luc du lieu
+    ve khong bi nhay layout */
 const CardSkeleton = () => (
-  <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-card">
+  <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-card">
     <div className="aspect-[16/10] w-full animate-pulse bg-gray-100" />
-    <div className="space-y-2.5 p-4">
+    <div className="space-y-3 p-5">
       <div className="h-4 w-3/4 animate-pulse rounded bg-gray-100" />
-      <div className="h-3 w-full animate-pulse rounded bg-gray-100" />
-      <div className="h-3 w-2/3 animate-pulse rounded bg-gray-100" />
+      <div className="grid grid-cols-3 gap-2">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div key={index} className="h-16 animate-pulse rounded-lg bg-gray-100" />
+        ))}
+      </div>
     </div>
   </div>
 );
@@ -115,6 +123,13 @@ const ProjectListPage = () => {
     );
     return () => clearTimeout(timer);
   }, [searchInput, urlSearch, applyParams]);
+
+  // Bam nut Tim kiem / go Enter: ap ngay, khong doi het 300ms. Sau khi URL doi
+  // thi effect tren thay searchInput === urlSearch nen khong ap lai lan nua.
+  const submitSearch = useCallback(
+    () => applyParams({ [PARAM.search]: searchInput || null }),
+    [applyParams, searchInput],
+  );
 
   // ── Truy van ─────────────────────────────────────────────────────────────
   const query: ProjectQuery = useMemo(
@@ -233,7 +248,7 @@ const ProjectListPage = () => {
 
   return (
     <div className="site-container py-8">
-      <h1 className="mb-6 text-center text-2xl font-bold uppercase tracking-wide text-gray-900">
+      <h1 className="mb-6 text-center text-3xl font-bold uppercase tracking-wide text-gray-900">
         Danh sách dự án
       </h1>
 
@@ -245,6 +260,7 @@ const ProjectListPage = () => {
           activeCount={activeChips.length}
           resultCount={total}
           onClearAll={clearAllFilters}
+          onSubmitSearch={submitSearch}
           onChange={handleFilterChange}
         />
       </div>
@@ -267,66 +283,53 @@ const ProjectListPage = () => {
         {isRefreshing && <span className="text-gray-400">Đang cập nhật...</span>}
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-        <div className="lg:col-span-3">
-          {listQuery.isError ? (
-            <div className="rounded-lg border border-error-500/30 bg-error-50 p-8 text-center">
-              <p className="mb-4 text-theme-sm text-error-600">
-                Không tải được danh sách dự án.
-              </p>
-              <button
-                type="button"
-                onClick={() => listQuery.refetch()}
-                className="rounded-md bg-brand-500 px-4 py-2 text-theme-sm font-semibold text-white transition hover:bg-brand-600"
-              >
-                Thử lại
-              </button>
-            </div>
-          ) : isFirstLoad ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, index) => (
-                <CardSkeleton key={index} />
-              ))}
-            </div>
-          ) : projects.length === 0 ? (
-            <div className="rounded-lg border border-gray-200 bg-white p-12 text-center">
-              <p className="mb-4 text-theme-sm text-gray-500">
-                {hasActiveFilter
-                  ? 'Không tìm thấy dự án phù hợp với bộ lọc.'
-                  : 'Chưa có dự án nào.'}
-              </p>
-              {hasActiveFilter && (
-                <button
-                  type="button"
-                  onClick={clearAllFilters}
-                  className="rounded-md border border-gray-300 px-4 py-2 text-theme-sm font-medium text-gray-700 transition hover:border-brand-400 hover:text-brand-600"
-                >
-                  Xóa bộ lọc
-                </button>
-              )}
-            </div>
-          ) : (
-            <div
-              className={`grid grid-cols-1 gap-5 transition-opacity duration-200 sm:grid-cols-2 xl:grid-cols-3 ${
-                isRefreshing ? 'opacity-70' : 'opacity-100'
-              }`}
+      {listQuery.isError ? (
+        <div className="rounded-xl border border-error-500/30 bg-error-50 p-8 text-center">
+          <p className="mb-4 text-theme-sm text-error-600">
+            Không tải được danh sách dự án.
+          </p>
+          <button
+            type="button"
+            onClick={() => listQuery.refetch()}
+            className="rounded-md bg-brand-500 px-4 py-2 text-theme-sm font-semibold text-white transition hover:bg-brand-600"
+          >
+            Thử lại
+          </button>
+        </div>
+      ) : isFirstLoad ? (
+        <div className={GRID_CLASS}>
+          {Array.from({ length: 9 }).map((_, index) => (
+            <CardSkeleton key={index} />
+          ))}
+        </div>
+      ) : projects.length === 0 ? (
+        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
+          <p className="mb-4 text-theme-sm text-gray-500">
+            {hasActiveFilter
+              ? 'Không tìm thấy dự án phù hợp với bộ lọc.'
+              : 'Chưa có dự án nào.'}
+          </p>
+          {hasActiveFilter && (
+            <button
+              type="button"
+              onClick={clearAllFilters}
+              className="rounded-md border border-gray-300 px-4 py-2 text-theme-sm font-medium text-gray-700 transition hover:border-brand-400 hover:text-brand-600"
             >
-              {projects.map((project) => (
-                <ProjectCard key={project.publicId} project={project} />
-              ))}
-            </div>
+              Xóa bộ lọc
+            </button>
           )}
         </div>
-
-        <div className="lg:col-span-1">
-          <div className="lg:sticky lg:top-20">
-            <ProjectHighlightPanel
-              groups={highlightsQuery.data ?? []}
-              isLoading={highlightsQuery.isLoading}
-            />
-          </div>
+      ) : (
+        <div
+          className={`${GRID_CLASS} transition-opacity duration-200 ${
+            isRefreshing ? 'opacity-70' : 'opacity-100'
+          }`}
+        >
+          {projects.map((project) => (
+            <ProjectCard key={project.publicId} project={project} />
+          ))}
         </div>
-      </div>
+      )}
 
       {total > 0 && (
         <Pagination
@@ -344,6 +347,11 @@ const ProjectListPage = () => {
           }
         />
       )}
+
+      <ProjectHighlightPanel
+        groups={highlightsQuery.data ?? []}
+        isLoading={highlightsQuery.isLoading}
+      />
 
       <NewsSection />
     </div>

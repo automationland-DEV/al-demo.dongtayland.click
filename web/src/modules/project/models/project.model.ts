@@ -69,11 +69,17 @@ export type PaginatedProjects = {
   hasMore: boolean;
 };
 
-/** Du lieu panel "Du an dang ban chay" o cot phai */
+/**
+ * Du lieu khoi "Du an ban chay" duoi trang danh sach.
+ *
+ * Chi lay dung nhung truong khoi nay ve len: du an dung dau moi nhom hien
+ * duoi dang the anh lon nen can `thumbnailUrl`. Day van la mot phep chieu
+ * gon - dung tra ca ban ghi Project ve cho mot danh sach 5 dong.
+ */
 export type ProjectHighlightGroup = {
   key: string;
   title: string;
-  projects: Pick<Project, 'publicId' | 'slug' | 'name'>[];
+  projects: Pick<Project, 'publicId' | 'slug' | 'name' | 'thumbnailUrl'>[];
 };
 
 export const SEGMENT_LABELS: Record<ProjectSegment, string> = {

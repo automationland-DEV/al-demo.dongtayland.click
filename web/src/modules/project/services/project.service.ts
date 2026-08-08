@@ -118,8 +118,19 @@ export const ProjectService = {
       })),
     }),
 
-  /** Panel cot phai: cao tang / thap tang ban chay + moi nhat */
+  /** Khoi cuoi trang danh sach: cao tang / thap tang ban chay + moi nhat */
   highlights: async (): Promise<ProjectHighlightGroup[]> => {
+    /**
+     * Phep chieu dung chung cho ca ba nhom - de mot cho de khong xay ra canh
+     * nhom nay co anh con nhom kia thi khong.
+     */
+    const toHighlight = ({ publicId, slug, name, thumbnailUrl }: Project) => ({
+      publicId,
+      slug,
+      name,
+      thumbnailUrl,
+    });
+
     /** Uu tien du an hot, bo trung, lay toi da `size` phan tu */
     const pick = (list: Project[], size: number) => {
       const seen = new Set<string>();
@@ -134,7 +145,7 @@ export const ProjectService = {
         if (picked.length === size) break;
       }
 
-      return picked.map(({ publicId, slug, name }) => ({ publicId, slug, name }));
+      return picked.map(toHighlight);
     };
 
     const bySegment = (segment: Project['segment']) =>
@@ -150,7 +161,7 @@ export const ProjectService = {
       {
         key: 'moi-nhat',
         title: 'Dự án mới nhất',
-        projects: newest.slice(0, 5).map(({ publicId, slug, name }) => ({ publicId, slug, name })),
+        projects: newest.slice(0, 5).map(toHighlight),
       },
     ]);
   },
