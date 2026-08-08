@@ -27,6 +27,8 @@ steps:
 
   build-admin:
     image: node:22-alpine
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8011
     commands:
       - cd admin
       - npm install

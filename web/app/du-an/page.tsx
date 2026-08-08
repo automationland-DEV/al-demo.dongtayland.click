@@ -17,9 +17,11 @@ const PageFallback = () => (
         <div key={index} className="h-11 animate-pulse rounded-md bg-gray-100" />
       ))}
     </div>
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} className="h-72 animate-pulse rounded-lg bg-gray-100" />
+    {/* Phai khop GRID_CLASS trong ProjectListPage, neu khong luoi se nhay mot
+        nhip khi Suspense nha ra */}
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 9 }).map((_, index) => (
+        <div key={index} className="h-96 animate-pulse rounded-xl bg-gray-100" />
       ))}
     </div>
   </div>

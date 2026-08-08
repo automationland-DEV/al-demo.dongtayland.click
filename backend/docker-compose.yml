@@ -9,6 +9,8 @@ services:
     container_name: demo_dongtayland_click_api
     ports:
       - "8827:8827"
+    env_file:
+      - .env
     environment:
       - PORT=8827
       - NODE_ENV=production

@@ -2,6 +2,7 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   // Ghim goc workspace vao chinh thu muc nay.
   // Repo co ba project canh nhau (web, admin, backend), moi project mot
   // package-lock.json rieng. Neu khong ghim, Next tu suy ra goc bang cach di

@@ -4,8 +4,8 @@
 
 @theme {
   --font-*: initial;
-  /* --font-inter do next/font dat trong app/layout.tsx */
-  --font-sans: var(--font-inter), "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  
+  --font-sans: var(--font-open-sans), "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
@@ -89,6 +89,111 @@
   --shadow-card-hover: 0px 12px 24px -6px rgba(16, 24, 40, 0.14), 0px 4px 8px -2px rgba(16, 24, 40, 0.06);
   --shadow-panel: 0px 4px 16px -4px rgba(16, 24, 40, 0.1);
   --shadow-focus-ring: 0px 0px 0px 4px rgba(15, 111, 209, 0.14);
+
+  /* Nay len roi lun ve - phan hoi cho cu cham vao nut yeu thich */
+  --animate-heart-pop: heart-pop 0.35s ease-out;
+
+  @keyframes heart-pop {
+    0% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.35);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* ── Tro ly ao ────────────────────────────────────────────────────────── */
+
+  /* Vong sang lan toa ra roi tan - nhip "cho nhay" cua nut chat */
+  --animate-chat-halo: chat-halo 2.4s ease-out infinite;
+
+  @keyframes chat-halo {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    70% {
+      transform: scale(1.75);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.75);
+      opacity: 0;
+    }
+  }
+
+  /* Robot noi len ha xuong cho co ve song dong */
+  --animate-chat-bob: chat-bob 3s ease-in-out infinite;
+
+  @keyframes chat-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* Huy hieu so tin nhan chua doc */
+  --animate-chat-blink: chat-blink 1.6s ease-in-out infinite;
+
+  @keyframes chat-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  /* Khung chat bung ra tu goc duoi phai */
+  --animate-chat-in: chat-in 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes chat-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Bong bong tin nhan moi truot len */
+  --animate-message-in: message-in 0.22s ease-out;
+
+  @keyframes message-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Ba cham "dang go" - moi cham lech pha nhau bang animation-delay */
+  --animate-typing-dot: typing-dot 1.3s ease-in-out infinite;
+
+  @keyframes typing-dot {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.35;
+    }
+    30% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
 }
 
 @layer base {
@@ -117,6 +222,12 @@
 /* Vung noi dung chinh - dung chung cho header, main, footer */
 @utility site-container {
   @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
+}
+
+/* Nen chuyen mau thuong hieu: nhan "du an cao tang" tren the du an va nut
+   tim kiem deu dung cai nay. De o day de hai cho khong bao gio lech mau. */
+@utility brand-gradient {
+  @apply bg-linear-to-r from-navy-800 via-navy-600 to-brand-500;
 }
 
 /* Cuon ngang duoc nhung khong hien thanh cuon - dung cho thanh tab */
