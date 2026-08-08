@@ -38,7 +38,7 @@ const LocationTab = ({ location, name, seed }: LocationTabProps) => {
         seed={`${seed}-location`}
         src={location.bannerUrl}
         alt={`Sơ đồ vị trí và kết nối vùng của ${name}`}
-        ratio="aspect-[21/9]"
+        ratio="aspect-21/9"
         className="shadow-card"
       />
 
@@ -67,7 +67,7 @@ const LocationTab = ({ location, name, seed }: LocationTabProps) => {
 
       <section>
         <h2 className="sr-only">Bản đồ vị trí dự án</h2>
-        <div className="aspect-[16/9] w-full overflow-hidden rounded-lg border border-gray-200 shadow-card">
+        <div className="aspect-16/9 w-full overflow-hidden rounded-lg border border-gray-200 shadow-card">
           <iframe
             src={mapSrc}
             title={`Bản đồ vị trí ${name} - ${location.mapLabel}`}

@@ -32,7 +32,7 @@ const PageFallback = () => (
   <div className="site-container py-8">
     <div className="mb-6 h-24 animate-pulse rounded-lg bg-gray-100" />
     <div className="mb-6 h-11 animate-pulse rounded bg-gray-100" />
-    <div className="aspect-[21/9] w-full animate-pulse rounded-xl bg-gray-100" />
+    <div className="aspect-21/9 w-full animate-pulse rounded-xl bg-gray-100" />
   </div>
 );
 

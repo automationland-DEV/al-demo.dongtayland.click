@@ -119,7 +119,7 @@ const OverviewTab = ({ project }: { project: ProjectDetail }) => {
             seed={`${project.publicId}-overview`}
             src={project.overviewImageUrl}
             alt={`Phối cảnh tổng thể ${project.name}`}
-            ratio="aspect-[4/3]"
+            ratio="aspect-4/3"
           />
         </div>
       </JadePanel>
@@ -173,7 +173,7 @@ const OverviewTab = ({ project }: { project: ProjectDetail }) => {
                   seed={product.publicId}
                   src={product.imageUrl}
                   alt={product.name}
-                  ratio="aspect-[4/3]"
+                  ratio="aspect-4/3"
                   className="rounded-none"
                 />
                 <div className="p-4">
@@ -217,7 +217,7 @@ const OverviewTab = ({ project }: { project: ProjectDetail }) => {
                   seed={amenity.publicId}
                   src={amenity.imageUrl}
                   alt={amenity.name}
-                  ratio="aspect-[4/3]"
+                  ratio="aspect-4/3"
                   className="rounded-none transition duration-500 group-hover:scale-105"
                 />
                 <figcaption className="absolute inset-x-0 bottom-0 bg-black/60 px-3 py-2 text-theme-xs font-semibold uppercase leading-tight text-white">

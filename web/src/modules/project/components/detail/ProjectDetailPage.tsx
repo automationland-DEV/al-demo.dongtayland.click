@@ -30,7 +30,7 @@ const DetailSkeleton = () => (
   <div className="site-container py-8">
     <div className="mb-6 h-24 animate-pulse rounded-lg bg-gray-100" />
     <div className="mb-6 h-11 animate-pulse rounded bg-gray-100" />
-    <div className="mb-6 aspect-[21/9] w-full animate-pulse rounded-xl bg-gray-100" />
+    <div className="mb-6 aspect-21/9 w-full animate-pulse rounded-xl bg-gray-100" />
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {Array.from({ length: 3 }).map((_, index) => (
         <div key={index} className="h-20 animate-pulse rounded-xl bg-gray-100" />

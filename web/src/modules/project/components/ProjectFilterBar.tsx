@@ -169,7 +169,7 @@ const ProjectFilterBar = ({
 
       {/* Duoi md truot len tu day man hinh, tu md tro len la hop thoai giua man */}
       {isFilterOpen && (
-        <div className="fixed inset-0 z-[1050]">
+        <div className="fixed inset-0 z-1050">
           <div
             aria-hidden
             onClick={() => setIsFilterOpen(false)}

@@ -188,7 +188,7 @@ const ChatWidget = () => {
             role="dialog"
             aria-modal="false"
             aria-label={BOT_NAME}
-            className="animate-chat-in fixed inset-x-4 bottom-4 z-50 flex h-[72dvh] origin-bottom-right flex-col overflow-hidden rounded-2xl bg-gray-50 shadow-[0_24px_60px_-12px_rgba(16,24,40,0.35)] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:h-[560px] sm:max-h-[calc(100dvh-6rem)] sm:w-96"
+            className="animate-chat-in fixed inset-x-4 bottom-4 z-50 flex h-[72dvh] origin-bottom-right flex-col overflow-hidden rounded-2xl bg-gray-50 shadow-[0_24px_60px_-12px_rgba(16,24,40,0.35)] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:h-140 sm:max-h-[calc(100dvh-6rem)] sm:w-96"
           >
             {/* ── Dau khung ─────────────────────────────────────────────── */}
             <header className="brand-gradient flex shrink-0 items-center gap-3 px-4 py-3.5">

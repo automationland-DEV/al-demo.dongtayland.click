@@ -46,7 +46,7 @@ const ProjectHeroCarousel = ({ slides, projectName }: ProjectHeroCarouselProps) 
       onFocusCapture={() => setIsPaused(true)}
       onBlurCapture={() => setIsPaused(false)}
     >
-      <div className="relative aspect-[21/9] w-full">
+      <div className="relative aspect-21/9 w-full">
         {slides.map((slide, slideIndex) => (
           <div
             key={slide.publicId}
@@ -65,7 +65,7 @@ const ProjectHeroCarousel = ({ slides, projectName }: ProjectHeroCarouselProps) 
 
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/60 to-transparent"
         />
         <p className="absolute inset-x-0 bottom-0 px-6 pb-8 text-center text-theme-sm font-medium text-white sm:pb-9">
           {slides[index].caption}

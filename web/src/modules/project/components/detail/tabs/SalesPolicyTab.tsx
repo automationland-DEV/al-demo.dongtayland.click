@@ -25,7 +25,7 @@ const ScheduleTable = ({ schedule }: { schedule: InterestSchedule }) => (
     </h3>
 
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[320px] border-collapse text-center">
+      <table className="w-full min-w-80 border-collapse text-center">
         <thead>
           <tr>
             <th scope="col" className="px-2 py-1.5 text-left text-theme-xs text-white/60">
