@@ -1,0 +1,29 @@
+steps:
+  build:
+    image: node:22-alpine
+    commands:
+      - cd web
+      - npm install
+      - npm run build
+    when:
+      branch: main
+      event: [push, manual]
+
+
+  deploy:
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_username
+      password:
+        from_secret: ssh_password
+      command_timeout: 30m
+      script:
+        - cd /home/demo_dongtayland_click/al-demo.dongtayland.click/web
+        # Xóa bỏ các thay đổi thủ công trên server (nếu có) và kéo code mới nhất về
+        - git fetch origin main && git reset --hard origin/main && docker compose down && docker compose up -d --build && docker ps
+    when:
+      branch: main
+      event: [push, manual]
