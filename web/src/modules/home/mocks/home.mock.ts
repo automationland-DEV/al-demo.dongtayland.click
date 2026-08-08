@@ -1,0 +1,99 @@
+/**
+ * Du lieu mau cho trang chu - den khi backend co module `banner` + `home-config`
+ * thi chi can doi than ham trong services/home.service.ts.
+ *
+ * Dung luon MOCK_PROJECTS tu module project de featured khong bi "lech" voi
+ * trang /du-an (cung ten, cung dia chi, cung thumbnail).
+ */
+import { MOCK_PROJECTS } from '@/modules/project/mocks/projects.mock';
+import type {
+  HomeBannerSlide,
+  HomeContent,
+  HomeFeature,
+} from '../models/home.model';
+
+/** Lay ra 6 du an noi bat theo isHot + moi dang mo ban */
+export const MOCK_BANNERS: HomeBannerSlide[] = [
+  {
+    publicId: 'banner-001',
+    headline: 'Tìm dự án bất động sản phù hợp với bạn',
+    subtitle:
+      'Hơn 1.200 dự án được tuyển chọn từ các chủ đầu tư uy tín trên toàn quốc.',
+    primaryCtaLabel: 'Khám phá dự án',
+    secondaryCtaLabel: 'Đăng ký tư vấn',
+    desktopImageUrl: '/images/home/banner/desktop/b1.jpg',
+    mobileImageUrl: '/images/home/banner/mobile/b1.jpg',
+  },
+  {
+    publicId: 'banner-002',
+    headline: 'So sánh căn hộ trong vài giây',
+    subtitle:
+      'Đặt cùng lúc nhiều căn hộ lên bàn cân để chọn được căn phù hợp nhất với nhu cầu và tài chính của bạn.',
+    primaryCtaLabel: 'So sánh ngay',
+    desktopImageUrl: '/images/home/banner/desktop/b2.jpg',
+    mobileImageUrl: '/images/home/banner/mobile/b2.jpg',
+  },
+  {
+    publicId: 'banner-003',
+    headline: 'Sự kiện mở bán đang diễn ra',
+    subtitle:
+      'Cập nhật các đợt mở bán, lịch tham quan nhà mẫu và ưu đãi từ chủ đầu tư mỗi tuần.',
+    primaryCtaLabel: 'Xem sự kiện',
+    desktopImageUrl: '/images/home/banner/desktop/b3.jpg',
+    mobileImageUrl: '/images/home/banner/mobile/b3.jpg',
+  },
+  {
+    publicId: 'banner-004',
+    headline: 'Đăng ký nhận tư vấn miễn phí',
+    subtitle:
+      'Chuyên viên SalePlus sẽ liên hệ trong vòng 24 giờ để hỗ trợ bạn chọn dự án phù hợp.',
+    primaryCtaLabel: 'Nhận tư vấn',
+    desktopImageUrl: '/images/home/banner/desktop/b4.jpg',
+    mobileImageUrl: '/images/home/banner/mobile/b4.jpg',
+  },
+];
+
+export const MOCK_FEATURES: HomeFeature[] = [
+  {
+    publicId: 'feat-trusted',
+    icon: 'shield',
+    title: 'Thông tin minh bạch',
+    description:
+      'Mỗi dự án đều có đầy đủ pháp lý, tiến độ xây dựng và chính sách bán hàng được cập nhật liên tục.',
+  },
+  {
+    publicId: 'feat-search',
+    icon: 'search',
+    title: 'Bộ lọc thông minh',
+    description:
+      'Tìm kiếm theo khu vực, loại hình, chủ đầu tư, giá bán và ngân sách - không cần đăng ký tài khoản.',
+  },
+  {
+    publicId: 'feat-support',
+    icon: 'support',
+    title: 'Tư vấn miễn phí 1-1',
+    description:
+      'Đội ngũ chuyên viên đồng hành cùng bạn từ khi chọn dự án đến khi ký hợp đồng mua bán.',
+  },
+  {
+    publicId: 'feat-compare',
+    icon: 'chart',
+    title: 'So sánh căn hộ trực quan',
+    description:
+      'Đặt cùng lúc nhiều căn lên bàn cân để chọn được căn phù hợp nhất với nhu cầu thực tế.',
+  },
+];
+
+/** 6 du an noi bat: hot truoc, sau do moi theo thoi gian dang */
+export const MOCK_FEATURED_PROJECTS = [...MOCK_PROJECTS]
+  .sort((a, b) => {
+    if (a.isHot !== b.isHot) return Number(b.isHot) - Number(a.isHot);
+    return Date.parse(b.publishedAt) - Date.parse(a.publishedAt);
+  })
+  .slice(0, 6);
+
+export const MOCK_HOME_CONTENT: HomeContent = {
+  banners: MOCK_BANNERS,
+  featuredProjects: MOCK_FEATURED_PROJECTS,
+  features: MOCK_FEATURES,
+};

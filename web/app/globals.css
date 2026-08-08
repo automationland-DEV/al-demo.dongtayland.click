@@ -129,6 +129,23 @@
   }
 }
 
+/* Thanh thong bao chay ngang: dich toan bo noi dung tu 0 den -50% (do
+   items[] da nhan doi nen phan B ghep lien phan A). Hover vao parent
+   `.group` se dung lai (animation-play-state: paused). */
+@utility marquee-track {
+  animation: marquee var(--marquee-duration, 50s) linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
 /* ── Pin gia tren ban do mat bang (Leaflet divIcon) ──────────────────────
    Leaflet dung HTML tho cho icon nen khong ap dung duoc class Tailwind sinh
    theo nhu cau; cac lop nay phai la CSS that. */
