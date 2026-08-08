@@ -118,13 +118,21 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
 
       <div className="site-container pt-8">
         {currentTab === 'tong-quan' && <OverviewTab project={project} />}
-        {currentTab === 'vi-tri' && <LocationTab project={project} />}
+        {currentTab === 'vi-tri' && (
+          <LocationTab
+            location={project.location}
+            name={project.name}
+            seed={project.publicId}
+          />
+        )}
         {currentTab === 'phan-khu' && <PhasesTab project={project} />}
-        {currentTab === 'mat-bang-quy-can' && <FloorPlanTab project={project} />}
+        {currentTab === 'mat-bang-quy-can' && <FloorPlanTab planMap={project.planMap} />}
         {currentTab === 'quy-can' && <UnitsTab slug={slug} />}
         {currentTab === 'anh-360' && <Photo360Tab project={project} />}
         {currentTab === 'dao-tao' && <TrainingTab project={project} />}
-        {currentTab === 'chinh-sach-ban-hang' && <SalesPolicyTab project={project} />}
+        {currentTab === 'chinh-sach-ban-hang' && (
+          <SalesPolicyTab salesPolicy={project.salesPolicy} projectName={project.name} />
+        )}
         {currentTab === 'tien-do' && <ProgressTab project={project} />}
         {currentTab === 'tai-lieu' && <DocumentsTab project={project} />}
         {currentTab === 'tin-tuc' && <ProjectNewsTab project={project} />}

@@ -11,6 +11,8 @@
  *
  * Khi backend san sang: xoa file nay, khong sua component nao.
  */
+import { formatNumber } from '@/common/utils/format';
+import { toSlug } from '@/common/utils/text';
 import { MOCK_NEWS } from '@/modules/news/mocks/news.mock';
 import type { NewsArticle } from '@/modules/news/models/news.model';
 import type {
@@ -19,6 +21,7 @@ import type {
   LocationIcon,
   MasterPlanMap,
   Panorama,
+  PhaseDetail,
   ProgressMilestone,
   ProjectAmenity,
   ProjectConsultant,
@@ -453,8 +456,16 @@ const buildUnits = (
   return units;
 };
 
+const PHASE_HEADLINES = [
+  'Vịnh biển thượng lưu, năng động, hiện đại bậc nhất khu vực',
+  'Toạ độ thư thái, riêng tư nhất toàn khu đô thị',
+  'Nơi hội tụ ánh sáng, năng lượng và chất sống thượng lưu',
+  'Không gian sống cân bằng giữa mặt nước và mảng xanh',
+] as const;
+
 const buildPhases = (
   project: Project,
+  rng: Rng,
   phaseNames: string[],
   units: ProjectUnit[],
   imageOffset: number,
@@ -462,15 +473,50 @@ const buildPhases = (
   phaseNames.map((name, index) => {
     const phaseUnits = units.filter((unit) => unit.phaseName === name);
     const prices = phaseUnits.map((unit) => unit.listedPrice);
+    const areas = phaseUnits.map((unit) => unit.landArea);
+
+    const totalArea = intBetween(rng, 18, 240);
+    const headline = PHASE_HEADLINES[index % PHASE_HEADLINES.length];
 
     return {
       publicId: `${project.publicId}-phase-${index + 1}`,
-      slug: `phan-khu-${index + 1}`,
+      slug: toSlug(name),
       name,
       imageUrl: PROJECT_IMAGES[(imageOffset + index + 3) % PROJECT_IMAGES.length],
       totalUnits: phaseUnits.length,
       priceFrom: prices.length ? Math.min(...prices) : 0,
       priceTo: prices.length ? Math.max(...prices) : 0,
+
+      headline,
+      description: `Phân khu ${name} là một trong ${phaseNames.length} phân khu của ${project.name}. Khu vực này được quy hoạch với mật độ xây dựng thấp, hệ tiện ích riêng bên cạnh các tiện ích dùng chung toàn khu, hướng tới nhóm cư dân tìm kiếm sự riêng tư mà vẫn thuận tiện di chuyển tới trục chính của dự án.`,
+
+      specs: [
+        { label: 'Tên dự án', value: project.name },
+        { label: 'Tổng căn', value: formatNumber(phaseUnits.length) },
+        { label: 'Tiêu chuẩn bàn giao', value: 'Đang cập nhật' },
+        {
+          label: 'Diện tích căn',
+          value: areas.length
+            ? `từ ${Math.min(...areas)} đến ${Math.max(...areas)} m²`
+            : 'Đang cập nhật',
+        },
+        { label: 'Phong cách xây dựng', value: 'Đang cập nhật' },
+        {
+          label: 'Hình thức sở hữu',
+          value: project.segment === 'cao-tang' ? 'Sở hữu 50 năm' : 'Lâu dài',
+        },
+        { label: 'Tổng diện tích', value: `${totalArea} ha` },
+        { label: 'Chủ đầu tư', value: project.developerName },
+      ],
+
+      masterPlanImages: Array.from({ length: 3 }, (_, sheet) => ({
+        publicId: `${project.publicId}-phase-${index + 1}-plan-${sheet + 1}`,
+        imageUrl: PROJECT_IMAGES[(imageOffset + index * 3 + sheet + 6) % PROJECT_IMAGES.length],
+        caption:
+          sheet === 0
+            ? `Tổng mặt bằng phân khu ${name}`
+            : `Tổng mặt bằng công viên ${name} - khu ${sheet}`,
+      })),
     };
   });
 
@@ -885,7 +931,7 @@ const ensureBuilt = (slug: string): ProjectDetail | null => {
 
   const phaseNames = buildPhaseNames(rng);
   const units = buildUnits(project, rng, phaseNames, profile);
-  const phases = buildPhases(project, phaseNames, units, imageOffset);
+  const phases = buildPhases(project, rng, phaseNames, units, imageOffset);
 
   const detail = buildProjectDetail(project, rng, profile, phases, units, imageOffset);
 
@@ -895,6 +941,42 @@ const ensureBuilt = (slug: string): ProjectDetail | null => {
 };
 
 export const getProjectDetail = (slug: string): ProjectDetail | null => ensureBuilt(slug);
+
+/**
+ * Ghep du lieu trang chi tiet phan khu tu du an cha.
+ *
+ * Vi tri va chinh sach ban hang dung chung voi du an; `planMap` duoc loc chi
+ * con pin cua phan khu nay.
+ */
+export const getPhaseDetail = (
+  projectSlug: string,
+  phaseSlug: string,
+): PhaseDetail | null => {
+  const project = ensureBuilt(projectSlug);
+  if (!project) return null;
+
+  const phase = project.phases.find((item) => item.slug === phaseSlug);
+  if (!phase) return null;
+
+  return {
+    phase,
+    projectSlug: project.slug,
+    projectName: project.name,
+    siblings: project.phases.map(({ publicId, slug, name }) => ({
+      publicId,
+      slug,
+      name,
+    })),
+    location: project.location,
+    planMap: {
+      ...project.planMap,
+      markers: project.planMap.markers.filter(
+        (marker) => marker.phaseName === phase.name,
+      ),
+    },
+    salesPolicy: project.salesPolicy,
+  };
+};
 
 export const getProjectUnits = (slug: string): ProjectUnit[] => {
   ensureBuilt(slug);

@@ -8,8 +8,8 @@ import { formatBillion, formatBillionShort } from '@/common/utils/format';
 import {
   UNIT_FUND_LABELS,
   UNIT_STATUS_LABELS,
+  type MasterPlanMap,
   type PlanMarker,
-  type ProjectDetail,
   type UnitFundType,
   type UnitStatus,
 } from '../../../models/project-detail.model';
@@ -52,9 +52,16 @@ const MapButton = ({
   </button>
 );
 
-const FloorPlanTab = ({ project }: { project: ProjectDetail }) => {
-  const { planMap } = project;
+type FloorPlanTabProps = {
+  planMap: MasterPlanMap;
+  /**
+   * Khi mo tu trang phan khu, ban do da chi con pin cua phan khu do nen o loc
+   * "Phan khu" khong con y nghia - truyen ten vao day de an o do di.
+   */
+  lockedPhaseName?: string;
+};
 
+const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
@@ -236,21 +243,25 @@ const FloorPlanTab = ({ project }: { project: ProjectDetail }) => {
 
       {isFilterOpen && (
         <div className="mb-4 grid grid-cols-1 gap-4 rounded-lg border border-gray-200 bg-gray-25 p-4 sm:grid-cols-3">
-          <label className="block">
-            <span className="mb-1 block text-theme-xs font-medium text-gray-500">Phân khu</span>
-            <select
-              value={phaseName ?? ''}
-              onChange={(event) => setPhaseName(event.target.value || null)}
-              className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-theme-sm text-gray-700 outline-none transition focus:border-brand-400 focus:shadow-focus-ring"
-            >
-              <option value="">Tất cả</option>
-              {phaseNames.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </label>
+          {!lockedPhaseName && (
+            <label className="block">
+              <span className="mb-1 block text-theme-xs font-medium text-gray-500">
+                Phân khu
+              </span>
+              <select
+                value={phaseName ?? ''}
+                onChange={(event) => setPhaseName(event.target.value || null)}
+                className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-theme-sm text-gray-700 outline-none transition focus:border-brand-400 focus:shadow-focus-ring"
+              >
+                <option value="">Tất cả</option>
+                {phaseNames.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
 
           <label className="block">
             <span className="mb-1 block text-theme-xs font-medium text-gray-500">

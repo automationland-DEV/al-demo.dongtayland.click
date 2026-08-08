@@ -131,6 +131,58 @@ export type ProjectPhase = {
   totalUnits: number;
   priceFrom: number;
   priceTo: number;
+
+  // Cac truong duoi day chi dung o trang chi tiet phan khu, the phan khu tren
+  // tab "Phan khu" khong doc toi.
+  /** Cau tieu de lon phia tren doan mo ta */
+  headline: string;
+  description: string;
+  /** Bang "Thong tin chung" */
+  specs: ProjectSpec[];
+  /** Cac ban ve mat bang lon xep doc duoi phan mo ta */
+  masterPlanImages: MediaSlide[];
+};
+
+/** Muc trong thanh chuyen nhanh giua cac phan khu */
+export type PhaseSummary = {
+  publicId: string;
+  slug: string;
+  name: string;
+};
+
+/** Thu tu tab tren trang chi tiet phan khu - it hon trang du an */
+export const PHASE_DETAIL_TABS = [
+  { key: 'tong-quan', label: 'Tổng quan' },
+  { key: 'vi-tri', label: 'Vị trí' },
+  { key: 'mat-bang-quy-can', label: 'Mặt bằng quỹ căn' },
+  { key: 'quy-can', label: 'Quỹ căn' },
+  { key: 'chinh-sach-ban-hang', label: 'Chính sách bán hàng' },
+] as const;
+
+export type PhaseDetailTabKey = (typeof PHASE_DETAIL_TABS)[number]['key'];
+
+export const DEFAULT_PHASE_TAB: PhaseDetailTabKey = 'tong-quan';
+
+export const parsePhaseTabKey = (value: string | null): PhaseDetailTabKey =>
+  PHASE_DETAIL_TABS.some((tab) => tab.key === value)
+    ? (value as PhaseDetailTabKey)
+    : DEFAULT_PHASE_TAB;
+
+/**
+ * Du lieu mot trang chi tiet phan khu.
+ *
+ * Vi tri, chinh sach ban hang dung chung voi du an cha nen duoc chep vao day
+ * thay vi bat trang goi them mot lan nua. `planMap` da loc san chi con pin cua
+ * phan khu nay. Bang hang van di qua `ProjectService.units` voi `phaseName`.
+ */
+export type PhaseDetail = {
+  phase: ProjectPhase;
+  projectSlug: string;
+  projectName: string;
+  siblings: PhaseSummary[];
+  location: ProjectLocation;
+  planMap: MasterPlanMap;
+  salesPolicy: SalesPolicy;
 };
 
 // ── Tab: Mat bang quy can ──────────────────────────────────────────────────

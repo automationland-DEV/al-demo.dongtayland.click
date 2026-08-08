@@ -69,8 +69,17 @@ const FilterSelect = ({
   </label>
 );
 
-const UnitsTab = ({ slug }: { slug: string }) => {
-  const [query, setQuery] = useState<UnitQuery>(DEFAULT_UNIT_QUERY);
+type UnitsTabProps = {
+  slug: string;
+  /** Mo tu trang phan khu: khoa bang hang vao dung phan khu do */
+  lockedPhaseName?: string;
+};
+
+const UnitsTab = ({ slug, lockedPhaseName }: UnitsTabProps) => {
+  const [query, setQuery] = useState<UnitQuery>(() => ({
+    ...DEFAULT_UNIT_QUERY,
+    phaseName: lockedPhaseName ?? null,
+  }));
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -98,12 +107,16 @@ const UnitsTab = ({ slug }: { slug: string }) => {
     );
   }, []);
 
+  // Phan khu bi khoa thi khong tinh la "bo loc dang bat" - nguoi dung khong bat no
   const activeFilterCount = useMemo(
     () =>
-      [query.phaseName, query.propertyTypeLabel, query.direction, query.status].filter(
-        Boolean,
-      ).length,
-    [query],
+      [
+        lockedPhaseName ? null : query.phaseName,
+        query.propertyTypeLabel,
+        query.direction,
+        query.status,
+      ].filter(Boolean).length,
+    [query, lockedPhaseName],
   );
 
   const isAtSelectionLimit = selected.length >= MAX_UNIT_SELECTION;
@@ -153,12 +166,14 @@ const UnitsTab = ({ slug }: { slug: string }) => {
       {isFilterOpen && facets && (
         <div className="mb-4 rounded-lg border border-gray-200 bg-gray-25 p-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <FilterSelect
-              label="Phân khu"
-              value={query.phaseName}
-              options={facets.phaseNames.map((name) => ({ value: name, label: name }))}
-              onChange={(value) => patchQuery({ phaseName: value })}
-            />
+            {!lockedPhaseName && (
+              <FilterSelect
+                label="Phân khu"
+                value={query.phaseName}
+                options={facets.phaseNames.map((name) => ({ value: name, label: name }))}
+                onChange={(value) => patchQuery({ phaseName: value })}
+              />
+            )}
             <FilterSelect
               label="Loại hình"
               value={query.propertyTypeLabel}
@@ -187,7 +202,7 @@ const UnitsTab = ({ slug }: { slug: string }) => {
               type="button"
               onClick={() =>
                 patchQuery({
-                  phaseName: null,
+                  phaseName: lockedPhaseName ?? null,
                   propertyTypeLabel: null,
                   direction: null,
                   status: null,

@@ -2,7 +2,11 @@
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ProjectService } from '../services/project.service';
-import type { ProjectDetail, UnitQuery } from '../models/project-detail.model';
+import type {
+  PhaseDetail,
+  ProjectDetail,
+  UnitQuery,
+} from '../models/project-detail.model';
 import type { ProjectQuery } from '../models/project.model';
 
 /**
@@ -43,6 +47,18 @@ export const useProjectDetail = (slug: string, initialProject?: ProjectDetail) =
     queryKey: ['project-detail', slug] as const,
     queryFn: () => ProjectService.detail(slug),
     initialData: initialProject,
+    staleTime: 5 * 60 * 1000,
+  });
+
+export const usePhaseDetail = (
+  projectSlug: string,
+  phaseSlug: string,
+  initialPhase?: PhaseDetail,
+) =>
+  useQuery({
+    queryKey: ['project-phase', projectSlug, phaseSlug] as const,
+    queryFn: () => ProjectService.phase(projectSlug, phaseSlug),
+    initialData: initialPhase,
     staleTime: 5 * 60 * 1000,
   });
 
