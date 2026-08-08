@@ -31,7 +31,7 @@ export const JadePanel = ({
   className?: string;
 }) => (
   <section
-    className={`overflow-hidden rounded-xl bg-gradient-to-br from-jade-600 via-jade-500 to-jade-600 p-6 shadow-panel sm:p-8 ${className}`}
+    className={`overflow-hidden rounded-xl bg-linear-to-br from-jade-600 via-jade-500 to-jade-600 p-6 shadow-panel sm:p-8 ${className}`}
   >
     {children}
   </section>
@@ -53,7 +53,7 @@ export const MediaFrame = ({
   src,
   alt,
   label,
-  ratio = 'aspect-[16/9]',
+  ratio = 'aspect-16/9',
   className = '',
 }: {
   seed: string;

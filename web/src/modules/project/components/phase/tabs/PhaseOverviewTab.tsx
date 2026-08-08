@@ -40,7 +40,7 @@ const PhaseOverviewTab = ({ phase }: { phase: ProjectPhase }) => (
               src={sheet.imageUrl}
               alt={sheet.caption}
               label={sheet.caption}
-              ratio="aspect-[16/10]"
+              ratio="aspect-16/10"
             />
           </div>
           <figcaption className="mt-2 text-center text-theme-xs text-gray-500">

@@ -59,7 +59,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-card transition hover:shadow-card-hover">
-      <div className="relative aspect-[16/10] w-full overflow-hidden">
+      <div className="relative aspect-16/10 w-full overflow-hidden">
         <Link href={project.detailUrl} className="block h-full w-full">
           <PlaceholderThumb
             seed={project.publicId}
@@ -71,7 +71,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           {/* Lop phu toi dan tu duoi len de chu luon doc duoc tren moi anh */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent"
+            className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/70 via-black/15 to-transparent"
           />
           <span className="pointer-events-none absolute inset-x-0 bottom-0 px-5 pb-4 text-center text-xl font-bold uppercase leading-tight tracking-wide text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
             {project.name}

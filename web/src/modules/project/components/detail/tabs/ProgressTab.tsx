@@ -37,7 +37,7 @@ const ProgressTab = ({ project }: { project: ProjectDetail }) => {
                 <li key={item.publicId} className="relative">
                   <span
                     aria-hidden
-                    className={`absolute -left-[22px] top-3.5 h-2.5 w-2.5 rounded-full ring-2 ring-white ${
+                    className={`absolute -left-5.5 top-3.5 h-2.5 w-2.5 rounded-full ring-2 ring-white ${
                       isActive ? 'bg-accent-500' : 'bg-gray-300'
                     }`}
                   />
@@ -96,7 +96,7 @@ const ProgressTab = ({ project }: { project: ProjectDetail }) => {
               seed={`${milestone.publicId}-image-${imageIndex}`}
               src={imageUrl}
               alt={`Hình ảnh tiến độ ${imageIndex + 1} - ${project.name}`}
-              ratio="aspect-[4/3]"
+              ratio="aspect-4/3"
               className="shadow-card"
             />
           ))}

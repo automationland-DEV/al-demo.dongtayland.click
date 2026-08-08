@@ -16,7 +16,7 @@ const formatDate = (iso: string) =>
 
 const NewsCard = ({ article }: { article: NewsArticle }) => (
   <article className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-card transition hover:shadow-card-hover">
-    <div className="relative aspect-[16/9] w-full overflow-hidden">
+    <div className="relative aspect-video w-full overflow-hidden">
       <Link href={`/tin-tuc/${article.slug}`} className="block h-full w-full">
         <PlaceholderThumb
           seed={article.publicId}

@@ -21,7 +21,7 @@ const Photo360Tab = ({ project }: { project: ProjectDetail }) => {
         Toàn cảnh dự án
       </h2>
 
-      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-gray-900 shadow-card">
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-gray-900 shadow-card">
         <PlaceholderThumb
           seed={panorama.publicId}
           src={panorama.imageUrl || undefined}
@@ -51,7 +51,7 @@ const Photo360Tab = ({ project }: { project: ProjectDetail }) => {
           <FiMaximize aria-hidden />
         </button>
 
-        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pt-8 text-center text-theme-sm font-medium text-white">
+        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pb-3 pt-8 text-center text-theme-sm font-medium text-white">
           {panorama.title}
         </p>
       </div>

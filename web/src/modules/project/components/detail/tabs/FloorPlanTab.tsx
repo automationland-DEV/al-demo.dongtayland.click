@@ -340,10 +340,10 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
         ref={wrapperRef}
         className="relative overflow-hidden rounded-lg border border-gray-200 bg-gray-100 shadow-card"
       >
-        <div ref={containerRef} className="h-[560px] w-full sm:h-[680px]" />
+        <div ref={containerRef} className="h-140 w-full sm:h-170" />
 
         {/* Dieu khien tu ve de bam dung thiet ke; Leaflet control mac dinh da tat */}
-        <div className="absolute left-3 top-3 z-[900] flex flex-col gap-2">
+        <div className="absolute left-3 top-3 z-900 flex flex-col gap-2">
           <MapButton label="Phóng to" onClick={() => mapRef.current?.zoomIn()}>
             <FiPlus aria-hidden />
           </MapButton>
@@ -369,14 +369,14 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
             >
               <span
                 className={`absolute top-0.5 h-3 w-3 rounded-full bg-white transition-all ${
-                  showPrice ? 'left-[18px]' : 'left-0.5'
+                  showPrice ? 'left-4.5' : 'left-0.5'
                 }`}
               />
             </span>
           </button>
         </div>
 
-        <div className="absolute right-3 top-3 z-[900] flex items-start gap-2">
+        <div className="absolute right-3 top-3 z-900 flex items-start gap-2">
           {isSearchOpen && (
             <form
               onSubmit={(event) => {

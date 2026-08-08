@@ -68,7 +68,7 @@ const PhasesTab = ({ project }: { project: ProjectDetail }) => {
                 seed={phase.publicId}
                 src={phase.imageUrl}
                 alt={`Phối cảnh phân khu ${phase.name}`}
-                ratio="aspect-[4/3]"
+                ratio="aspect-4/3"
               />
 
               {/* Luon hien chu khong chi hien khi hover: tren man hinh cam tay

@@ -219,7 +219,7 @@ const UnitsTab = ({ slug, lockedPhaseName }: UnitsTabProps) => {
 
       <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-card">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1080px] border-collapse text-left">
+          <table className="w-full min-w-270 border-collapse text-left">
             <caption className="sr-only">
               Bảng hàng chi tiết từng căn, có thể chọn tối đa {MAX_UNIT_SELECTION} căn để so
               sánh
