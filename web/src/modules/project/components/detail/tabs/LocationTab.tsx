@@ -9,7 +9,7 @@ import {
   FaShip,
   FaTrain,
 } from 'react-icons/fa';
-import type { LocationIcon, ProjectDetail } from '../../../models/project-detail.model';
+import type { LocationIcon, ProjectLocation } from '../../../models/project-detail.model';
 import { MediaFrame } from '../shared';
 
 const HIGHLIGHT_ICONS: Record<LocationIcon, ReactNode> = {
@@ -21,18 +21,23 @@ const HIGHLIGHT_ICONS: Record<LocationIcon, ReactNode> = {
   rocket: <FaRocket aria-hidden />,
 };
 
-const LocationTab = ({ project }: { project: ProjectDetail }) => {
-  const { location } = project;
+type LocationTabProps = {
+  location: ProjectLocation;
+  /** Ten hien trong alt anh va tieu de ban do - du an hoac phan khu */
+  name: string;
+  seed: string;
+};
 
+const LocationTab = ({ location, name, seed }: LocationTabProps) => {
   // Ban do nhung cua Google khong can API key voi tham so output=embed
   const mapSrc = `https://www.google.com/maps?q=${location.latitude},${location.longitude}&hl=vi&z=14&output=embed`;
 
   return (
     <div className="space-y-8">
       <MediaFrame
-        seed={`${project.publicId}-location`}
+        seed={`${seed}-location`}
         src={location.bannerUrl}
-        alt={`Sơ đồ vị trí và kết nối vùng của ${project.name}`}
+        alt={`Sơ đồ vị trí và kết nối vùng của ${name}`}
         ratio="aspect-[21/9]"
         className="shadow-card"
       />
@@ -65,7 +70,7 @@ const LocationTab = ({ project }: { project: ProjectDetail }) => {
         <div className="aspect-[16/9] w-full overflow-hidden rounded-lg border border-gray-200 shadow-card">
           <iframe
             src={mapSrc}
-            title={`Bản đồ vị trí ${project.name} - ${location.mapLabel}`}
+            title={`Bản đồ vị trí ${name} - ${location.mapLabel}`}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             className="h-full w-full border-0"

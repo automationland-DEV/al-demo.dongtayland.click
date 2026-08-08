@@ -10,7 +10,11 @@
  * Khong component hay hook nao duoc doc mock truc tiep - moi thu di qua day,
  * nen viec doi sang API that chi cham vao dung file nay.
  */
-import { getProjectDetail, getProjectUnits } from '../mocks/project-detail.mock';
+import {
+  getPhaseDetail,
+  getProjectDetail,
+  getProjectUnits,
+} from '../mocks/project-detail.mock';
 import {
   MOCK_DEVELOPERS,
   MOCK_PROJECTS,
@@ -18,6 +22,7 @@ import {
 } from '../mocks/projects.mock';
 import type {
   PaginatedUnits,
+  PhaseDetail,
   ProjectDetail,
   ProjectUnit,
   UnitQuery,
@@ -158,6 +163,14 @@ export const ProjectService = {
    */
   detail: async (slug: string): Promise<ProjectDetail | null> =>
     delay(getProjectDetail(slug)),
+
+  /**
+   * Chi tiet mot phan khu trong du an.
+   *
+   * KHI CO BACKEND: GET /projects/:slug/phases/:phaseSlug
+   */
+  phase: async (projectSlug: string, phaseSlug: string): Promise<PhaseDetail | null> =>
+    delay(getPhaseDetail(projectSlug, phaseSlug)),
 
   /**
    * Bang hang cua mot du an. Tach khoi `detail` vi mot du an co the co hang

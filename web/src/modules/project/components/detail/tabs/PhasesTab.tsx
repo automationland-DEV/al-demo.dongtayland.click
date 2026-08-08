@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { HiOutlineBuildingOffice2, HiOutlineSquares2X2 } from 'react-icons/hi2';
-import { FiCreditCard } from 'react-icons/fi';
+import { FiCreditCard, FiEye } from 'react-icons/fi';
 import { formatNumber, formatPriceRange } from '@/common/utils/format';
 import type { ProjectDetail } from '../../../models/project-detail.model';
 import { MediaFrame, TabEmptyState } from '../shared';
@@ -49,17 +50,34 @@ const PhasesTab = ({ project }: { project: ProjectDetail }) => {
               Phân khu
             </p>
             <h3 className="mt-1 text-base font-bold uppercase leading-snug text-navy-700">
-              {phase.name}
+              <Link
+                href={`/du-an/${project.slug}/phan-khu/${phase.slug}`}
+                className="transition hover:text-brand-600"
+              >
+                {phase.name}
+              </Link>
             </h3>
           </div>
 
           <div className="p-4">
-            <MediaFrame
-              seed={phase.publicId}
-              src={phase.imageUrl}
-              alt={`Phối cảnh phân khu ${phase.name}`}
-              ratio="aspect-[4/3]"
-            />
+            <Link
+              href={`/du-an/${project.slug}/phan-khu/${phase.slug}`}
+              className="group/thumb relative block"
+            >
+              <MediaFrame
+                seed={phase.publicId}
+                src={phase.imageUrl}
+                alt={`Phối cảnh phân khu ${phase.name}`}
+                ratio="aspect-[4/3]"
+              />
+
+              {/* Luon hien chu khong chi hien khi hover: tren man hinh cam tay
+                  khong co trang thai hover nen nut se khong bao gio xuat hien */}
+              <span className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-2 rounded-md bg-white/90 py-2 text-theme-sm font-semibold text-gray-800 shadow-card backdrop-blur-sm transition group-hover/thumb:bg-white group-hover/thumb:text-brand-600">
+                <FiEye aria-hidden />
+                Xem chi tiết
+              </span>
+            </Link>
           </div>
 
           <div className="space-y-2 px-4 pb-4">

@@ -1,6 +1,6 @@
 'use client';
 
-import type { InterestSchedule, ProjectDetail } from '../../../models/project-detail.model';
+import type { InterestSchedule, SalesPolicy } from '../../../models/project-detail.model';
 import { JadePanel } from '../shared';
 
 /** Khung con trong panel xanh - vien mo, nen dam hon mot chut */
@@ -75,13 +75,17 @@ const ScheduleTable = ({ schedule }: { schedule: InterestSchedule }) => (
   </PolicyBox>
 );
 
-const SalesPolicyTab = ({ project }: { project: ProjectDetail }) => {
-  const { salesPolicy } = project;
+type SalesPolicyTabProps = {
+  salesPolicy: SalesPolicy;
+  /** Luon la ten DU AN, ke ca khi xem tu trang phan khu */
+  projectName: string;
+};
 
+const SalesPolicyTab = ({ salesPolicy, projectName }: SalesPolicyTabProps) => {
   return (
     <div>
       <h2 className="mb-5 text-center text-lg font-bold uppercase tracking-wide text-gray-900">
-        Chính sách bán hàng dự án {project.name}
+        Chính sách bán hàng dự án {projectName}
       </h2>
 
       <JadePanel>

@@ -4,17 +4,13 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
 import { formatArticleDate } from '@/common/utils/format';
+import { removeDiacritics } from '@/common/utils/text';
 import { NEWS_CATEGORY_LABELS } from '@/modules/news/models/news.model';
 import type { ProjectDetail } from '../../../models/project-detail.model';
 import { MediaFrame } from '../shared';
 
 /** Bo dau de go "ha long" van ra "Hạ Long" */
-const normalize = (value: string) =>
-  value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/đ/g, 'd');
+const normalize = (value: string) => removeDiacritics(value).toLowerCase();
 
 const ProjectNewsTab = ({ project }: { project: ProjectDetail }) => {
   const [search, setSearch] = useState('');
