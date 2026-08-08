@@ -23,7 +23,7 @@ steps:
       script:
         - cd /home/demo_dongtayland_click/al-demo.dongtayland.click/web
         # Xóa bỏ các thay đổi thủ công trên server (nếu có) và kéo code mới nhất về
-        - git fetch origin main && git reset --hard origin/main && docker compose down && docker compose up -d --build && docker ps
+        - GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch origin main && git reset --hard origin/main && docker compose down && docker compose up -d --build && docker ps
     when:
       branch: main
       event: [push, manual]
