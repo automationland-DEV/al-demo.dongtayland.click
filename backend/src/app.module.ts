@@ -33,6 +33,8 @@ import { VideosModule } from './modules/media/videos/video.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 
+import { AppController } from './app.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -79,6 +81,7 @@ import { FeedbackModule } from './modules/feedback/feedback.module';
     LeadsModule,
     FeedbackModule,
   ],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
