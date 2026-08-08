@@ -1,5 +1,7 @@
 steps:
-  build:
+  # === BUILD STEPS (Always run on main branch) ===
+
+  build-web:
     image: node:22-alpine
     commands:
       - cd web
@@ -8,9 +10,36 @@ steps:
     when:
       branch: main
       event: [push, manual]
+      path:
+        include: [ 'web/**' ]
 
+  build-backend:
+    image: node:22-alpine
+    commands:
+      - cd backend
+      - npm install
+      - npm run build
+    when:
+      branch: main
+      event: [push, manual]
+      path:
+        include: [ 'backend/**' ]
 
-  deploy:
+  build-admin:
+    image: node:22-alpine
+    commands:
+      - cd admin
+      - npm install
+      - npm run build
+    when:
+      branch: main
+      event: [push, manual]
+      path:
+        include: [ 'admin/**' ]
+
+  # === DEPLOY STEPS (Only run when specific paths change) ===
+
+  deploy-web:
     image: appleboy/drone-ssh
     settings:
       host:
@@ -21,9 +50,55 @@ steps:
         from_secret: ssh_password
       command_timeout: 30m
       script:
-        - cd /home/demo_dongtayland_click/al-demo.dongtayland.click/web
+        - cd /home/demo_dongtayland_click/al-demo.dongtayland.click
         # Xóa bỏ các thay đổi thủ công trên server (nếu có) và kéo code mới nhất về
-        - GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch origin main && git reset --hard origin/main && docker compose down && docker compose up -d --build && docker ps
+        - GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch origin main && git reset --hard origin/main
+        - cd web
+        - docker compose down && docker compose up -d --build && docker ps
     when:
       branch: main
       event: [push, manual]
+      path:
+        include: [ 'web/**' ]
+
+  deploy-backend:
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_username
+      password:
+        from_secret: ssh_password
+      command_timeout: 30m
+      script:
+        - cd /home/demo_dongtayland_click/al-demo.dongtayland.click
+        - GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch origin main && git reset --hard origin/main
+        - cd backend
+        - docker compose down && docker compose up -d --build && docker ps
+    when:
+      branch: main
+      event: [push, manual]
+      path:
+        include: [ 'backend/**' ]
+
+  deploy-admin:
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_username
+      password:
+        from_secret: ssh_password
+      command_timeout: 30m
+      script:
+        - cd /home/demo_dongtayland_click/al-demo.dongtayland.click
+        - GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch origin main && git reset --hard origin/main
+        - cd admin
+        - docker compose down && docker compose up -d --build && docker ps
+    when:
+      branch: main
+      event: [push, manual]
+      path:
+        include: [ 'admin/**' ]
