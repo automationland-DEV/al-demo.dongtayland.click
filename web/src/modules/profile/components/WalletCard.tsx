@@ -1,54 +1,42 @@
+import { FiArrowUpRight, FiTrendingUp } from 'react-icons/fi';
+
 import type { Profile } from '../mocks/profile.mock';
 
 /**
  * Card "Dong Tot" hien thi so du + nut nap ngay.
- * Mau vang gold de noi bat, phan tach voi phan con lai cua trang (trang/blue).
- * Coin icon SVG inline de khong phu thuoc react-icons them icon moi.
+ *
+ * Design 2026: subtle gradient (10-20% saturation) voi clean icon thay vi
+ * coin SVG inline. Layout 2 cot: left info, right CTA.
  */
-const CoinIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
-    <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2" />
-    <circle cx="12" cy="12" r="7.5" fill="currentColor" />
-    <text
-      x="12"
-      y="16"
-      textAnchor="middle"
-      fontSize="9"
-      fontWeight="bold"
-      fill="white"
-    >
-      ₫
-    </text>
-  </svg>
-);
-
 const WalletCard = ({ wallet }: { wallet: Profile['wallet'] }) => {
   return (
-    <section className="rounded-2xl border border-warning-500/30 bg-gradient-to-r from-warning-50 via-warning-50 to-warning-100/60 p-5 shadow-theme-sm md:p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <CoinIcon className="h-5 w-5 text-warning-600" />
-            <span className="text-theme-xs font-semibold uppercase tracking-wide text-warning-700">
-              {wallet.title}
-            </span>
+    <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-theme-sm">
+      <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex items-center gap-4">
+          {/* Icon tile - gradient nhe, icon trang noi bat */}
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-warning-400 to-warning-600 text-white shadow-theme-xs">
+            <FiTrendingUp aria-hidden className="h-6 w-6" />
           </div>
 
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-warning-700 md:text-4xl">
-              {wallet.balance.toLocaleString('vi-VN')}
-            </span>
-            <span className="text-theme-sm font-bold text-warning-600">đồng</span>
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-gray-900 md:text-3xl">
+                {wallet.balance.toLocaleString('vi-VN')}
+              </span>
+              <span className="text-theme-sm font-semibold text-gray-500">
+                {wallet.title}
+              </span>
+            </div>
+            <p className="mt-0.5 text-theme-xs text-gray-500">{wallet.subtitle}</p>
           </div>
-
-          <p className="mt-2 text-theme-xs text-gray-600">{wallet.subtitle}</p>
         </div>
 
         <button
           type="button"
-          className="shrink-0 rounded-full bg-gradient-to-r from-warning-500 to-warning-600 px-5 py-2.5 text-theme-sm font-bold text-white shadow-theme-md transition hover:from-warning-600 hover:to-warning-700"
+          className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-4 py-2.5 text-theme-sm font-semibold text-white shadow-theme-xs transition hover:bg-brand-600"
         >
           Nạp ngay
+          <FiArrowUpRight aria-hidden className="h-4 w-4" />
         </button>
       </div>
     </section>

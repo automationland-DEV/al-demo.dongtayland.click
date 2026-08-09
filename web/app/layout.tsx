@@ -3,6 +3,7 @@ import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import SiteHeader from '@/common/layout/SiteHeader';
 import SiteFooter from '@/common/layout/SiteFooter';
+import MobileBottomTabs from '@/common/layout/MobileBottomTabs';
 import BackToTop from '@/common/components/BackToTop';
 import ChatWidget from '@/modules/chat/components/ChatWidget';
 import QueryProvider from '@/common/providers/QueryProvider';
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     default: 'RealtyHub',
     template: '%s | RealtyHub',
   },
-  description: 'Nền tảng công nghệ hỗ trợ kinh doanh bất động sản.',
+  description: 'Nền tảng công nghệ dành riêng cho môi giới, cung cấp thông tin dự án và công cụ hỗ trợ bán hàng, giúp tư vấn nhanh và chốt giao dịch hiệu quả.',
   /**
    * Favicon / icon cho trinh duyet va home screen.
    *
@@ -64,8 +65,11 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col" suppressHydrationWarning>
         <QueryProvider>
           <SiteHeader />
-          <main className="flex-1">{children}</main>
+          {/* pb-16 = 64px: du cho thanh tabs (56px) + safe-area inset (8px).
+              Tren desktop pb-16 khong co tac dung vi tabs an (lg:hidden). */}
+          <main className="flex-1 pb-16 lg:pb-0">{children}</main>
           <SiteFooter />
+          <MobileBottomTabs />
           <BackToTop />
           <ChatWidget />
         </QueryProvider>

@@ -117,20 +117,3 @@ export const useLogout = () => {
 /** Mot so role co quyen truy cap admin panel. */
 export const hasAdminAccess = (role: UserRole | undefined): boolean =>
   role === 'ADMIN' || role === 'SUPER_ADMIN';
-
-/**
- * Tao URL slug tu ten user (khong dau, gach ngang, lowercase).
- * Vi du: "Nguyen Gia Khang" -> "nguyen-gia-khang".
- * Dung de di den trang profile public /ho-so/[slug].
- *
- * Khong can thay the chinh xac vi ta chi can unique-enough cho mock.
- * Khi noi backend that, slug den tu server.
- */
-export const slugifyName = (name: string): string =>
-  name
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // bo dau
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') || 'user';

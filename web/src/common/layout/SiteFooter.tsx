@@ -38,7 +38,8 @@ const SiteFooter = () => (
         </Link>
 
         <p className="mb-5 text-theme-sm leading-relaxed text-gray-400">
-          Nền tảng công nghệ hỗ trợ kinh doanh bất động sản.
+          Nền tảng công nghệ dành riêng cho môi giới, cung cấp thông tin dự án
+          và công cụ hỗ trợ bán hàng, giúp tư vấn nhanh và chốt giao dịch hiệu quả.
         </p>
 
         <ul className="space-y-3 text-theme-sm">

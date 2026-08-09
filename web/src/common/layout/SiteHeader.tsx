@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiBell, FiChevronDown, FiMenu, FiMessageSquare, FiX } from 'react-icons/fi';
-import { FaApple, FaGooglePlay } from 'react-icons/fa';
+import { FaApple, FaGooglePlay, FaRegHeart } from 'react-icons/fa';
 import AccountMenu from '@/common/components/AccountMenu';
 import FavoriteButton from '@/common/layout/FavoriteButton';
 
@@ -97,6 +97,45 @@ const BrandMark = () => (
       className="h-12 w-auto"
     />
   </Link>
+);
+
+/**
+ * Mot quick action trong ngan keo mobile (Tin nhan / Yeu thich / Thong bao).
+ *
+ * Layout: icon + label ngan phia duoi - phu hop voi chieu rong ngan keo
+ * (khoang 360px max-w-sm). Icon co badge neu co. Bam se auto-close drawer
+ * de nguoi dung thay ngay trang dich dang load.
+ */
+const DrawerActionItem = ({
+  href,
+  icon,
+  label,
+  badge,
+  onClose,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  badge?: string;
+  onClose: () => void;
+}) => (
+  <li className="flex-1">
+    <Link
+      href={href}
+      onClick={onClose}
+      className="group relative flex flex-col items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-theme-xs font-semibold text-gray-700 transition hover:bg-brand-50 hover:text-brand-700"
+    >
+      <span className="relative flex h-9 w-9 items-center justify-center text-lg">
+        {icon}
+        {badge && (
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-error-500 px-1 text-[10px] font-bold leading-none text-white">
+            {badge}
+          </span>
+        )}
+      </span>
+      <span className="leading-none">{label}</span>
+    </Link>
+  </li>
 );
 
 const SiteHeader = () => {
@@ -204,6 +243,18 @@ const SiteHeader = () => {
   return (
     <header className={`sticky top-0 z-40 border-b transition-colors ${headerColor}`}>
       <div className="site-container flex h-16 items-center justify-between gap-4">
+        {/* Nut menu mobile dat o goc trai, truoc BrandMark. Tren desktop
+            nut nay an di boi lg:hidden (desktop co nav inline). */}
+        <button
+          type="button"
+          onClick={() => setIsMobileOpen((open) => !open)}
+          aria-label={isMobileOpen ? 'Đóng menu' : 'Mở menu'}
+          aria-expanded={isMobileOpen}
+          className={`order-first flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition lg:hidden ${iconColor}`}
+        >
+          {isMobileOpen ? <FiX aria-hidden /> : <FiMenu aria-hidden />}
+        </button>
+
         <BrandMark />
 
         <nav aria-label="Điều hướng chính" className="hidden lg:block">
@@ -269,22 +320,26 @@ const SiteHeader = () => {
         </nav>
 
         <div className="flex items-center gap-1.5">
+          {/* Ba icon nhanh (Tin nhan, Yeu thich, Thong bao) chi hien tren
+              desktop. Tren mobile chung duoc dua vao ngan keo (xem drawer
+              ben duoi) de giam chen chan header va tap trung vao dieu
+              huong chinh. */}
           <Link
             href="/tin-nhan"
             aria-label="Tin nhắn"
-            className={`flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
+            className={`hidden lg:flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
           >
             <FiMessageSquare aria-hidden />
           </Link>
 
           {/* Icon yeu thich: badge so du an da luu. Component tu handle
               SSR (khong badge lan dau) + hydrate sau mount. */}
-          <FavoriteButton iconClass={iconColor} />
+          <FavoriteButton iconClass={`hidden lg:flex ${iconColor}`} />
 
           <Link
             href="/thong-bao"
             aria-label="Thông báo"
-            className={`relative flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
+            className={`relative hidden lg:flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
           >
             <FiBell aria-hidden />
             <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-error-500 px-1 text-[10px] font-bold text-white">
@@ -295,16 +350,6 @@ const SiteHeader = () => {
           {/* Account popover: avatar + ten neu da dang nhap, hoac nut "Dang nhap"
               neu chua. Click mo menu xo ra voi cac tuy chon tai khoan. */}
           <AccountMenu />
-
-          <button
-            type="button"
-            onClick={() => setIsMobileOpen((open) => !open)}
-            aria-label={isMobileOpen ? 'Đóng menu' : 'Mở menu'}
-            aria-expanded={isMobileOpen}
-            className={`flex h-9 w-9 items-center justify-center rounded-full transition lg:hidden ${iconColor}`}
-          >
-            {isMobileOpen ? <FiX aria-hidden /> : <FiMenu aria-hidden />}
-          </button>
         </div>
       </div>
 
@@ -337,6 +382,34 @@ const SiteHeader = () => {
                 <FiX aria-hidden className="text-xl" />
               </button>
             </div>
+
+            {/* Khu vuc quick actions tren mobile: 3 icon Tin nhan / Yeu
+                thich / Thong bao. Dat len dau ngan keo de user mo menu
+                la thay ngay, khong phai cuon xuong moi tim. */}
+            <ul
+              aria-label="Truy cập nhanh"
+              className="flex shrink-0 items-stretch border-b border-gray-200 px-2 py-2"
+            >
+              <DrawerActionItem
+                href="/tin-nhan"
+                icon={<FiMessageSquare aria-hidden />}
+                label="Tin nhắn"
+                onClose={() => setIsMobileOpen(false)}
+              />
+              <DrawerActionItem
+                href="/yeu-thich"
+                icon={<FaRegHeart aria-hidden />}
+                label="Yêu thích"
+                onClose={() => setIsMobileOpen(false)}
+              />
+              <DrawerActionItem
+                href="/thong-bao"
+                icon={<FiBell aria-hidden />}
+                label="Thông báo"
+                badge="3"
+                onClose={() => setIsMobileOpen(false)}
+              />
+            </ul>
 
             <ul className="flex-1 overflow-y-auto">
               {NAV_ITEMS.map((item) => (

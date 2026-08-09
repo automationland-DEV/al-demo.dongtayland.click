@@ -23,6 +23,7 @@ export const MOCK_BANNERS: HomeBannerSlide[] = [
     primaryCtaLabel: 'Khám phá dự án',
     secondaryCtaLabel: 'Đăng ký tư vấn',
     desktopImageUrl: '/images/home/banner/desktop/b1.jpg',
+    tabletImageUrl: '/images/home/banner/tablet/b1.jpg',
     mobileImageUrl: '/images/home/banner/mobile/b1.jpg',
   },
   {
@@ -32,6 +33,7 @@ export const MOCK_BANNERS: HomeBannerSlide[] = [
       'Đặt cùng lúc nhiều căn hộ lên bàn cân để chọn được căn phù hợp nhất với nhu cầu và tài chính của bạn.',
     primaryCtaLabel: 'So sánh ngay',
     desktopImageUrl: '/images/home/banner/desktop/b2.jpg',
+    tabletImageUrl: '/images/home/banner/tablet/b2.jpg',
     mobileImageUrl: '/images/home/banner/mobile/b2.jpg',
   },
   {
@@ -41,16 +43,8 @@ export const MOCK_BANNERS: HomeBannerSlide[] = [
       'Cập nhật các đợt mở bán, lịch tham quan nhà mẫu và ưu đãi từ chủ đầu tư mỗi tuần.',
     primaryCtaLabel: 'Xem sự kiện',
     desktopImageUrl: '/images/home/banner/desktop/b3.jpg',
+    tabletImageUrl: '/images/home/banner/tablet/b3.png',
     mobileImageUrl: '/images/home/banner/mobile/b3.jpg',
-  },
-  {
-    publicId: 'banner-004',
-    headline: 'Đăng ký nhận tư vấn miễn phí',
-    subtitle:
-      'Chuyên viên RealtyHub sẽ liên hệ trong vòng 24 giờ để hỗ trợ bạn chọn dự án phù hợp.',
-    primaryCtaLabel: 'Nhận tư vấn',
-    desktopImageUrl: '/images/home/banner/desktop/b4.jpg',
-    mobileImageUrl: '/images/home/banner/mobile/b4.jpg',
   },
 ];
 
