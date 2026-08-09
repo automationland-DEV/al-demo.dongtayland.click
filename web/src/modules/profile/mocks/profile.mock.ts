@@ -4,18 +4,45 @@
  * nay noi backend that, doi `MOCK_PROFILE` thanh goi /users/me.
  */
 
-export type ProfileStat = { label: string; value: number };
+import type { ComponentType } from 'react';
+import {
+  FiBookmark,
+  FiClock,
+  FiCreditCard,
+  FiGift,
+  FiHelpCircle,
+  FiLogOut,
+  FiMessageSquare,
+  FiPackage,
+  FiPercent,
+  FiSearch,
+  FiSettings,
+  FiShoppingBag,
+  FiStar,
+  FiTag,
+  FiTrendingUp,
+  FiUserCheck,
+} from 'react-icons/fi';
+
+export type ProfileStat = {
+  /** Key de map icon (xem STAT_ICONS trong ProfileCard). */
+  key: 'followers' | 'following' | 'joined';
+  label: string;
+  value: number;
+};
 
 export type BadgeVariant = 'new' | 'gold' | 'pro';
 
 export type MenuItem = {
   /** Href tuyet doi (next/link). Neu undefined -> placeholder, click khong di dau. */
   href?: string;
-  /** Emoji/icon dat san o he thong (tranh dung icon set lon de giu gon file). */
-  emoji: string;
-  /** Mau nen cho icon tile: 'brand' | 'navy' | 'warning' | 'success' | 'gray'. */
-  tone: 'brand' | 'navy' | 'warning' | 'success' | 'gray';
+  /** Icon component tu react-icons/fi (Feather). Chuyen nghiep hon emoji. */
+  icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
+  /** Mau nen cho icon tile: 'brand' | 'navy' | 'warning' | 'success' | 'gray' | 'accent'. */
+  tone: 'brand' | 'navy' | 'warning' | 'success' | 'gray' | 'accent';
   label: string;
+  /** Mo ta ngan duoi label (optional, de lam sub-text). */
+  description?: string;
   badge?: { text: string; variant: BadgeVariant };
 };
 
@@ -24,6 +51,7 @@ export type Profile = {
       /ho-so/[slug]. */
   slug: string;
   name: string;
+  email: string;
   /** Chu cai hien thi khi khong co avatar that. */
   initials: string;
   /** URL avatar that, neu co. Trong mock hien khong co nen se fallback initials. */
@@ -52,6 +80,7 @@ export type Profile = {
 export const MOCK_PROFILE: Profile = {
   slug: 'nguyen-gia-khang',
   name: 'Nguyễn Gia Khang',
+  email: 'khang.nguyen@realtyhub.vn',
   initials: 'NK',
   // Mock chua co file avatar that - de undefined de UserAvatar fallback
   // sang gradient + initials "NK". Khi nao co file that, set URL o day.
@@ -60,8 +89,9 @@ export const MOCK_PROFILE: Profile = {
   joinedAt: 'Đã tham gia 2 tháng 30 ngày',
   location: 'Quận Tân Phú, TP.HCM',
   stats: [
-    { label: 'Người theo dõi', value: 12 },
-    { label: 'Đang theo dõi', value: 4 },
+    { key: 'followers', label: 'Người theo dõi', value: 12 },
+    { key: 'following', label: 'Đang theo dõi', value: 4 },
+    { key: 'joined', label: 'Tin đã đăng', value: 8 },
   ],
   wallet: {
     title: 'Tài khoản Định danh',
@@ -70,53 +100,129 @@ export const MOCK_PROFILE: Profile = {
   },
   // "Tien ich": cac trang quan ly noi dung cua toi
   utilities: [
-    { emoji: '🔖', tone: 'brand', label: 'Tin đã lưu', href: '/tai-khoan/tin-da-luu' },
-    { emoji: '🔍', tone: 'brand', label: 'Tìm kiếm đã lưu', href: '/tai-khoan/tim-kiem-da-luu' },
-    { emoji: '🕘', tone: 'gray', label: 'Lịch sử xem tin', href: '/tai-khoan/lich-su' },
-    { emoji: '⭐', tone: 'warning', label: 'Đánh giá từ tôi', href: '/tai-khoan/danh-gia' },
     {
-      emoji: '📍',
+      icon: FiBookmark,
+      tone: 'brand',
+      label: 'Tin đã lưu',
+      description: 'Danh sách các dự án bạn đã thêm vào bộ sưu tập',
+      href: '/tai-khoan/tin-da-luu',
+    },
+    {
+      icon: FiSearch,
+      tone: 'brand',
+      label: 'Tìm kiếm đã lưu',
+      description: 'Các bộ lọc và gợi ý bạn đã lưu để xem lại',
+      href: '/tai-khoan/tim-kiem-da-luu',
+    },
+    {
+      icon: FiClock,
+      tone: 'gray',
+      label: 'Lịch sử xem tin',
+      description: 'Hoạt động xem dự án trong 30 ngày gần nhất',
+      href: '/tai-khoan/lich-su',
+    },
+    {
+      icon: FiStar,
+      tone: 'warning',
+      label: 'Đánh giá từ tôi',
+      description: 'Những đánh giá bạn đã viết về các dự án',
+      href: '/tai-khoan/danh-gia',
+    },
+    {
+      icon: FiTrendingUp,
       tone: 'success',
       label: 'Đánh giá khu vực',
+      description: 'Theo dõi biến động giá và xu hướng khu vực bạn quan tâm',
       href: '/tai-khoan/danh-gia-khu-vuc',
-      badge: { text: 'Tính năng mới', variant: 'new' },
+      badge: { text: 'Mới', variant: 'new' },
     },
   ],
   // "Dich vu tra phi": cac goi tang kha nang tiep can
   paidServices: [
     {
-      emoji: '🪙',
+      icon: FiPackage,
       tone: 'warning',
       label: 'Đồng Tốt',
+      description: 'Đơn vị để đăng tin nổi bật và tạo chuyên trang',
       href: '/tai-khoan/dong-tot',
     },
     {
-      emoji: '👑',
+      icon: FiUserCheck,
       tone: 'navy',
       label: 'Gói PRO',
+      description: 'Ưu tiên hiển thị, huy hiệu PRO, hỗ trợ riêng',
       href: '/tai-khoan/goi-pro',
       badge: { text: 'PRO', variant: 'pro' },
     },
-    { emoji: '🤝', tone: 'success', label: 'Kênh Đối Tác', href: '/tai-khoan/kenh-doi-tac' },
-    { emoji: '💳', tone: 'gray', label: 'Lịch sử giao dịch', href: '/tai-khoan/giao-dich' },
     {
-      emoji: '🏪',
+      icon: FiShoppingBag,
+      tone: 'success',
+      label: 'Kênh Đối Tác',
+      description: 'Hợp tác cùng dự án và nhận hoa hồng giới thiệu',
+      href: '/tai-khoan/kenh-doi-tac',
+    },
+    {
+      icon: FiCreditCard,
+      tone: 'gray',
+      label: 'Lịch sử giao dịch',
+      description: 'Hóa đơn, biên nhận và trạng thái thanh toán',
+      href: '/tai-khoan/giao-dich',
+    },
+    {
+      icon: FiMessageSquare,
       tone: 'brand',
       label: 'Cửa hàng / Chuyên trang của tôi',
+      description: 'Tạo trang riêng để showcase dự án của bạn',
       href: '/tai-khoan/chuyen-trang',
       badge: { text: 'Tạo ngay', variant: 'gold' },
     },
   ],
   // "Uu dai, khuyen mai": marketing cho user
   promotions: [
-    { emoji: '🎁', tone: 'warning', label: 'Chợ Tốt ưu đãi', href: '/uu-dai' },
-    { emoji: '🏷️', tone: 'brand', label: 'Ưu đãi của tôi', href: '/tai-khoan/uu-dai-cua-toi' },
+    {
+      icon: FiGift,
+      tone: 'warning',
+      label: 'RealtyHub ưu đãi',
+      description: 'Chương trình khuyến mãi đang diễn ra',
+      href: '/uu-dai',
+    },
+    {
+      icon: FiTag,
+      tone: 'brand',
+      label: 'Ưu đãi của tôi',
+      description: 'Voucher và mã giảm giá đã lưu',
+      href: '/tai-khoan/uu-dai-cua-toi',
+    },
   ],
   // "Khac": cai dat + tro giup + dang xuat
   others: [
-    { emoji: '⚙️', tone: 'gray', label: 'Cài đặt tài khoản', href: '/cai-dat' },
-    { emoji: '❓', tone: 'brand', label: 'Trợ giúp', href: '/tro-giup' },
-    { emoji: '💬', tone: 'success', label: 'Đóng góp ý kiến', href: '/dong-gop-y-kien' },
-    { emoji: '🚪', tone: 'gray', label: 'Đăng xuất', href: '/dang-xuat' },
+    {
+      icon: FiSettings,
+      tone: 'gray',
+      label: 'Cài đặt tài khoản',
+      description: 'Thông tin cá nhân, bảo mật, thông báo',
+      href: '/cai-dat',
+    },
+    {
+      icon: FiHelpCircle,
+      tone: 'brand',
+      label: 'Trợ giúp',
+      description: 'Hướng dẫn sử dụng và câu hỏi thường gặp',
+      href: '/tro-giup',
+    },
+    {
+      icon: FiPercent,
+      tone: 'success',
+      label: 'Đóng góp ý kiến',
+      description: 'Gửi phản hồi để chúng tôi cải thiện sản phẩm',
+      href: '/dong-gop-y-kien',
+    },
+    {
+      icon: FiLogOut,
+      tone: 'gray',
+      label: 'Đăng xuất',
+      description: 'Đăng xuất khỏi tài khoản trên thiết bị này',
+      href: '/dang-xuat',
+    },
   ],
 };

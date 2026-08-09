@@ -5,7 +5,7 @@ import { HomeService } from '@/modules/home/services/home.service';
 export const metadata: Metadata = {
   title: 'Trang chủ',
   description:
-    'Nền tảng công nghệ hỗ trợ kinh doanh bất động sản - tìm kiếm, so sánh và nhận tư vấn dự án miễn phí.',
+    'Nền tảng công nghệ dành riêng cho môi giới, cung cấp thông tin dự án và công cụ hỗ trợ bán hàng, giúp tư vấn nhanh và chốt giao dịch hiệu quả.',
 };
 
 /**
