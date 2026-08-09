@@ -264,13 +264,19 @@ const ProjectMapView = ({ projects, isLoading }: ProjectMapViewProps) => {
         .join(' ');
 
       const marker = L.marker([project.latitude, project.longitude], {
+        // Ca hai loai ghim deu ve phan nhin thay bang <span> ben trong, va
+        // deu ghi de iconSize/iconAnchor thanh undefined. Ly do:
+        //  - L.divIcon co san mac dinh iconSize [12,12]; bo trong thi Leaflet
+        //    van gan width/height inline, o chu khong co dan duoc theo chu.
+        //  - Leaflet ghi transform inline len the ghim, nen phan phong to khi
+        //    ro chuot phai nam o <span>, khong dat tren the duoc.
+        // De undefined thi the ghim la diem neo 0x0 dung toa do, <span> tu keo
+        // ve giua - o chu dai ngan the nao cung can dung ghim.
         icon: L.divIcon({
           className,
-          html: text ? `<span>${escapeHtml(text)}</span>` : '',
-          // Phai khop .map-pin--label trong globals.css: Leaflet dat ghim theo
-          // iconAnchor, lech so la ghim khong dung toa do that.
-          iconSize: text ? [44, 18] : [12, 12],
-          iconAnchor: text ? [22, 9] : [6, 6],
+          html: `<span>${text ? escapeHtml(text) : ''}</span>`,
+          iconSize: undefined,
+          iconAnchor: undefined,
         }),
         title: project.name,
       })
