@@ -262,8 +262,10 @@ const ProjectMapView = ({ projects, isLoading }: ProjectMapViewProps) => {
         icon: L.divIcon({
           className,
           html: text ? `<span>${escapeHtml(text)}</span>` : '',
-          iconSize: text ? [58, 24] : [14, 14],
-          iconAnchor: text ? [29, 12] : [7, 7],
+          // Phai khop .map-pin--label trong globals.css: Leaflet dat ghim theo
+          // iconAnchor, lech so la ghim khong dung toa do that.
+          iconSize: text ? [48, 20] : [14, 14],
+          iconAnchor: text ? [24, 10] : [7, 7],
         }),
         title: project.name,
       })
