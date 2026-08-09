@@ -1,11 +1,12 @@
-import React from 'react'
+import type { Metadata } from 'next';
+import AgentOnboardingView from '@/modules/agent-onboarding/components/AgentOnboardingView';
 
-const TroThanhMoiGioiPage = () => {
-  return (
-    <div>
-        <h1>Trở thành môi giới</h1>
-    </div>
-  )
-}
+export const metadata: Metadata = {
+  title: 'Trở thành môi giới',
+  description:
+    'Hoàn tất 4 bước đăng ký để trở thành đối tác môi giới chính thức của Saleplust: khu vực hoạt động, người cố vấn, định danh điện tử và chứng chỉ hành nghề.',
+};
 
-export default TroThanhMoiGioiPage
+const TroThanhMoiGioiPage = () => <AgentOnboardingView />;
+
+export default TroThanhMoiGioiPage;

@@ -174,13 +174,6 @@ const OverviewTab = ({ project }: { project: ProjectDetail }) => {
         </section>
       )}
 
-      <StoryPanel
-        title={project.intro.title}
-        body={project.intro.body}
-        thumbnailUrl={project.intro.videoThumbnailUrl}
-        seed={`${project.publicId}-intro`}
-      />
-
       {/* Tien ich */}
       {amenityPages.length > 0 && (
         <section>

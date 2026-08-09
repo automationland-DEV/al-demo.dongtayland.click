@@ -22,11 +22,11 @@ const NAV_ITEMS = [
 const MORE_MENU = {
   label: 'mục Khác',
   children: [
-  { label: 'Trở thành môi giới', href: '/tro-thanh-moi-gioi' },
+    { label: 'Trở thành môi giới', href: '/tro-thanh-moi-gioi' },
+    { label: 'So sánh chính sách', href: '/so-sanh-chinh-sach' },
     { label: 'Liên hệ chúng tôi', href: '/lien-he-chung-toi' },
     { label: 'Góp ý & phản hồi', href: '/gop-y-va-phan-hoi' },
     { label: 'Hướng dẫn sử dụng', href: '/huong-dan' },
-
   ],
 };
 

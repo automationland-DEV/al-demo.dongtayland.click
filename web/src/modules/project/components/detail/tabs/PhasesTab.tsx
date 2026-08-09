@@ -51,7 +51,7 @@ const PhasesTab = ({ project }: { project: ProjectDetail }) => {
             </p>
             <h3 className="mt-1 text-base font-bold uppercase leading-snug text-navy-700">
               <Link
-                href={`/du-an/${project.slug}/phan-khu/${phase.slug}`}
+                href={`/gio-hang/${project.slug}/phan-khu/${phase.slug}`}
                 className="transition hover:text-brand-600"
               >
                 {phase.name}
@@ -61,7 +61,7 @@ const PhasesTab = ({ project }: { project: ProjectDetail }) => {
 
           <div className="p-4">
             <Link
-              href={`/du-an/${project.slug}/phan-khu/${phase.slug}`}
+              href={`/gio-hang/${project.slug}/phan-khu/${phase.slug}`}
               className="group/thumb relative block"
             >
               <MediaFrame

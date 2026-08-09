@@ -121,7 +121,7 @@ const NotFound = () => (
 
       {/* Search bar (decorative) */}
       <Link
-        href="/du-an"
+        href="/gio-hang"
         className="mt-10 flex w-full max-w-xl items-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3.5 text-left text-white shadow-theme-md backdrop-blur-md transition hover:bg-white/15"
       >
         <FiSearch aria-hidden className="h-5 w-5 text-white/70" />
@@ -144,7 +144,7 @@ const NotFound = () => (
           Về trang chủ
         </Link>
         <Link
-          href="/du-an"
+          href="/gio-hang"
           className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-theme-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20"
         >
           Khám phá dự án
@@ -217,8 +217,8 @@ const NotFound = () => (
 // ============================================================================
 
 const POPULAR_LINKS = [
-  { emoji: '🏗️', label: 'Dự án', desc: 'Khám phá 250+ dự án', href: '/du-an' },
-  { emoji: '🏠', label: 'Căn hộ', desc: 'Tìm căn phù hợp', href: '/du-an?type=can-ho' },
+  { emoji: '🏗️', label: 'Dự án', desc: 'Khám phá 250+ dự án', href: '/gio-hang' },
+  { emoji: '🏠', label: 'Căn hộ', desc: 'Tìm căn phù hợp', href: '/gio-hang?type=can-ho' },
   { emoji: '📰', label: 'Tin tức', desc: 'Cập nhật thị trường', href: '/tin-tuc' },
   { emoji: '🎓', label: 'Đào tạo', desc: 'Khóa học BĐS miễn phí', href: '/dao-tao' },
   { emoji: '📅', label: 'Sự kiện', desc: 'Workshop & offline event', href: '/su-kien' },

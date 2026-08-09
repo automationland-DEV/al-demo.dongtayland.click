@@ -91,7 +91,7 @@ const LoginPage = () => {
               thế hệ mới
             </h2>
             <p className="mt-4 max-w-md text-theme-sm leading-relaxed text-white/85">
-              Tìm dự án bằng AI, so sánh lãi vay, đồng bộ khách hàng giữa môi giới và quản trị —
+              Tìm dự án bằng AI, so sánh chính sách, đồng bộ khách hàng giữa môi giới và quản trị —
               tất cả trong một nền tảng.
             </p>
 
@@ -106,7 +106,7 @@ const LoginPage = () => {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-[10px] font-bold">
                   ✓
                 </span>
-                So sánh lãi vay ngân hàng
+                So sánh chính sách bán hàng
               </li>
               <li className="flex items-center gap-3">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-[10px] font-bold">
