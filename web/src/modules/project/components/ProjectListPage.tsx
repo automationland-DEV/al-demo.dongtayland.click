@@ -392,7 +392,12 @@ const ProjectListPage = () => {
   return (
     <div className={shellClass}>
       <div className={headClass}>
-        <h1 className="mb-6 text-center text-3xl font-bold uppercase tracking-wide text-gray-900">
+        {/* Che do ban do tren dien thoai: giau tieu de de nhuong cho cho ban do */}
+        <h1
+          className={`mb-6 text-center text-3xl font-bold uppercase tracking-wide text-gray-900 ${
+            isMapView ? 'hidden lg:block' : ''
+          }`}
+        >
           Danh sách dự án
         </h1>
 
@@ -411,7 +416,11 @@ const ProjectListPage = () => {
         />
       </div>
 
-        <div className="mb-4 flex min-h-5 items-center justify-between text-theme-sm text-gray-500">
+        <div
+          className={`mb-4 flex min-h-5 items-center justify-between text-theme-sm text-gray-500 ${
+            isMapView ? 'hidden lg:flex' : ''
+          }`}
+        >
           {isFirstLoad ? (
             <span className="h-4 w-32 animate-pulse rounded bg-gray-100" />
           ) : (

@@ -25,9 +25,6 @@ import {
   type ProjectStatus,
 } from '../models/project.model';
 
-/** Chieu cao header dinh - ban do bat dau ngay duoi no va choan het phan con lai */
-const HEADER_HEIGHT = '65px';
-
 /**
  * Hai lop nen cua ban do.
  *
@@ -325,10 +322,15 @@ const ProjectMapView = ({ projects, isLoading }: ProjectMapViewProps) => {
   return (
     <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       {/* ── Ban do: dinh theo man hinh, tran sat mep phai ────────────────── */}
-      <div
-        className="relative order-1 h-[60vh] lg:sticky lg:order-2 lg:h-[calc(100vh-65px)]"
-        style={{ top: HEADER_HEIGHT }}
-      >
+      {/* 65px la chieu cao header dinh - ban do bat dau ngay duoi no va choan
+          het phan con lai cua man hinh.
+
+          `top` phai la class chu khong duoc dat inline: inline thi no ap dung o
+          MOI be ngang, ma truoc day the nay con mang class `relative` nen tren
+          dien thoai bi day xuong 65px, chua ra mot vet trang ngay tren ban do.
+          Dung `sticky` luon (thay `relative`) - sticky cung tao khung cho cac
+          lop phu dat tuyet doi ben trong. */}
+      <div className="sticky top-[65px] order-1 h-[calc(100dvh-65px)] lg:order-2 lg:h-[calc(100vh-65px)]">
         <div ref={containerRef} className="h-full w-full" />
 
         {/* Dai icon chon cach ghim tu gioi thieu minh - cuon ngang khi hep */}
@@ -437,8 +439,11 @@ const ProjectMapView = ({ projects, isLoading }: ProjectMapViewProps) => {
         )}
       </div>
 
-      {/* ── Danh sach: cuon cung trang, ban do dinh lai ben canh ─────────── */}
-      <div className="order-2 px-4 py-4 sm:px-6 lg:order-1 lg:py-6 lg:pl-8 lg:pr-4">
+      {/* ── Danh sach: cuon cung trang, ban do dinh lai ben canh ───────────
+          An hoan toan tren dien thoai: man hinh hep khong du cho vua ban do
+          vua danh sach, trang mau cung chi hien moi ban do. Doi lai danh sach
+          bang nut "Danh sach" o thanh tren. */}
+      <div className="hidden px-4 py-4 sm:px-6 lg:order-1 lg:block lg:py-6 lg:pl-8 lg:pr-4">
         {isLoading ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {Array.from({ length: 4 }).map((_, index) => (
