@@ -29,7 +29,7 @@ import ProjectCard from './ProjectCard';
  *   - Sort: Vua luu (mac dinh) / Ten A-Z / Phan khuc
  *   - Action bar: "Xoa tat ca" + "Chia se" (copy link public)
  *   - Hien thi savedAt relative ("vua luu", "2 gio truoc") nho stamp thoi gian
- *   - Empty state co CTA + goi y 3 du an noi bat tu /du-an
+ *   - Empty state co CTA + goi y 3 du an noi bat tu /gio-hang
  *
  * Data flow:
  *   1. useFavorites() tra danh sach FavoriteEntry (publicId + savedAt) tu localStorage.
@@ -342,7 +342,7 @@ const FavoriteList = () => {
             Bấm vào biểu tượng trái tim trên bất kỳ dự án nào để lưu vào đây.
           </p>
           <Link
-            href="/du-an"
+            href="/gio-hang"
             className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-5 py-2.5 text-theme-sm font-semibold text-white transition hover:bg-brand-600"
           >
             Khám phá dự án

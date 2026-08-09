@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  * Luu o localStorage nen phai o client (server khong biet user da luu
  * du an nao). Component FavoriteList:
  *   - luc chua hydrate: hien trang thai loading (skeleton giong card)
- *   - luc da hydrate + favorites rong: empty state co CTA quay lai /du-an
+ *   - luc da hydrate + favorites rong: empty state co CTA quay lai /gio-hang
  *   - co data: grid ProjectCard (click heart se bo luu -> grid tu update)
  *
  * Phai boc Suspense de useSearchParams ben trong khong chan prerender.

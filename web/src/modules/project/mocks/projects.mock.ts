@@ -75,7 +75,7 @@ export const MOCK_PROJECTS: Project[] = SEEDS.map((seed, index) => {
     regionId: region.value,
     regionName: region.label,
     thumbnailUrl: `/images/projects/${seed.slug}.jpg`,
-    detailUrl: `/du-an/${seed.slug}`,
+    detailUrl: `/gio-hang/${seed.slug}`,
     isHot: seed.isHot,
     publishedAt: publishedAtFor(index),
   };
