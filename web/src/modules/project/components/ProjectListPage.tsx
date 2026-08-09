@@ -5,25 +5,34 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/common/components/Pagination';
 import NewsSection from '@/modules/news/components/NewsSection';
 import ProjectCard from './ProjectCard';
-import ProjectFilterBar, { type ProjectFilterValues } from './ProjectFilterBar';
+import ProjectFilterBar, {
+  type ProjectFilterValues,
+  type ProjectViewMode,
+} from './ProjectFilterBar';
 import ProjectHighlightPanel from './ProjectHighlightPanel';
-import ActiveFilterChips, { type ActiveChip } from './ActiveFilterChips';
+import ProjectMapView from './ProjectMapView';
+import { useFavorites } from '../hooks/useFavorites';
 import {
   useProjectFilterOptions,
   useProjectHighlights,
   useProjectList,
 } from '../hooks/useProjects';
 import {
-  PROPERTY_TYPE_LABELS,
-  STATUS_LABELS,
+  type ProjectAmenityTag,
+  type ProjectFilterOptions,
+  type ProjectLegal,
   type ProjectPropertyType,
   type ProjectQuery,
+  type ProjectSegment,
   type ProjectStatus,
+  type ProjectViewpoint,
 } from '../models/project.model';
 
 /**
  * URL la nguon su that duy nhat cua bo loc: refresh khong mat filter,
  * copy link gui nguoi khac ra dung ket qua, nut Back cua trinh duyet chay dung.
+ *
+ * Ten tham so viet tat tieng Viet cho link ngan va van doc duoc.
  */
 const PARAM = {
   search: 'q',
@@ -31,35 +40,82 @@ const PARAM = {
   region: 'kv',
   propertyType: 'lh',
   status: 'tt',
+  segment: 'pk',
+  priceMin: 'gia-tu',
+  priceMax: 'gia-den',
+  areaMax: 'dt',
+  bedrooms: 'pn',
+  handoverBefore: 'bg',
+  amenityTags: 'ti',
+  viewpoints: 'vw',
+  legal: 'pl',
+  hasDiscount: 'ck',
+  hasBankSupport: 'nh',
+  postedWithinDays: 'dang',
   page: 'trang',
   limit: 'sl',
 } as const;
 
+/** Moi khoa loc tren ProjectFilterValues ung voi dung mot tham so URL */
+const PARAM_OF: Record<keyof ProjectFilterValues, string> = {
+  search: PARAM.search,
+  developerId: PARAM.developer,
+  regionId: PARAM.region,
+  propertyType: PARAM.propertyType,
+  status: PARAM.status,
+  segment: PARAM.segment,
+  priceMin: PARAM.priceMin,
+  priceMax: PARAM.priceMax,
+  areaMax: PARAM.areaMax,
+  bedrooms: PARAM.bedrooms,
+  handoverBefore: PARAM.handoverBefore,
+  amenityTags: PARAM.amenityTags,
+  viewpoints: PARAM.viewpoints,
+  legal: PARAM.legal,
+  hasDiscount: PARAM.hasDiscount,
+  hasBankSupport: PARAM.hasBankSupport,
+  postedWithinDays: PARAM.postedWithinDays,
+};
+
 const ALLOWED_LIMITS = [12, 24, 48];
 const DEFAULT_LIMIT = 12;
 
-const EMPTY_OPTIONS = {
+const EMPTY_OPTIONS: ProjectFilterOptions = {
   developers: [],
   regions: [],
   propertyTypes: [],
   statuses: [],
+  segments: [],
+  amenityTags: [],
+  viewpoints: [],
+  legals: [],
+  handoverYears: [],
+};
+
+/**
+ * Doi mot gia tri bo loc thanh doan text tren URL.
+ * Tra ve null khi "khong loc gi" - applyParams se xoa han tham so do, nen URL
+ * chi chua dung nhung gi nguoi dung that su chon.
+ */
+const toParam = (value: ProjectFilterValues[keyof ProjectFilterValues]) => {
+  if (value === null || value === '' || value === false) return null;
+  if (value === true) return '1';
+  if (Array.isArray(value)) return value.length > 0 ? value.join(',') : null;
+  return String(value);
 };
 
 
 const GRID_CLASS = 'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3';
 
-/** Phai giu dung hinh dang ProjectCard (anh - ten - hang 3 nut) de luc du lieu
-    ve khong bi nhay layout */
+/** Phai giu dung hinh dang ProjectCard (anh - hang 3 nut) de luc du lieu ve
+    khong bi nhay layout */
 const CardSkeleton = () => (
   <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-card">
     <div className="aspect-16/10 w-full animate-pulse bg-gray-100" />
-    <div className="space-y-3 p-5">
-      <div className="h-4 w-3/4 animate-pulse rounded bg-gray-100" />
-      <div className="grid grid-cols-3 gap-2">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <div key={index} className="h-16 animate-pulse rounded-lg bg-gray-100" />
-        ))}
-      </div>
+    <div className="grid grid-cols-3 gap-2 p-5">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div key={index} className="h-16 animate-pulse rounded-lg bg-gray-100" />
+      ))}
     </div>
   </div>
 );
@@ -70,17 +126,47 @@ const ProjectListPage = () => {
   const pathname = usePathname();
 
   // ── Doc trang thai tu URL ────────────────────────────────────────────────
+  // URL do nguoi dung sua duoc, nen moi gia tri deu phai qua mot buoc lam sach:
+  // so hong tra ve null, danh sach rong tra ve mang rong.
+  const readNumber = (key: string): number | null => {
+    const raw = searchParams.get(key);
+    if (raw === null) return null;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+
+  const readList = (key: string): string[] => {
+    const raw = searchParams.get(key);
+    return raw ? raw.split(',').filter(Boolean) : [];
+  };
+
   const urlSearch = searchParams.get(PARAM.search) ?? '';
   const developerId = searchParams.get(PARAM.developer);
   const regionId = searchParams.get(PARAM.region);
   const propertyType = searchParams.get(PARAM.propertyType);
   const status = searchParams.get(PARAM.status);
+  const segment = searchParams.get(PARAM.segment);
+  const legal = searchParams.get(PARAM.legal);
+  const priceMin = readNumber(PARAM.priceMin);
+  const priceMax = readNumber(PARAM.priceMax);
+  const areaMax = readNumber(PARAM.areaMax);
+  const bedrooms = readNumber(PARAM.bedrooms);
+  const handoverBefore = readNumber(PARAM.handoverBefore);
+  const postedWithinDays = readNumber(PARAM.postedWithinDays);
+  const amenityTags = readList(PARAM.amenityTags);
+  const viewpoints = readList(PARAM.viewpoints);
+  const hasDiscount = searchParams.get(PARAM.hasDiscount) === '1';
+  const hasBankSupport = searchParams.get(PARAM.hasBankSupport) === '1';
 
   const rawPage = Number(searchParams.get(PARAM.page));
   const page = Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
 
   const rawLimit = Number(searchParams.get(PARAM.limit));
   const limit = ALLOWED_LIMITS.includes(rawLimit) ? rawLimit : DEFAULT_LIMIT;
+
+  // Cach xem khong phai bo loc nen khong day len URL - doi tab xong tai lai
+  // trang thi ve mac dinh la danh sach, dung nhu mong doi.
+  const [view, setView] = useState<ProjectViewMode>('danh-sach');
 
   // ── O tim kiem: go den dau hien den do, 300ms sau moi ghi vao URL ────────
   const [searchInput, setSearchInput] = useState(urlSearch);
@@ -132,6 +218,12 @@ const ProjectListPage = () => {
   );
 
   // ── Truy van ─────────────────────────────────────────────────────────────
+  // Cac phep ep kieu o day la ranh gioi giua "chuoi bat ky tren URL" va union
+  // hep cua model. Gia tri la vo nghia thi service khong khop du an nao, tuong
+  // duong khong loc - nen khong can kiem tra tung gia tri mot.
+  const amenityTagsKey = amenityTags.join(',');
+  const viewpointsKey = viewpoints.join(',');
+
   const query: ProjectQuery = useMemo(
     () => ({
       page,
@@ -141,13 +233,48 @@ const ProjectListPage = () => {
       regionId,
       propertyType: propertyType as ProjectPropertyType | null,
       status: status as ProjectStatus | null,
+      segment: segment as ProjectSegment | null,
+      priceMin,
+      priceMax,
+      areaMax,
+      bedrooms,
+      handoverBefore,
+      amenityTags: (amenityTagsKey ? amenityTagsKey.split(',') : []) as ProjectAmenityTag[],
+      viewpoints: (viewpointsKey ? viewpointsKey.split(',') : []) as ProjectViewpoint[],
+      legal: legal as ProjectLegal | null,
+      hasDiscount,
+      hasBankSupport,
+      postedWithinDays,
     }),
-    [page, limit, urlSearch, developerId, regionId, propertyType, status],
+    // amenityTags/viewpoints la mang moi o moi lan render nen phai phu thuoc vao
+    // chuoi da noi, neu khong useMemo khong bao gio giu duoc ket qua cu
+    [
+      page,
+      limit,
+      urlSearch,
+      developerId,
+      regionId,
+      propertyType,
+      status,
+      segment,
+      priceMin,
+      priceMax,
+      areaMax,
+      bedrooms,
+      handoverBefore,
+      amenityTagsKey,
+      viewpointsKey,
+      legal,
+      hasDiscount,
+      hasBankSupport,
+      postedWithinDays,
+    ],
   );
 
   const listQuery = useProjectList(query);
   const optionsQuery = useProjectFilterOptions();
   const highlightsQuery = useProjectHighlights();
+  const { favorites } = useFavorites();
 
   const options = optionsQuery.data ?? EMPTY_OPTIONS;
 
@@ -157,133 +284,148 @@ const ProjectListPage = () => {
     regionId,
     propertyType,
     status,
+    segment,
+    priceMin,
+    priceMax,
+    areaMax,
+    bedrooms,
+    handoverBefore,
+    amenityTags,
+    viewpoints,
+    legal,
+    hasDiscount,
+    hasBankSupport,
+    postedWithinDays,
   };
 
   const handleFilterChange = useCallback(
-    <K extends keyof ProjectFilterValues>(key: K, value: ProjectFilterValues[K]) => {
-      if (key === 'search') {
-        setSearchInput(value ?? '');
-        return;
+    (updates: Partial<ProjectFilterValues>) => {
+      const params: Record<string, string | null> = {};
+
+      for (const [key, value] of Object.entries(updates)) {
+        // O tim kiem co do tre go phim rieng, khong ghi thang len URL
+        if (key === 'search') {
+          setSearchInput(typeof value === 'string' ? value : '');
+          continue;
+        }
+
+        params[PARAM_OF[key as keyof ProjectFilterValues]] = toParam(
+          value as ProjectFilterValues[keyof ProjectFilterValues],
+        );
       }
 
-      const paramKey = {
-        developerId: PARAM.developer,
-        regionId: PARAM.region,
-        propertyType: PARAM.propertyType,
-        status: PARAM.status,
-        search: PARAM.search,
-      }[key];
-
-      applyParams({ [paramKey]: value });
+      // Ghi mot lan cho ca nhom, neu khong lan sau se dung URL cu lam goc
+      if (Object.keys(params).length > 0) applyParams(params);
     },
-    [applyParams],
+    [applyParams, setSearchInput],
   );
 
-  // ── Chip bo loc dang bat ─────────────────────────────────────────────────
-  const activeChips: ActiveChip[] = useMemo(() => {
-    const labelOf = (list: { value: string; label: string }[], value: string) =>
-      list.find((option) => option.value === value)?.label ?? value;
-
-    const chips: ActiveChip[] = [];
-
-    if (urlSearch) {
-      chips.push({ param: PARAM.search, label: `Từ khóa: “${urlSearch}”` });
-    }
-    if (developerId) {
-      chips.push({
-        param: PARAM.developer,
-        label: labelOf(options.developers, developerId),
-      });
-    }
-    if (regionId) {
-      chips.push({ param: PARAM.region, label: labelOf(options.regions, regionId) });
-    }
-    if (propertyType) {
-      chips.push({
-        param: PARAM.propertyType,
-        label:
-          PROPERTY_TYPE_LABELS[propertyType as ProjectPropertyType] ?? propertyType,
-      });
-    }
-    if (status) {
-      chips.push({
-        param: PARAM.status,
-        label: STATUS_LABELS[status as ProjectStatus] ?? status,
-      });
-    }
-
-    return chips;
-  }, [
-    urlSearch,
-    developerId,
-    regionId,
-    propertyType,
-    status,
-    options.developers,
-    options.regions,
-  ]);
-
-  const removeChip = useCallback(
-    (param: string) => {
-      if (param === PARAM.search) setSearchInput('');
-      applyParams({ [param]: null });
-    },
-    [applyParams],
-  );
+  // ── So o loc dang bat ────────────────────────────────────────────────────
+  // Dem theo tung o loc chu khong theo so tham so URL: khoang gia gom hai
+  // tham so nhung voi nguoi dung do van la mot bo loc.
+  const activeCount =
+    [
+      urlSearch,
+      developerId,
+      regionId,
+      propertyType,
+      status,
+      segment,
+      legal,
+      bedrooms,
+      handoverBefore,
+      postedWithinDays,
+    ].filter((value) => value !== null && value !== '').length +
+    [
+      priceMin !== null || priceMax !== null,
+      areaMax !== null,
+      amenityTags.length > 0,
+      viewpoints.length > 0,
+      hasDiscount,
+      hasBankSupport,
+    ].filter(Boolean).length;
 
   const clearAllFilters = useCallback(() => {
     setSearchInput('');
     router.replace(pathname, { scroll: false });
-  }, [pathname, router]);
+  }, [pathname, router, setSearchInput]);
 
-  const projects = listQuery.data?.projects ?? [];
+  /**
+   * Du an da tim duoc day len dau.
+   *
+   * Sap xep o day chu khong o ProjectService: danh sach tim nam trong
+   * localStorage cua tung may, service la ranh gioi se thay bang API that nen
+   * khong duoc biet gi ve no. Doi lai, phep sap chi chay TRONG trang dang xem -
+   * tim mot du an o trang 2 thi no len dau trang 2, khong nhay ve trang 1.
+   */
+  const projects = useMemo(() => {
+    const list = listQuery.data?.projects ?? [];
+    if (favorites.length === 0) return list;
+
+    const favorite = new Set(favorites);
+    // sort cua JS on dinh nen cac du an cung nhom giu nguyen thu tu goc
+    return [...list].sort(
+      (a, b) => Number(favorite.has(b.publicId)) - Number(favorite.has(a.publicId)),
+    );
+  }, [listQuery.data, favorites]);
+
   const total = listQuery.data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / limit));
-  const hasActiveFilter = activeChips.length > 0;
+  const hasActiveFilter = activeCount > 0;
 
   // Chi hien khung xuong o lan tai dau; doi trang/loc thi giu ket qua cu
   // va lam mo di, tranh giat layout.
   const isFirstLoad = listQuery.isLoading;
   const isRefreshing = listQuery.isFetching && !isFirstLoad;
 
-  return (
-    <div className="site-container py-8">
-      <h1 className="mb-6 text-center text-3xl font-bold uppercase tracking-wide text-gray-900">
-        Danh sách dự án
-      </h1>
+  const isMapView = view === 'ban-do';
 
-      <div className="mb-4">
+  /**
+   * Che do ban do bo site-container: ban do phai cham duoc mep phai man hinh
+   * nhu trang mau, ma site-container thi khoa be ngang o 1280px va co dem hai
+   * ben. Phan tieu de/bo loc tu mang dem cua rieng no.
+   */
+  const shellClass = isMapView ? 'w-full pt-6' : 'site-container py-8';
+  const headClass = isMapView ? 'px-4 sm:px-6 lg:px-8' : '';
+
+  return (
+    <div className={shellClass}>
+      <div className={headClass}>
+        <h1 className="mb-6 text-center text-3xl font-bold uppercase tracking-wide text-gray-900">
+          Danh sách dự án
+        </h1>
+
+        <div className="mb-4">
         <ProjectFilterBar
           values={filterValues}
           options={options}
           isLoadingOptions={optionsQuery.isLoading}
-          activeCount={activeChips.length}
+          activeCount={activeCount}
           resultCount={total}
+          view={view}
+          onViewChange={setView}
           onClearAll={clearAllFilters}
           onSubmitSearch={submitSearch}
           onChange={handleFilterChange}
         />
       </div>
 
-      <ActiveFilterChips
-        chips={activeChips}
-        onRemove={removeChip}
-        onClearAll={clearAllFilters}
-      />
-
-      <div className="mb-4 flex min-h-5 items-center justify-between text-theme-sm text-gray-500">
-        {isFirstLoad ? (
-          <span className="h-4 w-32 animate-pulse rounded bg-gray-100" />
-        ) : (
-          <span aria-live="polite">
-            {hasActiveFilter ? 'Tìm thấy ' : 'Có '}
-            <strong className="text-gray-800">{total}</strong> dự án
-          </span>
-        )}
-        {isRefreshing && <span className="text-gray-400">Đang cập nhật...</span>}
+        <div className="mb-4 flex min-h-5 items-center justify-between text-theme-sm text-gray-500">
+          {isFirstLoad ? (
+            <span className="h-4 w-32 animate-pulse rounded bg-gray-100" />
+          ) : (
+            <span aria-live="polite">
+              {hasActiveFilter ? 'Tìm thấy ' : 'Có '}
+              <strong className="text-gray-800">{total}</strong> dự án
+            </span>
+          )}
+          {isRefreshing && <span className="text-gray-400">Đang cập nhật...</span>}
+        </div>
       </div>
 
-      {listQuery.isError ? (
+      {isMapView ? (
+        <ProjectMapView projects={projects} isLoading={isFirstLoad} />
+      ) : listQuery.isError ? (
         <div className="rounded-xl border border-error-500/30 bg-error-50 p-8 text-center">
           <p className="mb-4 text-theme-sm text-error-600">
             Không tải được danh sách dự án.
@@ -331,7 +473,7 @@ const ProjectListPage = () => {
         </div>
       )}
 
-      {total > 0 && (
+      {view === 'danh-sach' && total > 0 && (
         <Pagination
           currentPage={page}
           totalPages={totalPages}
@@ -348,12 +490,17 @@ const ProjectListPage = () => {
         />
       )}
 
-      <ProjectHighlightPanel
-        groups={highlightsQuery.data ?? []}
-        isLoading={highlightsQuery.isLoading}
-      />
+      {/* Ban do da choan het chieu cao man hinh nen hai khoi nay khong con cho */}
+      {!isMapView && (
+        <>
+          <ProjectHighlightPanel
+            groups={highlightsQuery.data ?? []}
+            isLoading={highlightsQuery.isLoading}
+          />
 
-      <NewsSection />
+          <NewsSection />
+        </>
+      )}
     </div>
   );
 };

@@ -41,6 +41,13 @@ type MenuPosition = {
 
 const RESET_VALUE = '__all__';
 
+/**
+ * 'field' - o loc cao 44px chiem tron chieu ngang, dung trong bang loc.
+ * 'chip'  - vien bo tron cao 36px co gian theo noi dung, dung tren hang chip
+ *           duoi thanh tim kiem. Chi khac phan nut bam, menu giong het nhau.
+ */
+export type FilterSelectVariant = 'field' | 'chip';
+
 type FilterSelectProps = {
   /** Vua la placeholder, vua la nhan cho trinh doc man hinh */
   label: string;
@@ -51,6 +58,7 @@ type FilterSelectProps = {
   icon?: ReactNode;
   /** Nhan cho dong "bo chon" dau danh sach */
   resetLabel?: string;
+  variant?: FilterSelectVariant;
   onChange: (value: string | null) => void;
   className?: string;
 };
@@ -70,6 +78,7 @@ const FilterSelect = ({
   isLoading = false,
   icon,
   resetLabel = 'Tất cả',
+  variant = 'field',
   onChange,
   className = '',
 }: FilterSelectProps) => {
@@ -263,17 +272,43 @@ const FilterSelect = ({
   };
 
   // ── Giao dien ────────────────────────────────────────────────────────────
+  const isChip = variant === 'chip';
+
   if (isLoading) {
     return (
       <div
-        className={`h-11 animate-pulse rounded-md border border-gray-200 bg-gray-50 ${className}`}
+        className={
+          isChip
+            ? `h-9 w-28 shrink-0 animate-pulse rounded-full border border-gray-200 bg-gray-50 ${className}`
+            : `h-11 animate-pulse rounded-md border border-gray-200 bg-gray-50 ${className}`
+        }
         aria-hidden
       />
     );
   }
 
+  // Chip: dang chon thi dau mui ten nhuong cho cho nut xoa, nen chi mot trong
+  // hai xuat hien. O loc thuong rong hon nen hien duoc ca hai canh nhau.
+  const triggerClass = isChip
+    ? `flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border pl-3.5 text-left text-theme-sm font-medium transition outline-none ${
+        selected ? 'pr-8' : 'pr-3'
+      } ${
+        selected
+          ? 'border-brand-500 bg-brand-50 text-brand-700'
+          : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50'
+      } ${isOpen ? 'shadow-focus-ring' : ''}`
+    : `flex h-11 w-full items-center gap-2 rounded-md border bg-white pl-3 text-left text-theme-sm transition outline-none ${
+        selected ? 'pr-14' : 'pr-9'
+      } ${
+        isOpen
+          ? 'border-brand-400 shadow-focus-ring'
+          : selected
+            ? 'border-brand-300 hover:border-brand-400'
+            : 'border-gray-300 hover:border-brand-300'
+      }`;
+
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${isChip ? 'shrink-0' : ''} ${className}`}>
       <button
         ref={triggerRef}
         type="button"
@@ -285,26 +320,34 @@ const FilterSelect = ({
         aria-activedescendant={isOpen ? optionId(activeIndex) : undefined}
         onClick={() => (isOpen ? closeMenu() : openMenu())}
         onKeyDown={handleKeyDown}
-        className={`flex h-11 w-full items-center gap-2 rounded-md border bg-white pl-3 text-left text-theme-sm transition outline-none ${
-          selected ? 'pr-14' : 'pr-9'
-        } ${
-          isOpen
-            ? 'border-brand-400 shadow-focus-ring'
-            : selected
-              ? 'border-brand-300 hover:border-brand-400'
-              : 'border-gray-300 hover:border-brand-300'
-        }`}
+        className={triggerClass}
       >
         {icon && (
-          <span aria-hidden className="shrink-0 text-gray-400">
+          <span
+            aria-hidden
+            className={`shrink-0 ${isChip ? 'opacity-70' : 'text-gray-400'}`}
+          >
             {icon}
           </span>
         )}
         <span
-          className={`truncate ${selected ? 'font-medium text-gray-800' : 'text-gray-400'}`}
+          className={
+            isChip
+              ? 'truncate'
+              : `truncate ${selected ? 'font-medium text-gray-800' : 'text-gray-400'}`
+          }
         >
           {selected ? selected.label : label}
         </span>
+
+        {isChip && !selected && (
+          <FiChevronDown
+            aria-hidden
+            className={`shrink-0 opacity-60 transition-transform ${
+              isOpen ? 'rotate-180' : ''
+            }`}
+          />
+        )}
       </button>
 
       {/* Nut xoa la anh em cua nut bam, khong long ben trong - button khong duoc lot nhau */}
@@ -313,18 +356,24 @@ const FilterSelect = ({
           type="button"
           onClick={() => onChange(null)}
           aria-label={`Bỏ chọn ${label}`}
-          className="absolute right-8 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100 hover:text-error-500"
+          className={
+            isChip
+              ? 'absolute right-2 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-brand-500 transition hover:bg-brand-100 hover:text-brand-700'
+              : 'absolute right-8 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100 hover:text-error-500'
+          }
         >
           <FiX aria-hidden className="text-[13px]" />
         </button>
       )}
 
-      <FiChevronDown
-        aria-hidden
-        className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-transform ${
-          isOpen ? 'rotate-180' : ''
-        }`}
-      />
+      {!isChip && (
+        <FiChevronDown
+          aria-hidden
+          className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-transform ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      )}
 
       {isOpen &&
         position &&

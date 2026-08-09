@@ -230,6 +230,41 @@
   @apply bg-linear-to-r from-navy-800 via-navy-600 to-brand-500;
 }
 
+/* Nut keo cua thanh truot trong bang loc. Duong ray duoc ve bang div rieng
+   ben duoi nen ban than input trong suot. */
+@utility range-thumb {
+  appearance: none;
+  background: transparent;
+
+  &::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 9999px;
+    border: 2px solid var(--color-brand-500);
+    background: #fff;
+    box-shadow: var(--shadow-card);
+    cursor: grab;
+  }
+
+  &::-moz-range-thumb {
+    pointer-events: auto;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 9999px;
+    border: 2px solid var(--color-brand-500);
+    background: #fff;
+    box-shadow: var(--shadow-card);
+    cursor: grab;
+  }
+
+  &:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-brand-300);
+    outline-offset: 2px;
+  }
+}
+
 /* Cuon ngang duoc nhung khong hien thanh cuon - dung cho thanh tab */
 @utility no-scrollbar {
   scrollbar-width: none;
@@ -316,6 +351,61 @@
 .plan-pin--thuong {
   --pin: var(--color-success-500);
 }
+
+/* ── Ghim du an tren ban do khu vuc (Leaflet divIcon) ────────────────────
+   Cung ly do nhu .plan-pin: Leaflet nhan HTML tho nen phai la CSS that. */
+.map-pin {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: var(--color-error-600);
+  box-shadow: 0 1px 4px rgb(16 24 40 / 0.45);
+  /* Chi doi transform: doi width/height se lam ghim lech khoi toa do that,
+     vi Leaflet dat goc icon theo iconAnchor tinh mot lan luc tao. */
+  transition: transform 0.15s ease;
+}
+
+.map-pin:hover {
+  transform: scale(1.35);
+}
+
+/* Ghim cua du an dang tro toi - phong to va doi sang mau thuong hieu */
+.map-pin--active {
+  background: var(--color-brand-500);
+  transform: scale(1.6);
+  box-shadow: 0 0 0 4px rgb(15 111 209 / 0.25);
+}
+
+/* Ghim cua du an da luu */
+.map-pin--favorite {
+  background: var(--color-accent-500);
+}
+
+/* Ghim mang chu (gia, dien tich, nam ban giao...) - vien vien thay vi cham tron */
+.map-pin--label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 24px;
+  min-width: 46px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Bang mau khi ghim duoc to theo loai hinh / trang thai */
+.map-pin--c1 { background: var(--color-brand-500); }
+.map-pin--c2 { background: var(--color-accent-500); }
+.map-pin--c3 { background: var(--color-jade-500); }
+.map-pin--c4 { background: var(--color-error-600); }
+.map-pin--c5 { background: var(--color-navy-600); }
 
 /* Popup cua Leaflet mac dinh bo goc 12px va font rieng - keo ve dung he thong */
 .leaflet-container {

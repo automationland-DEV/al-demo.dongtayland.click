@@ -28,11 +28,16 @@ import type {
   UnitQuery,
 } from '../models/project-detail.model';
 import {
+  AMENITY_TAG_LABELS,
+  LEGAL_LABELS,
   PROPERTY_TYPE_LABELS,
+  SEGMENT_LABELS,
   STATUS_LABELS,
+  VIEWPOINT_LABELS,
   type FilterOption,
   type PaginatedProjects,
   type Project,
+  type ProjectFilterOptions,
   type ProjectHighlightGroup,
   type ProjectQuery,
 } from '../models/project.model';
@@ -51,11 +56,60 @@ const normalize = (value: string) =>
     .replace(/[̀-ͯ]/g, '')
     .replace(/đ/g, 'd');
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 const matchesQuery = (project: Project, query: ProjectQuery): boolean => {
   if (query.developerId && project.developerId !== query.developerId) return false;
   if (query.regionId && project.regionId !== query.regionId) return false;
   if (query.propertyType && project.propertyType !== query.propertyType) return false;
   if (query.status && project.status !== query.status) return false;
+  if (query.segment && project.segment !== query.segment) return false;
+
+  // Gia: du an chi co gia khoi diem, nen so sanh mot diem voi ca hai dau khoang
+  if (query.priceMin !== null && project.priceFrom < query.priceMin) return false;
+  if (query.priceMax !== null && project.priceFrom > query.priceMax) return false;
+
+  // Dien tich la mot nguong tren: "tu 0 den N m2". Du an dat neu co it nhat
+  // mot loai san pham nho hon nguong - tuc san pham nho nhat phai vua khung.
+  if (query.areaMax !== null && project.areaFrom > query.areaMax) return false;
+
+  // 5 mang nghia "5 phong tro len"
+  if (query.bedrooms !== null) {
+    const enough = project.bedroomOptions.some((count) =>
+      query.bedrooms === 5 ? count >= 5 : count === query.bedrooms,
+    );
+    if (!enough) return false;
+  }
+
+  if (query.handoverBefore !== null && project.handoverYear > query.handoverBefore) {
+    return false;
+  }
+
+  if (query.legal && project.legal !== query.legal) return false;
+  if (query.hasDiscount && !project.hasDiscount) return false;
+  if (query.hasBankSupport && !project.hasBankSupport) return false;
+
+  // Tien ich: phai co DU cac muc duoc chon (loc thu hep dan, dung nhu mong doi)
+  if (
+    query.amenityTags.length > 0 &&
+    !query.amenityTags.every((amenity) => project.amenityTags.includes(amenity))
+  ) {
+    return false;
+  }
+
+  // Huong nhin: chi can khop MOT - nguoi tim "view bien hoac view song" khong
+  // ky vong du an phai co ca hai
+  if (
+    query.viewpoints.length > 0 &&
+    !query.viewpoints.some((viewpoint) => project.viewpoints.includes(viewpoint))
+  ) {
+    return false;
+  }
+
+  if (query.postedWithinDays !== null) {
+    const age = Date.now() - Date.parse(project.publishedAt);
+    if (age > query.postedWithinDays * DAY_MS) return false;
+  }
 
   const keyword = normalize(query.search.trim());
   if (!keyword) return true;
@@ -99,24 +153,25 @@ export const ProjectService = {
   },
 
   /** Cac lua chon cho thanh filter - sau nay la 1 endpoint /projects/filters */
-  filterOptions: async (): Promise<{
-    developers: FilterOption[];
-    regions: FilterOption[];
-    propertyTypes: FilterOption[];
-    statuses: FilterOption[];
-  }> =>
-    delay({
+  filterOptions: async (): Promise<ProjectFilterOptions> => {
+    const toOptions = (labels: Record<string, string>): FilterOption[] =>
+      Object.entries(labels).map(([value, label]) => ({ value, label }));
+
+    return delay({
       developers: MOCK_DEVELOPERS,
       regions: MOCK_REGIONS,
-      propertyTypes: Object.entries(PROPERTY_TYPE_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
-      statuses: Object.entries(STATUS_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
-    }),
+      propertyTypes: toOptions(PROPERTY_TYPE_LABELS),
+      statuses: toOptions(STATUS_LABELS),
+      segments: toOptions(SEGMENT_LABELS),
+      amenityTags: toOptions(AMENITY_TAG_LABELS),
+      viewpoints: toOptions(VIEWPOINT_LABELS),
+      legals: toOptions(LEGAL_LABELS),
+      /** Nam ban giao co that trong du lieu, sap tang dan */
+      handoverYears: [
+        ...new Set(MOCK_PROJECTS.map((project) => project.handoverYear)),
+      ].sort((a, b) => a - b),
+    });
+  },
 
   /** Khoi cuoi trang danh sach: cao tang / thap tang ban chay + moi nhat */
   highlights: async (): Promise<ProjectHighlightGroup[]> => {

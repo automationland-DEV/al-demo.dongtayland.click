@@ -10,12 +10,17 @@
  * services/project.service.ts.
  */
 import seedData from './projects.seed.json';
-import type {
-  FilterOption,
-  Project,
-  ProjectPropertyType,
-  ProjectSegment,
-  ProjectStatus,
+import {
+  AMENITY_TAG_LABELS,
+  VIEWPOINT_LABELS,
+  type FilterOption,
+  type Project,
+  type ProjectAmenityTag,
+  type ProjectLegal,
+  type ProjectPropertyType,
+  type ProjectSegment,
+  type ProjectStatus,
+  type ProjectViewpoint,
 } from '../models/project.model';
 
 export const MOCK_DEVELOPERS: FilterOption[] = [
@@ -50,6 +55,100 @@ type Seed = {
 
 const SEEDS = seedData as Seed[];
 
+// ── Sinh cac truong phuc vu bang loc ───────────────────────────────────────
+// projects.seed.json chi mo ta phan "bien tap" cua du an. Gia, dien tich,
+// tien ich... duoc suy ra tu slug bang bo sinh co hat giong: cung mot slug
+// luon cho cung mot ket qua, nen server va client render giong nhau va so
+// lieu khong nhay moi lan tai lai.
+
+/** mulberry32 - nho, du deu, va quan trong nhat la lap lai duoc */
+const createRng = (seed: string) => {
+  let hash = 1779033703 ^ seed.length;
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = Math.imul(hash ^ seed.charCodeAt(index), 3432918353);
+    hash = (hash << 13) | (hash >>> 19);
+  }
+
+  let state = hash >>> 0;
+  return () => {
+    state += 0x6d2b79f5;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
+type Rng = () => number;
+
+const intBetween = (rng: Rng, min: number, max: number) =>
+  min + Math.floor(rng() * (max - min + 1));
+
+const pickOne = <T,>(rng: Rng, list: readonly T[]): T =>
+  list[Math.floor(rng() * list.length)];
+
+/** Chon ngau nhien `count` phan tu khac nhau, giu nguyen thu tu goc cua pool */
+const pickSome = <T,>(rng: Rng, pool: readonly T[], count: number): T[] => {
+  const indexes = pool.map((_, index) => index);
+  for (let i = indexes.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
+  }
+  return indexes
+    .slice(0, count)
+    .sort((a, b) => a - b)
+    .map((index) => pool[index]);
+};
+
+const AMENITY_TAG_KEYS = Object.keys(AMENITY_TAG_LABELS) as ProjectAmenityTag[];
+const VIEWPOINT_KEYS = Object.keys(VIEWPOINT_LABELS) as ProjectViewpoint[];
+
+/**
+ * Moi loai hinh co mot mat bang gia va dien tich rieng - can ho khong the
+ * cung khung voi biet thu, neu khong bo loc gia se vo nghia.
+ * [giaMin, giaMax] tinh theo VND, [dtMin, dtMax] theo m2.
+ */
+const PROFILE: Record<
+  ProjectPropertyType,
+  { price: [number, number]; area: [number, number]; bedrooms: number[] }
+> = {
+  'can-ho': { price: [1_200_000_000, 6_500_000_000], area: [45, 120], bedrooms: [1, 2, 3] },
+  'biet-thu': { price: [8_000_000_000, 28_000_000_000], area: [180, 450], bedrooms: [3, 4, 5] },
+  'nha-pho': { price: [5_000_000_000, 14_000_000_000], area: [90, 200], bedrooms: [3, 4] },
+  shophouse: { price: [7_000_000_000, 20_000_000_000], area: [100, 250], bedrooms: [2, 3, 4] },
+  'dat-nen': { price: [1_800_000_000, 9_000_000_000], area: [80, 300], bedrooms: [] },
+};
+
+const LEGAL_BY_STATUS: Record<ProjectStatus, ProjectLegal[]> = {
+  'dang-mo-ban': ['so-lau-dai', 'so-50-nam'],
+  'sap-mo-ban': ['dang-hoan-thien', 'so-lau-dai'],
+  'da-ban-giao': ['so-lau-dai'],
+};
+
+/**
+ * Tam khu vuc that, de ghim ban do roi dung cho tinh/thanh.
+ * Toa do tung du an = tam khu vuc + mot do lech nho suy tu slug, nen cac ghim
+ * khong chong len nhau ma van nam trong dia ban.
+ */
+const REGION_CENTER: Record<string, [number, number]> = {
+  'kv-ha-noi': [21.0278, 105.8342],
+  'kv-hcm': [10.7769, 106.7009],
+  'kv-da-nang': [16.0544, 108.2022],
+  'kv-hung-yen': [20.6464, 106.0511],
+  'kv-quang-ninh': [20.9599, 107.0448],
+  'kv-hai-phong': [20.8449, 106.6881],
+};
+
+/** Do lech toi da quanh tam khu vuc, do - khoang 9 km */
+const REGION_SPREAD = 0.08;
+
+/** Nam ban giao bam theo trang thai ban hang cho hop ly */
+const HANDOVER_BY_STATUS: Record<ProjectStatus, [number, number]> = {
+  'dang-mo-ban': [2027, 2029],
+  'sap-mo-ban': [2029, 2031],
+  'da-ban-giao': [2023, 2026],
+};
+
 /** Ngay dang gia lap - lui dan tu 07/08/2026 de thu tu "moi nhat" on dinh */
 const publishedAtFor = (index: number) => {
   const base = new Date('2026-08-07T09:00:00.000Z');
@@ -60,6 +159,16 @@ const publishedAtFor = (index: number) => {
 export const MOCK_PROJECTS: Project[] = SEEDS.map((seed, index) => {
   const developer = MOCK_DEVELOPERS[seed.developerIndex];
   const region = MOCK_REGIONS[seed.regionIndex];
+
+  // Hat giong khac hat giong cua project-detail.mock de hai ben khong sinh ra
+  // cung mot chuoi so - o day chi can on dinh, khong can khop voi trang chi tiet.
+  const rng = createRng(`${seed.slug}-facets`);
+  const profile = PROFILE[seed.propertyType];
+
+  const priceFrom = Math.round(intBetween(rng, profile.price[0], profile.price[1]) / 1e8) * 1e8;
+  const [centerLat, centerLng] = REGION_CENTER[region.value] ?? REGION_CENTER['kv-ha-noi'];
+  const areaFrom = intBetween(rng, profile.area[0], Math.round(profile.area[1] * 0.6));
+  const areaTo = intBetween(rng, Math.round(profile.area[1] * 0.7), profile.area[1]);
 
   return {
     publicId: `prj-${String(index + 1).padStart(3, '0')}`,
@@ -78,5 +187,19 @@ export const MOCK_PROJECTS: Project[] = SEEDS.map((seed, index) => {
     detailUrl: `/du-an/${seed.slug}`,
     isHot: seed.isHot,
     publishedAt: publishedAtFor(index),
+
+    priceFrom,
+    areaFrom,
+    areaTo,
+    bedroomOptions: profile.bedrooms,
+    latitude: centerLat + (rng() - 0.5) * 2 * REGION_SPREAD,
+    longitude: centerLng + (rng() - 0.5) * 2 * REGION_SPREAD,
+    scaleHa: intBetween(rng, 3, 120),
+    handoverYear: intBetween(rng, ...HANDOVER_BY_STATUS[seed.status]),
+    amenityTags: pickSome(rng, AMENITY_TAG_KEYS, intBetween(rng, 3, 7)),
+    viewpoints: pickSome(rng, VIEWPOINT_KEYS, intBetween(rng, 1, 3)),
+    legal: pickOne(rng, LEGAL_BY_STATUS[seed.status]),
+    hasDiscount: rng() < 0.45,
+    hasBankSupport: rng() < 0.7,
   };
 });
