@@ -303,11 +303,14 @@ const ProjectMapView = ({ projects, isLoading }: ProjectMapViewProps) => {
   useEffect(() => {
     if (!isMapReady) return;
 
+    // favorites la mang { publicId, savedAt } nen phai rut publicId ra truoc
+    const favoriteIds = new Set(favorites.map((entry) => entry.publicId));
+
     markersRef.current.forEach((marker, publicId) => {
       const element = marker.getElement();
       if (!element) return;
       element.classList.toggle('map-pin--active', publicId === activeId);
-      element.classList.toggle('map-pin--favorite', favorites.includes(publicId));
+      element.classList.toggle('map-pin--favorite', favoriteIds.has(publicId));
     });
   }, [isMapReady, activeId, favorites, projectKey, modeKey]);
 
