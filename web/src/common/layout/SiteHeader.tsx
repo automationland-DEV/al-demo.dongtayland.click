@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiBell, FiChevronDown, FiMenu, FiMessageSquare, FiX } from 'react-icons/fi';
+import { FaApple, FaGooglePlay } from 'react-icons/fa';
 import AccountMenu from '@/common/components/AccountMenu';
 import FavoriteButton from '@/common/layout/FavoriteButton';
 
@@ -29,6 +30,61 @@ const MORE_MENU = {
     { label: 'Hướng dẫn sử dụng', href: '/huong-dan' },
   ],
 };
+
+/**
+ * Duong dan tai ung dung.
+ *
+ * CHUA CO ung dung that - thay hai duong dan nay bang link cua hang khi phat
+ * hanh. De o day de doi mot cho la xong.
+ */
+const APP_LINKS = {
+  android: '#',
+  ios: '#',
+};
+
+/**
+ * Khoi tai ung dung o day ngan keo, hoc theo "Find homes on the go!" cua trang
+ * mau.
+ *
+ * Khong dung huy hieu "Get it on Google Play" / "Download on the App Store"
+ * chinh chu: do la tai san thuong hieu, dung sai quy cach la vi pham. Nut tu
+ * ve theo he mau cua site vua an toan vua dong bo giao dien.
+ */
+const AppDownloadBlock = () => (
+  <div className="shrink-0 border-t border-gray-200 bg-gray-50 px-5 py-4">
+    <p className="mb-3 text-theme-sm font-bold text-gray-900">
+      Tìm dự án mọi lúc mọi nơi
+    </p>
+
+    <div className="flex flex-col gap-2">
+      <a
+        href={APP_LINKS.android}
+        className="flex items-center gap-3 rounded-lg bg-gray-900 px-3 py-2 text-white transition hover:bg-gray-800"
+      >
+        <FaGooglePlay aria-hidden className="shrink-0 text-xl" />
+        <span className="flex flex-col leading-tight">
+          <span className="text-[10px] uppercase tracking-wide text-gray-300">
+            Tải về trên
+          </span>
+          <span className="text-theme-sm font-semibold">Google Play</span>
+        </span>
+      </a>
+
+      <a
+        href={APP_LINKS.ios}
+        className="flex items-center gap-3 rounded-lg bg-gray-900 px-3 py-2 text-white transition hover:bg-gray-800"
+      >
+        <FaApple aria-hidden className="shrink-0 text-xl" />
+        <span className="flex flex-col leading-tight">
+          <span className="text-[10px] uppercase tracking-wide text-gray-300">
+            Tải về trên
+          </span>
+          <span className="text-theme-sm font-semibold">App Store</span>
+        </span>
+      </a>
+    </div>
+  </div>
+);
 
 const BrandMark = () => (
   <Link href="/" className="flex items-center" aria-label="Trang chủ">
@@ -95,6 +151,24 @@ const SiteHeader = () => {
     };
   }, [isMoreOpen]);
 
+  // Ngan keo phu kin man hinh: khoa cuon nen va cho Escape dong lai
+  useEffect(() => {
+    if (!isMobileOpen) return undefined;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMobileOpen(false);
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isMobileOpen]);
+
   const variant: 'solid' | 'transparent' =
     pathname === '/' && !isScrolled ? 'transparent' : 'solid';
   const isTransparent = variant === 'transparent';
@@ -105,22 +179,14 @@ const SiteHeader = () => {
     ? {
         active: 'text-white underline decoration-white decoration-2 underline-offset-8',
         idle: 'text-white/85 hover:text-white',
-        mobile: 'text-white',
-        mobileActive: 'text-white',
       }
     : {
         active: 'text-navy-700 underline decoration-brand-500 decoration-2 underline-offset-8',
         idle: 'text-gray-600 hover:text-brand-600',
-        mobile: 'text-gray-700',
-        mobileActive: 'text-brand-600',
       };
   const iconColor = isTransparent
     ? 'text-white/90 hover:bg-white/15 hover:text-white'
     : 'text-gray-500 hover:bg-gray-100 hover:text-brand-600';
-  const mobilePanelClass = isTransparent
-    ? 'border-t border-white/20 bg-black/40 backdrop-blur-md'
-    : 'border-t border-gray-200 bg-white';
-
   // Mau dropdown "Khac" - mo phong theo tone header (trang / den).
   const moreBtnActive = isMoreActive
     ? navColor.active
@@ -242,68 +308,93 @@ const SiteHeader = () => {
         </div>
       </div>
 
+      {/* ── Ngan keo dieu huong tren dien thoai ─────────────────────────────
+          Truot tu mep trai, phu het chieu cao - khac han kieu xo xuong duoi
+          header truoc day. Nen luon trang du header dang trong suot: chu tren
+          nen anh se khong doc duoc. */}
       {isMobileOpen && (
-        <nav
-          aria-label="Điều hướng di động"
-          className={`lg:hidden ${mobilePanelClass}`}
-        >
-          <ul className="site-container flex flex-col py-2">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setIsMobileOpen(false)}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                  className={`block py-2.5 text-theme-sm font-semibold uppercase tracking-wide ${
-                    isActive(item.href) ? navColor.mobileActive : navColor.mobile
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            aria-hidden
+            onClick={() => setIsMobileOpen(false)}
+            className="absolute inset-0 bg-gray-900/50"
+          />
 
-            {/* Nhom "Khac" mobile - de mo dropdown noi truc tiep, dung <details>
-                de khong can them state rieng. Mac dinh mo neu co muc con dang active. */}
-            <li>
-              <details
-                open={isMoreActive || isMoreOpen}
-                className="group"
+          <nav
+            aria-label="Điều hướng di động"
+            className="absolute inset-y-0 left-0 flex w-[86%] max-w-sm flex-col bg-white shadow-panel"
+          >
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-4 py-3">
+              <span onClick={() => setIsMobileOpen(false)}>
+                <BrandMark />
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsMobileOpen(false)}
+                aria-label="Đóng menu"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition hover:bg-gray-100"
               >
-                <summary
-                  className={`flex cursor-pointer items-center justify-between py-2.5 text-theme-sm font-semibold uppercase tracking-wide ${
-                    isMoreActive ? navColor.mobileActive : navColor.mobile
-                  }`}
-                >
-                  {MORE_MENU.label}
-                  <FiChevronDown
-                    aria-hidden
-                    className="h-4 w-4 transition-transform group-open:rotate-180"
-                  />
-                </summary>
-                <ul className="mb-1 ml-4 flex flex-col border-l border-current/20 pl-3">
-                  {MORE_MENU.children.map((child) => {
-                    const active = isActive(child.href);
-                    return (
-                      <li key={child.href}>
-                        <Link
-                          href={child.href}
-                          onClick={() => setIsMobileOpen(false)}
-                          aria-current={active ? 'page' : undefined}
-                          className={`block py-2 text-theme-sm font-medium ${
-                            active ? navColor.mobileActive : navColor.mobile
-                          }`}
-                        >
-                          {child.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </details>
-            </li>
-          </ul>
-        </nav>
+                <FiX aria-hidden className="text-xl" />
+              </button>
+            </div>
+
+            <ul className="flex-1 overflow-y-auto">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.href} className="border-b border-gray-100">
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMobileOpen(false)}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    className={`block px-5 py-4 text-base font-medium capitalize transition hover:bg-gray-50 ${
+                      isActive(item.href) ? 'text-brand-600' : 'text-gray-800'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+
+              {/* Nhom "Khac" - dung <details> de khong phai them state rieng.
+                  Mac dinh mo neu co muc con dang active. */}
+              <li className="border-b border-gray-100">
+                <details open={isMoreActive} className="group">
+                  <summary
+                    className={`flex cursor-pointer list-none items-center justify-between px-5 py-4 text-base font-medium capitalize transition hover:bg-gray-50 ${
+                      isMoreActive ? 'text-brand-600' : 'text-gray-800'
+                    }`}
+                  >
+                    {MORE_MENU.label}
+                    <FiChevronDown
+                      aria-hidden
+                      className="h-5 w-5 shrink-0 text-gray-400 transition-transform group-open:rotate-180"
+                    />
+                  </summary>
+                  <ul className="bg-gray-50 pb-1">
+                    {MORE_MENU.children.map((child) => {
+                      const active = isActive(child.href);
+                      return (
+                        <li key={child.href}>
+                          <Link
+                            href={child.href}
+                            onClick={() => setIsMobileOpen(false)}
+                            aria-current={active ? 'page' : undefined}
+                            className={`block py-3 pl-9 pr-5 text-theme-sm transition hover:text-brand-600 ${
+                              active ? 'font-semibold text-brand-600' : 'text-gray-600'
+                            }`}
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </details>
+              </li>
+            </ul>
+
+            <AppDownloadBlock />
+          </nav>
+        </div>
       )}
     </header>
   );
