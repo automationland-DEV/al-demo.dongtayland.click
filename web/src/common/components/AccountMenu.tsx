@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -45,6 +45,9 @@ const LANG_OPTIONS: { code: Lang; label: string }[] = [
 // URL admin panel hien dang chay o port 5011 theo deploy.sh - link cung
 // la relative cho cung host, nguoi dung tu mo o tab moi.
 const ADMIN_URL = '/admin';
+
+/** Store khong bao gio doi - chi de phan biet server render voi client render. */
+const neverChanges = () => () => {};
 
 const Divider = () => (
   <div aria-hidden className="my-1 h-px bg-gray-100" />
@@ -134,19 +137,14 @@ const AccountMenu = () => {
   const logout = useLogout();
   const [isOpen, setIsOpen] = useState(false);
   const [lang, setLang] = useState<Lang>('vi');
-  const [isHydrated, setIsHydrated] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Danh dau da hydrate xong: server va client render CUNG mot skeleton
-  // (placeholder) o lan dau, sau khi mount o client moi cap nhat state
-  // thanh giao dien that (login button hoac avatar). Tranh hoan toan
-  // hydration mismatch vi server khong co localStorage.
-  useEffect(() => {
-    // Read-on-mount can thiet cho hydration: server khong co localStorage,
-    // client phai danh dau "da hydrate" de swap tu skeleton -> that.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsHydrated(true);
-  }, []);
+  // `useCurrentUser` doc localStorage ngay trong lan render dau, nhung server
+  // khong co localStorage nen luon ra null -> hai ben ve ra hai cay khac nhau
+  // va React bao hydration mismatch. Hoan viec ve theo user den sau khi mount:
+  // lan ve dau o client dung snapshot cua server (false) nen khop, ngay sau do
+  // React doi sang snapshot client (true) va ve lai voi user that.
+  const isMounted = useSyncExternalStore(neverChanges, () => true, () => false);
 
   // Click outside / Esc de dong
   useEffect(() => {
@@ -173,7 +171,7 @@ const AccountMenu = () => {
   // SSR placeholder: giu div container voi chieu cao co dinh de layout
   // khong nhay khi hydrate xong (tranh CLS). Server va client render
   // cung mot markup o lan dau -> khong hydration mismatch.
-  if (!isHydrated) {
+  if (!isMounted) {
     return (
       <div className="flex h-9 items-center" aria-hidden>
         <span className="h-9 w-9 rounded-full bg-gray-100" />

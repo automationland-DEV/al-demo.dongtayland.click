@@ -417,3 +417,22 @@
   border-radius: 8px;
 }
 
+
+/* ── Trang "Tro thanh moi gioi" ───────────────────────────────────────────── */
+
+/* Bang mau rieng cua man hinh onboarding, do lai tu giao dien goc: xanh dam
+   hon va vien xam trung tinh hon he mau chung cua site. Khai bao o day thay vi
+   trong @theme de no chi song trong pham vi .agent-onboarding - phan con lai
+   cua web khong bi keo mau theo. */
+.agent-onboarding {
+  --ob-blue: #094cf6;
+  --ob-blue-strong: #0641d4;
+  --ob-blue-ink: #02206d;
+  --ob-blue-soft: #eef3ff;
+  --ob-surface: #f5f5f5;
+  --ob-border: #dedede;
+  --ob-border-soft: #ebebeb;
+  --ob-ink: #101010;
+  --ob-muted: #707070;
+  --ob-disabled-ink: #a3a3a3;
+}
