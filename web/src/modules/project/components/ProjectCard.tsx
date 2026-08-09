@@ -1,10 +1,10 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { TbLayoutGrid, TbMap2, TbView360 } from 'react-icons/tb';
-import PlaceholderThumb from '@/common/components/PlaceholderThumb';
+import ThumbCarousel from '@/common/components/ThumbCarousel';
 import ShineSweep from '@/common/components/ShineSweep';
 import { useFavorites } from '../hooks/useFavorites';
 import type { ProjectDetailTabKey } from '../models/project-detail.model';
@@ -52,18 +52,25 @@ type ProjectCardProps = {
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
   const { isFavorite: checkFavorite, toggle } = useFavorites();
+  // Ro chuot len the thi dung chuyen anh, de con kip nhin tam dang xem
+  const [isHovered, setIsHovered] = useState(false);
   const isFavorite = checkFavorite(project.publicId);
 
   const badge = SEGMENT_BADGES[project.segment];
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-card transition hover:shadow-card-hover">
+    <article
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-card transition hover:shadow-card-hover"
+    >
       <div className="relative aspect-16/10 w-full overflow-hidden">
         <Link href={project.detailUrl} className="block h-full w-full">
-          <PlaceholderThumb
+          <ThumbCarousel
             seed={project.publicId}
-            src={project.thumbnailUrl || undefined}
+            images={project.thumbnailUrls}
             alt={`Phối cảnh dự án ${project.name}`}
+            paused={isHovered}
             className="transition duration-500 group-hover:scale-105"
           />
 

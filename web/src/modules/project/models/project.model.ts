@@ -62,6 +62,11 @@ export type Project = {
   regionName: string;
   /** URL anh bia. Rong => ProjectThumb tu sinh anh placeholder. */
   thumbnailUrl: string;
+  /**
+   * Bang anh cho the du an, phan tu dau trung voi `thumbnailUrl`.
+   * Co tu 2 anh tro len thi the tu chuyen canh.
+   */
+  thumbnailUrls: string[];
   /** Link chi tiet du an (trang ngoai hoac noi bo) */
   detailUrl: string;
   isHot: boolean;

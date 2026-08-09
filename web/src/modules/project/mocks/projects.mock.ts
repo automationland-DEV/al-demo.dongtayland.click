@@ -31,6 +31,8 @@ export const MOCK_DEVELOPERS: FilterOption[] = [
   { value: 'cdt-truong-son', label: 'Trường Sơn Invest' },
 ];
 
+// Sau khong doi thu tu 6 muc dau: projects.seed.json tro toi khu vuc bang chi
+// so, dao cho la moi du an nhay sang tinh khac.
 export const MOCK_REGIONS: FilterOption[] = [
   { value: 'kv-ha-noi', label: 'Hà Nội' },
   { value: 'kv-hcm', label: 'TP. Hồ Chí Minh' },
@@ -38,6 +40,13 @@ export const MOCK_REGIONS: FilterOption[] = [
   { value: 'kv-hung-yen', label: 'Hưng Yên' },
   { value: 'kv-quang-ninh', label: 'Quảng Ninh' },
   { value: 'kv-hai-phong', label: 'Hải Phòng' },
+  { value: 'kv-long-an', label: 'Long An' },
+  { value: 'kv-ba-ria-vung-tau', label: 'Bà Rịa – Vũng Tàu' },
+  { value: 'kv-dong-nai', label: 'Đồng Nai' },
+  { value: 'kv-khanh-hoa', label: 'Khánh Hòa' },
+  { value: 'kv-kien-giang', label: 'Kiên Giang' },
+  { value: 'kv-binh-duong', label: 'Bình Dương' },
+  { value: 'kv-quang-ngai', label: 'Quảng Ngãi' },
 ];
 
 type Seed = {
@@ -137,6 +146,13 @@ const REGION_CENTER: Record<string, [number, number]> = {
   'kv-hung-yen': [20.6464, 106.0511],
   'kv-quang-ninh': [20.9599, 107.0448],
   'kv-hai-phong': [20.8449, 106.6881],
+  'kv-long-an': [10.6086, 106.4231],
+  'kv-ba-ria-vung-tau': [10.4114, 107.1362],
+  'kv-dong-nai': [10.7546, 106.8967],
+  'kv-khanh-hoa': [12.2388, 109.1967],
+  'kv-kien-giang': [10.2270, 103.9670],
+  'kv-binh-duong': [11.0686, 106.7261],
+  'kv-quang-ngai': [15.1214, 108.8044],
 };
 
 /** Do lech toi da quanh tam khu vuc, do - khoang 9 km */
@@ -147,6 +163,31 @@ const HANDOVER_BY_STATUS: Record<ProjectStatus, [number, number]> = {
   'dang-mo-ban': [2027, 2029],
   'sap-mo-ban': [2029, 2031],
   'da-ban-giao': [2023, 2026],
+};
+
+/**
+ * Bang anh cho the du an.
+ *
+ * Anh mock chi co MOT tam moi du an (public/images/projects/<slug>.jpg), nen
+ * bang anh duoc ghep tu chinh anh cua cac du an ke ben trong CUNG phan khuc:
+ * cao tang muon anh cao tang, thap tang muon anh thap tang. Cach nay khong
+ * them file nao vao repo ma van du anh de chuyen canh.
+ *
+ * Khi backend co module upload, thay ham nay bang danh sach anh that cua du an.
+ */
+const GALLERY_SIZE = 3;
+
+const SLUGS_BY_SEGMENT: Record<ProjectSegment, string[]> = {
+  'cao-tang': SEEDS.filter((seed) => seed.segment === 'cao-tang').map((s) => s.slug),
+  'thap-tang': SEEDS.filter((seed) => seed.segment === 'thap-tang').map((s) => s.slug),
+};
+
+const galleryFor = (seed: Seed): string[] => {
+  const pool = SLUGS_BY_SEGMENT[seed.segment];
+  const start = Math.max(0, pool.indexOf(seed.slug));
+  return Array.from({ length: Math.min(GALLERY_SIZE, pool.length) }, (_, index) =>
+    `/images/projects/${pool[(start + index) % pool.length]}.jpg`,
+  );
 };
 
 /** Ngay dang gia lap - lui dan tu 07/08/2026 de thu tu "moi nhat" on dinh */
@@ -184,6 +225,7 @@ export const MOCK_PROJECTS: Project[] = SEEDS.map((seed, index) => {
     regionId: region.value,
     regionName: region.label,
     thumbnailUrl: `/images/projects/${seed.slug}.jpg`,
+    thumbnailUrls: galleryFor(seed),
     detailUrl: `/du-an/${seed.slug}`,
     isHot: seed.isHot,
     publishedAt: publishedAtFor(index),
