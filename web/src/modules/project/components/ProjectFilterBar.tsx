@@ -175,20 +175,26 @@ const ProjectFilterBar = ({
         </form>
 
         {/* lg:contents tha hai nut nay thanh phan tu truc tiep cua hang tren,
-            de toggle day duoc ra sat mep phai bang ml-auto */}
-        <div className="flex items-center gap-3 lg:contents">
+            de toggle day duoc ra sat mep phai bang ml-auto.
+            flex-wrap la phao cuu sinh cho may rat hep (<=320px): thay vi day
+            nhau tran ra ngoai man hinh thi toggle tu xuong dong. */}
+        <div className="flex flex-wrap items-center gap-3 lg:contents">
           <button
             type="button"
             onClick={() => setIsSearchSaved((saved) => !saved)}
             aria-pressed={isSearchSaved}
-            className="brand-gradient group relative flex h-12 shrink-0 items-center overflow-hidden rounded-full px-5 text-theme-sm font-bold text-white shadow-[0_4px_16px_-4px_rgba(15,111,209,0.75)] transition-transform duration-300 ease-out hover:scale-105 active:scale-95"
+            className="brand-gradient group relative flex h-12 shrink-0 items-center overflow-hidden rounded-full px-4 text-theme-sm font-bold text-white sm:px-5 shadow-[0_4px_16px_-4px_rgba(15,111,209,0.75)] transition-transform duration-300 ease-out hover:scale-105 active:scale-95"
           >
             <span className="relative z-10 flex items-center gap-2">
               <FiHeart
                 aria-hidden
                 className={`text-base ${isSearchSaved ? 'fill-current' : ''}`}
               />
-              {isSearchSaved ? 'Đã lưu' : 'Lưu tìm kiếm'}
+              {/* Man hinh hep chi de lai icon: hai nut nay cong lai 406px, khong
+                  vua 358px con trong cua may 390px */}
+              <span className="hidden sm:inline">
+                {isSearchSaved ? 'Đã lưu' : 'Lưu tìm kiếm'}
+              </span>
             </span>
             <ShineSweep />
           </button>
