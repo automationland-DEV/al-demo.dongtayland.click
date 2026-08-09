@@ -26,11 +26,11 @@ const DocumentsTab = ({ project }: { project: ProjectDetail }) => {
             href={document.url}
             className="group flex items-center gap-3 bg-white px-4 py-4 transition hover:bg-gray-25"
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gold-400 text-theme-sm font-bold text-jade-800">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gold-400 text-base font-bold text-jade-800">
               {document.order}
             </span>
 
-            <span className="min-w-0 flex-1 truncate text-theme-sm font-semibold uppercase tracking-wide text-gray-800 transition group-hover:text-brand-600">
+            <span className="min-w-0 flex-1 truncate text-base font-semibold uppercase tracking-wide text-gray-800 transition group-hover:text-brand-600">
               {document.name}
             </span>
 
@@ -42,7 +42,7 @@ const DocumentsTab = ({ project }: { project: ProjectDetail }) => {
         ))}
       </div>
 
-      <p className="mt-5 flex items-start gap-2 rounded-lg border-l-4 border-gold-400 bg-gold-200/25 px-4 py-3 text-theme-sm text-gray-700">
+      <p className="mt-5 flex items-start gap-2 rounded-lg border-l-4 border-gold-400 bg-gold-200/25 px-4 py-3 text-base text-gray-700">
         <FiAlertCircle aria-hidden className="mt-0.5 shrink-0 text-gold-500" />
         <span>
           <strong className="font-semibold">Lưu ý:</strong> Thông tin tài liệu dự án ban đầu

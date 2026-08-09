@@ -15,24 +15,51 @@ import type { ReactNode } from 'react';
 import { FiPlay } from 'react-icons/fi';
 import PlaceholderThumb from '@/common/components/PlaceholderThumb';
 
-/** Tieu de muc - can trai, co gach mau dan truoc */
+/**
+ * Tieu de muc.
+ *
+ * Mac dinh can giua kem mot gach mau ngan ben duoi - kieu nay hop voi cac muc
+ * ma noi dung ben duoi cung can giua (luoi san pham, luoi tien ich, bang anh).
+ *
+ * `align="left"` danh cho muc co doan van dai chay theo le trai, luc do tieu de
+ * can giua se lam gay le doc cua ca khoi.
+ */
 export const SectionHeading = ({
   title,
   subtitle,
+  align = 'center',
 }: {
   title: string;
   subtitle?: string;
-}) => (
-  <div className="mb-6 flex items-start gap-3">
-    <span aria-hidden className="brand-gradient mt-1 h-9 w-1 shrink-0 rounded-full" />
-    <div className="min-w-0">
-      <h2 className="text-xl font-bold tracking-tight text-navy-800 sm:text-2xl">
+  align?: 'center' | 'left';
+}) => {
+  if (align === 'left') {
+    return (
+      <div className="mb-6 flex items-start gap-3">
+        <span aria-hidden className="brand-gradient mt-1 h-9 w-1 shrink-0 rounded-full" />
+        <div className="min-w-0">
+          <h2 className="text-2xl font-bold tracking-tight text-navy-800 sm:text-3xl">
+            {title}
+          </h2>
+          {subtitle && <p className="mt-1.5 text-base text-gray-500">{subtitle}</p>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-8 text-center">
+      <h2 className="text-2xl font-bold tracking-tight text-navy-800 sm:text-3xl">
         {title}
       </h2>
-      {subtitle && <p className="mt-1 text-theme-sm text-gray-500">{subtitle}</p>}
+      <span
+        aria-hidden
+        className="brand-gradient mx-auto mt-3 block h-1 w-16 rounded-full"
+      />
+      {subtitle && <p className="mt-3 text-base text-gray-500">{subtitle}</p>}
     </div>
-  </div>
-);
+  );
+};
 
 /**
  * Panel toi mau cho cac khoi ke chuyen (gioi thieu, thong so, ket bai).

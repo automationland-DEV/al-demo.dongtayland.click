@@ -39,7 +39,7 @@ const Photo360Tab = ({ project }: { project: ProjectDetail }) => {
           </span>
         ))}
 
-        <span className="pointer-events-none absolute bottom-3 left-3 rounded bg-black/60 px-2 py-1 text-theme-xs font-medium text-white">
+        <span className="pointer-events-none absolute bottom-3 left-3 rounded bg-black/60 px-2 py-1 text-theme-sm font-medium text-white">
           {index + 1}/{project.panoramas.length}
         </span>
 
@@ -51,7 +51,7 @@ const Photo360Tab = ({ project }: { project: ProjectDetail }) => {
           <FiMaximize aria-hidden />
         </button>
 
-        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pb-3 pt-8 text-center text-theme-sm font-medium text-white">
+        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pb-3 pt-8 text-center text-base font-medium text-white">
           {panorama.title}
         </p>
       </div>
