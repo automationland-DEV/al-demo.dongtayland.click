@@ -198,7 +198,12 @@ const ProjectMapView = ({ projects, isLoading }: ProjectMapViewProps) => {
         zoom: VIETNAM_ZOOM,
         // Dieu khien tu ve o goc duoi phai cho bam dung thiet ke
         zoomControl: false,
+        // Bo tien to "Leaflet |" - tren dien thoai dong ghi chu dai gan het
+        // be ngang ban do. Nguon ban do van duoc ghi day du.
+        attributionControl: false,
       });
+
+      L.control.attribution({ position: 'bottomright', prefix: false }).addTo(map);
 
       mapRef.current = map;
       setIsMapReady(true);
@@ -264,8 +269,8 @@ const ProjectMapView = ({ projects, isLoading }: ProjectMapViewProps) => {
           html: text ? `<span>${escapeHtml(text)}</span>` : '',
           // Phai khop .map-pin--label trong globals.css: Leaflet dat ghim theo
           // iconAnchor, lech so la ghim khong dung toa do that.
-          iconSize: text ? [48, 20] : [14, 14],
-          iconAnchor: text ? [24, 10] : [7, 7],
+          iconSize: text ? [44, 18] : [12, 12],
+          iconAnchor: text ? [22, 9] : [6, 6],
         }),
         title: project.name,
       })
