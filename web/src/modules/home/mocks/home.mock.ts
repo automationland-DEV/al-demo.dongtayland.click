@@ -10,6 +10,7 @@ import type {
   HomeBannerSlide,
   HomeContent,
   HomeFeature,
+  HomeTestimonial,
 } from '../models/home.model';
 
 /** Lay ra 6 du an noi bat theo isHot + moi dang mo ban */
@@ -46,7 +47,7 @@ export const MOCK_BANNERS: HomeBannerSlide[] = [
     publicId: 'banner-004',
     headline: 'Đăng ký nhận tư vấn miễn phí',
     subtitle:
-      'Chuyên viên SalePlus sẽ liên hệ trong vòng 24 giờ để hỗ trợ bạn chọn dự án phù hợp.',
+      'Chuyên viên RealtyHub sẽ liên hệ trong vòng 24 giờ để hỗ trợ bạn chọn dự án phù hợp.',
     primaryCtaLabel: 'Nhận tư vấn',
     desktopImageUrl: '/images/home/banner/desktop/b4.jpg',
     mobileImageUrl: '/images/home/banner/mobile/b4.jpg',
@@ -92,8 +93,48 @@ export const MOCK_FEATURED_PROJECTS = [...MOCK_PROJECTS]
   })
   .slice(0, 6);
 
+export const MOCK_TESTIMONIALS: HomeTestimonial[] = [
+  {
+    publicId: 'testimonial-001',
+    authorName: 'Nguyễn Minh Tuấn',
+    authorRole: 'Khách hàng mua căn hộ Vinhomes',
+    rating: 5,
+    quote:
+      'RealtyHub giúp mình so sánh 4 dự án cùng lúc chỉ trong 10 phút. Thông tin pháp lý minh bạch, không phải gọi điện hỏi từng chủ đầu tư.',
+    relatedProject: 'Vinhomes Grand Park',
+  },
+  {
+    publicId: 'testimonial-002',
+    authorName: 'Trần Thị Hồng Nhung',
+    authorRole: 'Nhà đầu tư cá nhân',
+    rating: 5,
+    quote:
+      'Đã mua 2 căn shophouse qua RealtyHub. Đội ngũ tư vấn nhiệt tình, đặc biệt là hỗ trợ thủ tục sang tên rất nhanh gọn.',
+    relatedProject: 'Masteri Thanh Đa',
+  },
+  {
+    publicId: 'testimonial-003',
+    authorName: 'Lê Hoàng Phúc',
+    authorRole: 'Môi giới BĐS 5 năm kinh nghiệm',
+    rating: 4,
+    quote:
+      'Tôi dùng RealtyHub để tìm nguồn hàng cho khách. Bộ lọc theo ngân sách và khu vực rất trực quan, tiết kiệm được rất nhiều thời gian.',
+    relatedProject: 'The Maris Vũng Tàu',
+  },
+  {
+    publicId: 'testimonial-004',
+    authorName: 'Phạm Thị Mai',
+    authorRole: 'Khách hàng lần đầu mua nhà',
+    rating: 5,
+    quote:
+      'Lần đầu mua nhà nên mình rất bỡ ngỡ. Nhờ RealtyHub mà mình hiểu rõ tiến độ thanh toán, pháp lý, và chọn được căn phù hợp với tài chính.',
+    relatedProject: 'Akari City',
+  },
+];
+
 export const MOCK_HOME_CONTENT: HomeContent = {
   banners: MOCK_BANNERS,
   featuredProjects: MOCK_FEATURED_PROJECTS,
   features: MOCK_FEATURES,
+  testimonials: MOCK_TESTIMONIALS,
 };

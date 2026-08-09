@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
 import { FaFacebookF, FaTiktok, FaYoutube } from 'react-icons/fa';
 
@@ -26,15 +27,15 @@ const SiteFooter = () => (
   <footer className="bg-navy-700 text-gray-300">
     <div className="site-container grid grid-cols-1 gap-10 py-12 md:grid-cols-2 lg:grid-cols-4">
       <div>
-        <div className="mb-4 flex items-center gap-2">
-          <svg viewBox="0 0 32 32" className="h-8 w-8" aria-hidden>
-            <rect width="32" height="32" rx="8" fill="white" />
-            <path d="M9 21.5 16 8l7 13.5h-4.4L16 16.4l-2.6 5.1H9Z" fill="var(--color-navy-700)" />
-          </svg>
-          <span className="text-lg font-extrabold uppercase tracking-tight text-white">
-            Saleplust
-          </span>
-        </div>
+        <Link href="/" aria-label="Trang chủ" className="mb-4 inline-block">
+          <Image
+            src="/images/home/realtyhub_new.svg"
+            alt="RealtyHub"
+            width={140}
+            height={36}
+            className="h-9 w-auto brightness-0 invert"
+          />
+        </Link>
 
         <p className="mb-5 text-theme-sm leading-relaxed text-gray-400">
           Nền tảng công nghệ hỗ trợ kinh doanh bất động sản.
@@ -43,8 +44,8 @@ const SiteFooter = () => (
         <ul className="space-y-3 text-theme-sm">
           <li className="flex items-start gap-2.5">
             <FiMail aria-hidden className="mt-0.5 shrink-0 text-brand-300" />
-            <a href="mailto:info@saleplust.vn" className="transition hover:text-white">
-              info@saleplust.vn
+            <a href="mailto:info@realtyhub.vn" className="transition hover:text-white">
+              info@realtyhub.vn
             </a>
           </li>
           <li className="flex items-start gap-2.5">
@@ -112,7 +113,7 @@ const SiteFooter = () => (
 
     <div className="border-t border-white/10">
       <div className="site-container py-5 text-theme-xs leading-relaxed text-gray-400">
-        <p>© 2026 Saleplust. Bảo lưu mọi quyền.</p>
+        <p>© 2026 RealtyHub. Bảo lưu mọi quyền.</p>
         <p>Thông tin doanh nghiệp sẽ được cập nhật sau.</p>
       </div>
     </div>

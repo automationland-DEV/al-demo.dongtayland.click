@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import {
-  FiBookOpen,
-  FiBookmark,
-  FiCalendar,
+  FiCamera,
   FiCompass,
+  FiFileText,
   FiGrid,
-  FiHeart,
-  FiHome,
-  FiMap,
-  FiStar,
+  FiMoon,
+  FiSliders,
+  FiUsers,
+  FiDroplet,
 } from 'react-icons/fi';
 
 type QuickUtility = {
@@ -17,65 +16,76 @@ type QuickUtility = {
   icon: React.ComponentType<{ 'aria-hidden'?: boolean; className?: string }>;
   /** Mau toa nen icon - xoay vong giua brand/jade/accent/gold de tao nhip cho grid */
   tone: 'brand' | 'jade' | 'accent' | 'gold';
+  /** Mo ta ngan hien o sr-only cho screen reader (hover tooltip neu can sau) */
+  description?: string;
 };
 
 /**
- * 8 tien ich xuat hien ngay duoi Hero - truy cap nhanh cac chuc nang hay dung
- * cua nguoi mua nha. Moi o di den trang da co (hoac not-yet-built, khi do no
- * van la link noi - khong phai nut).
+ * 8 tien ich xuat hien ngay duoi Hero - truy cap nhanh cac chuc nang tien ich
+ * cho nguoi mua nha + moi gioi: PDF tools, lich am phong thuy, CRM, so sanh.
+ *
+ * Moi o di den trang da co (hoac trang "Coming soon" - app/common/components/
+ * ComingSoon.tsx, khi do no van la link noi - khong phai nut).
  *
  * Icon dung react-icons (da co trong repo) - khong them dependency moi.
  */
 const UTILITIES: QuickUtility[] = [
-
   {
-    label: 'La bàn',
+    label: 'PDF Converter',
+    href: '/pdf-converter',
+    icon: FiFileText,
+    tone: 'brand',
+    description: 'Chuyển đổi PDF ↔ Word / Excel / PPT / JPG',
+  },
+  {
+    label: 'PDF Scanner',
+    href: '/pdf-scanner',
+    icon: FiCamera,
+    tone: 'jade',
+    description: 'Quét tài liệu thành PDF bằng camera',
+  },
+  {
+    label: 'Watermark',
+    href: '/watermark',
+    icon: FiDroplet,
+    tone: 'gold',
+    description: 'Thêm watermark bản quyền lên ảnh / PDF',
+  },
+  {
+    label: 'Lịch âm',
+    href: '/lich-am',
+    icon: FiMoon,
+    tone: 'accent',
+    description: 'Lịch âm Việt Nam, can chi, ngày tốt xấu',
+  },
+  {
+    label: 'CRM',
+    href: '/crm',
+    icon: FiUsers,
+    tone: 'brand',
+    description: 'Quản lý khách hàng cho môi giới',
+  },
+  {
+    label: 'La bàn phong thủy',
     href: '/la-ban',
     icon: FiCompass,
     tone: 'jade',
+    description: 'La bàn + hướng nhà theo tuổi',
   },
   {
-    label: 'Yêu thích',
-    href: '/yeu-thich',
-    icon: FiHeart,
-    tone: 'accent',
-  },
-  {
-    label: 'Tin tức',
-    href: '/tin-tuc',
-    icon: FiBookmark,
+    label: 'So sánh',
+    href: '/so-sanh',
+    icon: FiSliders,
     tone: 'gold',
-  },
-  {
-    label: 'Sự kiện',
-    href: '/su-kien',
-    icon: FiCalendar,
-    tone: 'brand',
-  },
-  {
-    label: 'Phong thủy',
-    href: '/phong-thuy',
-    icon: FiStar,
-    tone: 'gold',
-  },
-  {
-    label: 'Khu vực',
-    href: '/khu-vuc',
-    icon: FiMap,
-    tone: 'accent',
-  },
-  {
-    label: 'Hướng dẫn',
-    href: '/huong-dan',
-    icon: FiBookOpen,
-    tone: 'gold',
+    description: 'So sánh dự án và căn hộ cạnh nhau',
   },
   {
     label: 'Xem thêm',
     href: '/tien-ich',
     icon: FiGrid,
-    tone: 'brand',
-  }
+    tone: 'accent',
+    description: 'Tất cả tiện ích của RealtyHub',
+  },
 ];
 
 const TONE_CLASSES: Record<QuickUtility['tone'], string> = {
@@ -98,10 +108,12 @@ const QuickUtilities = () => (
     <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-card md:p-6">
       <h2 className="sr-only">Tiện ích nhanh</h2>
       <ul className="grid grid-cols-4 gap-3 md:gap-4 lg:grid-cols-8">
-        {UTILITIES.map(({ label, href, icon: Icon, tone }) => (
+        {UTILITIES.map(({ label, href, icon: Icon, tone, description }) => (
           <li key={href}>
             <Link
               href={href}
+              aria-label={description ?? label}
+              title={description}
               className="group flex flex-col items-center gap-2 rounded-xl px-2 py-3 transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 md:gap-3 md:py-4"
             >
               <span

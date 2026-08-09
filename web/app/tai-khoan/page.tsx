@@ -8,7 +8,7 @@ import { MOCK_PROFILE } from '@/modules/profile/mocks/profile.mock';
 
 export const metadata: Metadata = {
   title: 'Thông tin cá nhân',
-  description: 'Quản lý tài khoản, Đồng Tốt, tiện ích và dịch vụ trả phí của bạn trên Saleplust.',
+  description: 'Quản lý tài khoản, Đồng Tốt, tiện ích và dịch vụ trả phí của bạn trên RealtyHub.',
 };
 
 /**

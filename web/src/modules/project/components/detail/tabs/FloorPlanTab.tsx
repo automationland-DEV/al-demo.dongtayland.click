@@ -133,7 +133,7 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
       });
 
       L.imageOverlay(planMap.imageUrl, bounds, {
-        attribution: 'Saleplust',
+        attribution: 'RealtyHub',
       }).addTo(map);
 
       map.fitBounds(bounds);
