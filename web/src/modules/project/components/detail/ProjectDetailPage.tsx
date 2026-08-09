@@ -11,7 +11,6 @@ import {
   type ProjectDetailTabKey,
 } from '../../models/project-detail.model';
 import ProjectHero from './ProjectHero';
-import ProjectSidebar from './ProjectSidebar';
 import ProjectTabNav from './ProjectTabNav';
 import DocumentsTab from './tabs/DocumentsTab';
 import FloorPlanTab from './tabs/FloorPlanTab';
@@ -27,22 +26,9 @@ import UnitsTab from './tabs/UnitsTab';
 
 const TAB_PARAM = 'tab';
 
-/**
- * Cac tab can tron chieu ngang, khong kem cot phai.
- *
- * Bang hang co 11 cot, ban do mat bang va anh 360 deu la khoi tuong tac lon -
- * ep chung vao 2/3 chieu rong se phai cuon ngang lien tuc. Cac tab con lai la
- * noi dung doc nen hep bot lai con de doc hon, vi dong chu ngan di.
- */
-const WIDE_TABS = new Set<ProjectDetailTabKey>([
-  'mat-bang-quy-can',
-  'quy-can',
-  'anh-360',
-]);
-
 const DetailSkeleton = () => (
   <div>
-    <div className="h-[66vh] min-h-110 w-full animate-pulse bg-gray-200" />
+    <div className="h-[58vh] min-h-100 w-full animate-pulse bg-gray-200" />
     <div className="site-container py-10">
       <div className="mb-6 h-11 w-full animate-pulse rounded-full bg-gray-100" />
       <div className="h-96 w-full animate-pulse rounded-2xl bg-gray-100" />
@@ -120,8 +106,6 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
     );
   }
 
-  const isWide = WIDE_TABS.has(currentTab);
-
   const tabContent = (
     <>
       {currentTab === 'tong-quan' && <OverviewTab project={project} />}
@@ -150,22 +134,21 @@ const ProjectDetailPage = ({ slug, initialProject }: ProjectDetailPageProps) => 
     <div className="pb-16">
       <ProjectHero project={project} />
 
-      <div className="mt-8">
-        <ProjectTabNav current={currentTab} onChange={changeTab} />
-      </div>
+      <ProjectTabNav
+        current={currentTab}
+        onChange={changeTab}
+        consultants={project.consultants}
+      />
 
-      {/* scroll-mt tru cho ca SiteHeader (64px) lan thanh tab dinh (~60px) */}
-      <div ref={contentRef} className="site-container scroll-mt-32 pt-8">
-        {isWide ? (
-          tabContent
-        ) : (
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-            <div className="min-w-0 lg:col-span-8 xl:col-span-9">{tabContent}</div>
-            <div className="lg:col-span-4 xl:col-span-3">
-              <ProjectSidebar project={project} />
-            </div>
-          </div>
-        )}
+      {/* Moi tab tran het chieu rong. Truoc day co cot phai dinh o ben, nhung no
+          chi cao khoang 500px trong khi trang dai gan 5000px - tu giua trang tro
+          xuong mot phan ba chieu ngang bo trong. Bang thong so gio nam trong muc
+          "Tong quan du an", nut goi da gan vao thanh tab, nen khong con ly do
+          giu cot do.
+
+          scroll-mt tru cho ca SiteHeader (64px) lan thanh tab dinh (~60px). */}
+      <div ref={contentRef} className="site-container scroll-mt-32 pt-10">
+        {tabContent}
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ const PhaseFact = ({
     </span>
     <div className="min-w-0">
       <p className="text-[11px] uppercase tracking-wide text-gray-400">{label}</p>
-      <p className="truncate text-theme-sm font-bold text-gray-800">{value}</p>
+      <p className="truncate text-base font-bold text-gray-800">{value}</p>
     </div>
   </div>
 );
@@ -73,7 +73,7 @@ const PhasesTab = ({ project }: { project: ProjectDetail }) => {
 
               {/* Luon hien chu khong chi hien khi hover: tren man hinh cam tay
                   khong co trang thai hover nen nut se khong bao gio xuat hien */}
-              <span className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-2 rounded-md bg-white/90 py-2 text-theme-sm font-semibold text-gray-800 shadow-card backdrop-blur-sm transition group-hover/thumb:bg-white group-hover/thumb:text-brand-600">
+              <span className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-2 rounded-md bg-white/90 py-2 text-base font-semibold text-gray-800 shadow-card backdrop-blur-sm transition group-hover/thumb:bg-white group-hover/thumb:text-brand-600">
                 <FiEye aria-hidden />
                 Xem chi tiết
               </span>

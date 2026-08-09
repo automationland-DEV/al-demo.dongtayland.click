@@ -23,7 +23,7 @@ const TrainingTab = ({ project }: { project: ProjectDetail }) => {
               <PlayOverlay label={`Phát video: ${video.title}`} />
             </div>
 
-            <h3 className="mt-3 text-center text-theme-sm font-semibold uppercase leading-snug tracking-wide text-gray-800 transition group-hover:text-brand-600">
+            <h3 className="mt-3 text-center text-base font-semibold uppercase leading-snug tracking-wide text-gray-800 transition group-hover:text-brand-600">
               {video.title}
             </h3>
           </a>

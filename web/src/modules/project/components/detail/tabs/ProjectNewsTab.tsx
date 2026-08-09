@@ -42,14 +42,14 @@ const ProjectNewsTab = ({ project }: { project: ProjectDetail }) => {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Tìm kiếm tin tức..."
             aria-label="Tìm kiếm tin tức dự án"
-            className="h-11 w-full rounded-md border border-gray-300 bg-white pl-9 pr-3 text-theme-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-brand-400 focus:shadow-focus-ring"
+            className="h-11 w-full rounded-md border border-gray-300 bg-white pl-9 pr-3 text-base text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-brand-400 focus:shadow-focus-ring"
           />
         </div>
       </div>
 
       {articles.length === 0 ? (
         <div className="rounded-lg border border-gray-200 bg-white p-12 text-center">
-          <p className="text-theme-sm text-gray-500">
+          <p className="text-base text-gray-500">
             Không tìm thấy bài viết nào khớp từ khóa.
           </p>
         </div>
@@ -75,7 +75,7 @@ const ProjectNewsTab = ({ project }: { project: ProjectDetail }) => {
               </div>
 
               <div className="flex flex-1 flex-col gap-2 p-4">
-                <h3 className="line-clamp-2 text-theme-sm font-semibold leading-snug text-gray-800">
+                <h3 className="line-clamp-2 text-base font-semibold leading-snug text-gray-800">
                   <Link
                     href={`/tin-tuc/${article.slug}`}
                     className="transition hover:text-brand-600"
@@ -84,11 +84,11 @@ const ProjectNewsTab = ({ project }: { project: ProjectDetail }) => {
                   </Link>
                 </h3>
 
-                <p className="line-clamp-3 text-theme-xs leading-relaxed text-gray-500">
+                <p className="line-clamp-3 text-theme-sm leading-relaxed text-gray-500">
                   {article.excerpt}
                 </p>
 
-                <div className="mt-auto flex items-center justify-between pt-2 text-theme-xs text-gray-500">
+                <div className="mt-auto flex items-center justify-between pt-2 text-theme-sm text-gray-500">
                   <time dateTime={article.publishedAt}>
                     {formatArticleDate(article.publishedAt)}
                   </time>
