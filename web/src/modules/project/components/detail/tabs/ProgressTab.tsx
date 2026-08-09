@@ -45,7 +45,7 @@ const ProgressTab = ({ project }: { project: ProjectDetail }) => {
                     type="button"
                     onClick={() => setIndex(itemIndex)}
                     aria-current={isActive ? 'true' : undefined}
-                    className={`w-full rounded-md border px-3 py-2.5 text-left text-theme-sm transition ${
+                    className={`w-full rounded-md border px-3 py-2.5 text-left text-base transition ${
                       isActive
                         ? 'border-accent-400 bg-accent-50 font-semibold text-accent-600'
                         : 'border-gray-200 bg-white text-gray-600 hover:border-brand-300 hover:text-brand-600'
@@ -62,7 +62,7 @@ const ProgressTab = ({ project }: { project: ProjectDetail }) => {
             <button
               type="button"
               onClick={() => setIsExpanded((open) => !open)}
-              className="mt-3 w-full text-center text-theme-sm font-medium text-brand-600 transition hover:text-brand-700"
+              className="mt-3 w-full text-center text-base font-medium text-brand-600 transition hover:text-brand-700"
             >
               {isExpanded ? 'Thu gọn' : 'Xem thêm'}
             </button>

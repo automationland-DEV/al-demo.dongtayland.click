@@ -5,7 +5,7 @@ import LoginForm from '@/modules/auth/components/LoginForm';
 
 export const metadata: Metadata = {
   title: 'Đăng nhập',
-  description: 'Đăng nhập vào Saleplust để lưu dự án yêu thích và quản lý tài khoản.',
+  description: 'Đăng nhập vào RealtyHub để lưu dự án yêu thích và quản lý tài khoản.',
 };
 
 /**
@@ -118,7 +118,7 @@ const LoginPage = () => {
           </div>
 
           <p className="text-theme-xs text-white/60">
-            © {new Date().getFullYear()} Saleplust. Nền tảng công nghệ bất động sản.
+            © {new Date().getFullYear()} RealtyHub. Nền tảng công nghệ bất động sản.
           </p>
         </div>
       </div>

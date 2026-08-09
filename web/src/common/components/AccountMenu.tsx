@@ -168,6 +168,17 @@ const AccountMenu = () => {
   // Dat early-return SAU tat ca hook de tuan thu rules-of-hooks.
   if (pathname === '/login') return null;
 
+  // SSR placeholder: giu div container voi chieu cao co dinh de layout
+  // khong nhay khi hydrate xong (tranh CLS). Server va client render
+  // cung mot markup o lan dau -> khong hydration mismatch.
+  if (!isMounted) {
+    return (
+      <div className="flex h-9 items-center" aria-hidden>
+        <span className="h-9 w-9 rounded-full bg-gray-100" />
+      </div>
+    );
+  }
+
   const close = () => setIsOpen(false);
 
   const onChangeLang = (l: Lang) => {
@@ -178,10 +189,6 @@ const AccountMenu = () => {
       window.dispatchEvent(new Event('lang:change'));
     }
   };
-
-  // Cho o trong dung kich thuoc trong luc chua biet la khach hay user, de header
-  // khong bi giat khi noi dung that hien ra.
-  if (!isMounted) return <div aria-hidden className="h-10 w-10" />;
 
   // Neu chua dang nhap: chi hien nut dang nhhap di vao trang login (chua co).
   if (!user) {

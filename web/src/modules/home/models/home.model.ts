@@ -32,12 +32,34 @@ export type HomeFeature = {
   description: string;
 };
 
+/**
+ * Mot danh gia tu khach hang / chuyen gia / nha dau tu hien o khoi
+ * "Khach hang noi gi" tren trang chu.
+ */
+export type HomeTestimonial = {
+  publicId: string;
+  /** Ten khach hang. VD: "Anh Nguyen Van A". */
+  authorName: string;
+  /** Chuc danh / vi tri. VD: "Khach hang mua can ho Vinhomes". */
+  authorRole: string;
+  /** URL avatar that. Neu khong co -> UserAvatar fallback initials. */
+  avatar?: string;
+  /** So sao 1-5 (rating). */
+  rating: 1 | 2 | 3 | 4 | 5;
+  /** Noi dung danh gia. 1-3 cau, can ngan gon. */
+  quote: string;
+  /** Ten du an / san pham lien quan (hien thi o footer card). */
+  relatedProject?: string;
+};
+
 /** Toan bo du lieu trang chu - server se goi mot lan roi truyen xuong client */
 export type HomeContent = {
   banners: HomeBannerSlide[];
   /** 6 du an noi bat hien o khoi chinh giua */
   featuredProjects: Project[];
   features: HomeFeature[];
+  /** 3-6 danh gia hien o khoi testimonials. Neu rong -> khoi an. */
+  testimonials: HomeTestimonial[];
 };
 
 export const FEATURE_ICONS = ['shield', 'search', 'support', 'chart'] as const;

@@ -25,7 +25,7 @@ const WhyUs = ({ features }: WhyUsProps) => (
   <section className="site-container py-12 md:py-16">
     <div className="mb-8 text-center md:mb-10">
       <p className="mb-2 text-theme-xs font-bold uppercase tracking-[0.2em] text-brand-600">
-        Vì sao chọn Saleplust
+        Vì sao chọn RealtyHub
       </p>
       <h2 className="text-2xl font-bold uppercase tracking-wide text-gray-900 md:text-3xl">
         Đồng hành cùng bạn từ A đến Z

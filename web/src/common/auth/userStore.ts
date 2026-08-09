@@ -53,19 +53,38 @@ export const clearUser = () => {
 };
 
 /**
- * Hook theo doi user hien tai. Re-render component khi:
- *   - mount (doc localStorage qua lazy initializer - tranh setState trong effect)
+ * Hook theo doi user hien tai.
+ *
+ * SSR-safe: server luon tra ve null (user luc dau), client cung bat dau
+ * null, chi sau khi mount (useEffect) moi doc localStorage. Cach nay tranh
+ * hydration mismatch vi server va client render CUNG NHAT (null) o lan dau.
+ *
+ * Re-render component khi:
+ *   - mount (doc localStorage qua effect)
  *   - storage event tu tab khac (1 user dang nhap o tab A, tab B tu cap nhat)
  *   - custom event `user:change` (noi bo trong cung tab khi set/clear)
+ *
+ * Component tieu thu co the phan biet "chua hydrate" vs "da hydrate, chua
+ * dang nhap" bang cach: null o lan render dau == chua hydrate; sau khi
+ * effect chay, neu user van null la thuc su chua dang nhap.
+ *
+ * Dev muon test nhanh: mo DevTools, go
+ *   localStorage.setItem('user', JSON.stringify({...}))
+ * roi F5. Cac role SUPER_ADMIN / ADMIN se hien thi menu "Trang quan tri".
  */
 export const useCurrentUser = (): CurrentUser | null => {
-  // Lazy initializer chi chay 1 lan o client khi hydration; can vo cung
-  // quan trong vi localStorage chi ton tai o browser, server render se
-  // tra ve null (SSR mismatch, nhung thuc te hook chi chay o client
-  // component, nen OK).
-  const [user, setUser] = useState<CurrentUser | null>(() => readUser());
+  // null o lan render dau (ca server lan client) de khop nhau.
+  // useState lazy initializer KHONG du dung o day - no se goi readUser()
+  // ngay o client truoc khi server render xong, gay SSR != client.
+  const [user, setUser] = useState<CurrentUser | null>(null);
 
   useEffect(() => {
+    // Read-on-mount can thiet cho hydration: server tra null, client phai
+    // doc localStorage sau mount. React 19 canh bao cascading render, nhung
+    // day la pattern bat buoc cho SSR-safe localStorage - disable rule.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setUser(readUser());
+
     const onStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) setUser(readUser());
     };

@@ -24,5 +24,5 @@ export type QuickReply = {
 /** Anh dai dien bot, nam trong public/images/ */
 export const CHATBOT_IMAGE = '/images/icon_chatbot_ai.png';
 
-export const BOT_NAME = 'Trợ lý Saleplust';
+export const BOT_NAME = 'Trợ lý RealtyHub';
 export const BOT_STATUS = 'Luôn trực tuyến';

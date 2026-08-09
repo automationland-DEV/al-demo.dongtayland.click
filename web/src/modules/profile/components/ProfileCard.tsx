@@ -65,7 +65,7 @@ const ProfileCard = ({ profile }: { profile: Profile }) => {
         {/* Ten + stats */}
         <div className="flex-1">
           <h1 className="text-2xl font-extrabold md:text-3xl">{profile.name}</h1>
-          <p className="mt-1 text-theme-xs text-white/70">Đã tham gia Saleplust từ 2024</p>
+          <p className="mt-1 text-theme-xs text-white/70">Đã tham gia RealtyHub từ 2024</p>
 
           <div className="mt-4 flex gap-8">
             {profile.stats.map((stat) => (

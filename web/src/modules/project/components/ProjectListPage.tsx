@@ -362,7 +362,8 @@ const ProjectListPage = () => {
     const list = listQuery.data?.projects ?? [];
     if (favorites.length === 0) return list;
 
-    const favorite = new Set(favorites);
+    // favorites la mang { publicId, savedAt } nen phai rut publicId ra truoc
+    const favorite = new Set(favorites.map((entry) => entry.publicId));
     // sort cua JS on dinh nen cac du an cung nhom giu nguyen thu tu goc
     return [...list].sort(
       (a, b) => Number(favorite.has(b.publicId)) - Number(favorite.has(a.publicId)),
