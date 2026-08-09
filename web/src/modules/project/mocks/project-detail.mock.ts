@@ -36,6 +36,13 @@ import type {
   UnitStatus,
 } from '../models/project-detail.model';
 import { PROPERTY_TYPE_LABELS, type Project } from '../models/project.model';
+import {
+  VOP_DETAIL_OVERRIDE,
+  VOP_MASTER_PLAN,
+  VOP_PHASE_IMAGES,
+  VOP_PHASE_NAMES,
+  VOP_SLUG,
+} from './vinhomes-ocean-park.mock';
 import { MOCK_PROJECTS } from './projects.mock';
 
 // ── Bo sinh so ngau nhien co hat giong ─────────────────────────────────────
@@ -929,11 +936,45 @@ const ensureBuilt = (slug: string): ProjectDetail | null => {
   const profile = REGION_PROFILES[project.regionId] ?? FALLBACK_PROFILE;
   const imageOffset = MOCK_PROJECTS.findIndex((item) => item.slug === slug);
 
-  const phaseNames = buildPhaseNames(rng);
+  // Du an that dung dung ten 4 phan khu cua no; du an hu cau van sinh ngau nhien
+  const isReal = slug === VOP_SLUG;
+  const phaseNames = isReal ? [...VOP_PHASE_NAMES] : buildPhaseNames(rng);
+
   const units = buildUnits(project, rng, phaseNames, profile);
   const phases = buildPhases(project, rng, phaseNames, units, imageOffset);
 
-  const detail = buildProjectDetail(project, rng, profile, phases, units, imageOffset);
+  const generated = buildProjectDetail(project, rng, profile, phases, units, imageOffset);
+
+  /**
+   * Voi du an that, so lieu tra tu nguon cong khai de len tren ban sinh.
+   * Nhung truong KHONG co trong ban ghi de (bang hang, chinh sach ban hang,
+   * anh 360, tai lieu, tien do, pin gia tren mat bang) van la du lieu minh hoa -
+   * xem GHI-CHU-DU-LIEU.md.
+   */
+  const detail = isReal
+    ? {
+        ...generated,
+        ...VOP_DETAIL_OVERRIDE,
+        phases: generated.phases.map((phase, index) => ({
+          ...phase,
+          imageUrl: VOP_PHASE_IMAGES[index] ?? phase.imageUrl,
+          // To dau tien cua VOP_MASTER_PLAN la mat bang tong the, nen phan khu
+          // thu index nam o vi tri index + 1.
+          masterPlanImages: [
+            {
+              publicId: `${phase.publicId}-plan-phan-khu`,
+              imageUrl: VOP_MASTER_PLAN[index + 1]?.imageUrl ?? VOP_MASTER_PLAN[0].imageUrl,
+              caption: `Mặt bằng phân khu ${phase.name} trong tổng thể dự án`,
+            },
+            {
+              publicId: `${phase.publicId}-plan-tong-the`,
+              imageUrl: VOP_MASTER_PLAN[0].imageUrl,
+              caption: 'Mặt bằng tổng thể Vinhomes Ocean Park',
+            },
+          ],
+        })),
+      }
+    : generated;
 
   unitCache.set(slug, units);
   detailCache.set(slug, detail);

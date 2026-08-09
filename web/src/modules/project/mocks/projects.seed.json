@@ -1,5 +1,17 @@
 [
   {
+    "slug": "vinhomes-ocean-park-gia-lam",
+    "name": "Vinhomes Ocean Park",
+    "tagline": "Đại đô thị 420 ha với biển hồ nước mặn đầu tiên tại Hà Nội",
+    "address": "Xã Gia Lâm, TP. Hà Nội",
+    "segment": "cao-tang",
+    "status": "dang-mo-ban",
+    "propertyType": "can-ho",
+    "developerIndex": 5,
+    "regionIndex": 0,
+    "isHot": true
+  },
+  {
     "slug": "eco-retreat-long-an",
     "name": "Eco Retreat Long An",
     "tagline": "Biệt thự thấp tầng giữa không gian cây xanh",

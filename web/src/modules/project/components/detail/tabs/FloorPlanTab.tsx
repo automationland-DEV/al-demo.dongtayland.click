@@ -54,10 +54,6 @@ const MapButton = ({
 
 type FloorPlanTabProps = {
   planMap: MasterPlanMap;
-  /**
-   * Khi mo tu trang phan khu, ban do da chi con pin cua phan khu do nen o loc
-   * "Phan khu" khong con y nghia - truyen ten vao day de an o do di.
-   */
   lockedPhaseName?: string;
 };
 
@@ -67,6 +63,7 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
   const mapRef = useRef<LeafletMap | null>(null);
   const layerRef = useRef<LayerGroup | null>(null);
   const leafletRef = useRef<typeof import('leaflet') | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   const [isMapReady, setIsMapReady] = useState(false);
   const [funds, setFunds] = useState<UnitFundType[]>(FUND_TYPES);
@@ -142,10 +139,20 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
       layerRef.current = L.layerGroup().addTo(map);
       mapRef.current = map;
       setIsMapReady(true);
+
+      
+      const observer = new ResizeObserver(() => {
+        map?.invalidateSize({ animate: false });
+        map?.fitBounds(bounds);
+      });
+      observer.observe(containerRef.current);
+      resizeObserverRef.current = observer;
     })();
 
     return () => {
       cancelled = true;
+      resizeObserverRef.current?.disconnect();
+      resizeObserverRef.current = null;
       map?.remove();
       mapRef.current = null;
       layerRef.current = null;
@@ -336,9 +343,10 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
         </button>
       </div>
 
+      
       <div
         ref={wrapperRef}
-        className="relative overflow-hidden rounded-lg border border-gray-200 bg-gray-100 shadow-card"
+        className="relative isolate overflow-hidden rounded-lg border border-gray-200 bg-gray-100 shadow-card"
       >
         <div ref={containerRef} className="h-140 w-full sm:h-170" />
 

@@ -2,6 +2,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Man hinh cam tay khong co trang thai hover, nen moi thu chi hien khi hover
+   se khong bao gio xuat hien o do. Dat lop du phong sau bien the nay de tren
+   dien thoai no hien san. */
+@custom-variant no-hover (@media (hover: none));
+
 @theme {
   --font-*: initial;
   
@@ -406,6 +411,23 @@
 .map-pin--c3 { background: var(--color-jade-500); }
 .map-pin--c4 { background: var(--color-error-600); }
 .map-pin--c5 { background: var(--color-navy-600); }
+
+/* ── Chu thich tren anh 360 (Pannellum) ─────────────────────────────────
+   Pannellum ve hotspot bang DOM tho, khong ap duoc class Tailwind sinh theo
+   nhu cau nen cac lop nay phai la CSS that - giong .plan-pin ben duoi. */
+.pano-hotspot {
+  height: 14px;
+  width: 14px;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  background: var(--color-jade-500);
+  box-shadow: 0 2px 8px rgb(16 24 40 / 0.45);
+  cursor: pointer;
+}
+
+.pano-hotspot:hover {
+  background: var(--color-gold-400);
+}
 
 /* Popup cua Leaflet mac dinh bo goc 12px va font rieng - keo ve dung he thong */
 .leaflet-container {
