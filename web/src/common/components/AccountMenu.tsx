@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -45,6 +45,9 @@ const LANG_OPTIONS: { code: Lang; label: string }[] = [
 // URL admin panel hien dang chay o port 5011 theo deploy.sh - link cung
 // la relative cho cung host, nguoi dung tu mo o tab moi.
 const ADMIN_URL = '/admin';
+
+/** Store khong bao gio doi - chi de phan biet server render voi client render. */
+const neverChanges = () => () => {};
 
 const Divider = () => (
   <div aria-hidden className="my-1 h-px bg-gray-100" />
@@ -136,6 +139,13 @@ const AccountMenu = () => {
   const [lang, setLang] = useState<Lang>('vi');
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // `useCurrentUser` doc localStorage ngay trong lan render dau, nhung server
+  // khong co localStorage nen luon ra null -> hai ben ve ra hai cay khac nhau
+  // va React bao hydration mismatch. Hoan viec ve theo user den sau khi mount:
+  // lan ve dau o client dung snapshot cua server (false) nen khop, ngay sau do
+  // React doi sang snapshot client (true) va ve lai voi user that.
+  const isMounted = useSyncExternalStore(neverChanges, () => true, () => false);
+
   // Click outside / Esc de dong
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -168,6 +178,10 @@ const AccountMenu = () => {
       window.dispatchEvent(new Event('lang:change'));
     }
   };
+
+  // Cho o trong dung kich thuoc trong luc chua biet la khach hay user, de header
+  // khong bi giat khi noi dung that hien ra.
+  if (!isMounted) return <div aria-hidden className="h-10 w-10" />;
 
   // Neu chua dang nhap: chi hien nut dang nhhap di vao trang login (chua co).
   if (!user) {

@@ -24,7 +24,7 @@ const MORE_MENU = {
     { label: 'Sự kiện', href: '/su-kien' },
     { label: 'Hướng dẫn sử dụng', href: '/huong-dan' },
     { label: 'Quản lý khách hàng  ', href: '/quan-ly-khach-hang' },
-    { label: 'So sánh lãi vay', href: '/so-sanh-lai-vay' },
+    { label: 'So sánh chính sách', href: '/so-sanh-chinh-sach' },
     { label: 'So sánh căn hộ', href: '/so-sanh-can-ho' },
     { label: 'Liên hệ', href: '/lien-he' },
     { label: 'Góp ý & phản hồi', href: '/gop-y-va-phan-hoi' },
