@@ -121,7 +121,7 @@ const ProjectHighlightPanel = ({ groups, isLoading }: ProjectHighlightPanelProps
                   </h3>
 
                   <Link
-                    href={`/du-an/${top.slug}`}
+                    href={`/gio-hang/${top.slug}`}
                     className="group relative mb-4 block aspect-16/10 w-full overflow-hidden rounded-xl bg-gray-100"
                   >
                     <PlaceholderThumb
@@ -152,7 +152,7 @@ const ProjectHighlightPanel = ({ groups, isLoading }: ProjectHighlightPanelProps
                     {rest.map((project, index) => (
                       <li key={project.publicId}>
                         <Link
-                          href={`/du-an/${project.slug}`}
+                          href={`/gio-hang/${project.slug}`}
                           className="group flex items-center gap-3 rounded-lg px-2 py-2.5 transition hover:bg-gray-50"
                         >
                           <span

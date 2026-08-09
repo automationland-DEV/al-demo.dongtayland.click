@@ -95,7 +95,7 @@ const PhaseDetailPage = ({
       <div className="site-container py-16 text-center">
         <p className="mb-4 text-theme-sm text-gray-500">Không tìm thấy phân khu này.</p>
         <Link
-          href={`/du-an/${projectSlug}`}
+          href={`/gio-hang/${projectSlug}`}
           className="rounded-md border border-gray-300 px-4 py-2 text-theme-sm font-medium text-gray-700 transition hover:border-brand-400 hover:text-brand-600"
         >
           Về trang dự án
@@ -113,7 +113,7 @@ const PhaseDetailPage = ({
           <nav aria-label="Đường dẫn" className="min-w-0">
             <ol className="flex items-center gap-2 text-theme-sm text-gray-500">
               <li>
-                <Link href="/du-an" className="transition hover:text-brand-600">
+                <Link href="/gio-hang" className="transition hover:text-brand-600">
                   Trang chủ
                 </Link>
               </li>
@@ -122,7 +122,7 @@ const PhaseDetailPage = ({
               </li>
               <li>
                 <Link
-                  href={`/du-an/${data.projectSlug}`}
+                  href={`/gio-hang/${data.projectSlug}`}
                   className="transition hover:text-brand-600"
                 >
                   Chi tiết dự án
@@ -179,7 +179,7 @@ const PhaseDetailPage = ({
               return (
                 <li key={sibling.publicId}>
                   <Link
-                    href={`/du-an/${data.projectSlug}/phan-khu/${sibling.slug}`}
+                    href={`/gio-hang/${data.projectSlug}/phan-khu/${sibling.slug}`}
                     aria-current={isActive ? 'page' : undefined}
                     className={`block rounded border px-3.5 py-2 text-theme-xs font-bold uppercase tracking-wide transition ${
                       isActive

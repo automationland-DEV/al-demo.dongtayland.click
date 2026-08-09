@@ -208,7 +208,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
       {
         title: 'Mở bộ lọc nâng cao',
         content:
-          'Trang chủ hoặc trang /du-an, nhấn nút "Bộ lọc" ở góc trên bên phải.',
+          'Trang chủ hoặc trang /gio-hang, nhấn nút "Bộ lọc" ở góc trên bên phải.',
       },
       {
         title: 'Chọn tiêu chí',
@@ -237,7 +237,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
       {
         title: 'Chuyển sang chế độ bản đồ',
         content:
-          'Trang /du-an, nhấn icon bản đồ ở góc phải. Bản đồ OpenStreetMap sẽ hiển thị.',
+          'Trang /gio-hang, nhấn icon bản đồ ở góc phải. Bản đồ OpenStreetMap sẽ hiển thị.',
       },
       {
         title: 'Vẽ vùng tìm kiếm',

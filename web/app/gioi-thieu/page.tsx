@@ -305,7 +305,7 @@ const GioiThieuPage = () => (
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/du-an"
+              href="/gio-hang"
               className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-theme-sm font-semibold text-gray-900 shadow-theme-sm transition hover:bg-gray-100"
             >
               Khám phá dự án

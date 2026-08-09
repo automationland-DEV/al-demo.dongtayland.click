@@ -113,7 +113,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Giảm giá 8% căn hộ 2PN — chỉ trong hôm nay',
     excerpt:
       'Căn hộ 2PN diện tích 68m² giá chỉ từ 2.95 tỷ. Ưu đãi áp dụng đến 23:59 hôm nay.',
-    href: '/du-an/vinhomes-grand-park',
+    href: '/gio-hang/vinhomes-grand-park',
     createdAt: minutesAgo(45),
     isRead: false,
   },
@@ -126,7 +126,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Cập nhật tiến độ dự án — Tháng 8/2026',
     excerpt:
       'Tiến độ xây dựng đạt 78%. Phân khu The Sun đã cất nóc, dự kiến bàn giao Q2/2027.',
-    href: '/du-an/masteri-thao-dien',
+    href: '/gio-hang/masteri-thao-dien',
     createdAt: hoursAgo(2),
     isRead: false,
   },
@@ -154,7 +154,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Mở bán đợt 2 — 80 căn view biển',
     excerpt:
       'Giai đoạn 2 mở bán với mức giá ưu đãi dành cho khách hàng đăng ký sớm. Đặt cọc chỉ 50 triệu.',
-    href: '/du-an/the-maris-vung-tau',
+    href: '/gio-hang/the-maris-vung-tau',
     createdAt: hoursAgo(18),
     isRead: false,
   },
@@ -193,7 +193,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Cơ hội cuối: căn shop-house view hồ cuối cùng',
     excerpt:
       'Chỉ còn 1 căn duy nhất. Giá ưu đãi kèm nội thất trị giá 800 triệu. Liên hệ ngay để giữ chỗ.',
-    href: '/du-an/ecopark',
+    href: '/gio-hang/ecopark',
     createdAt: daysAgo(1),
     isRead: true,
   },
@@ -247,7 +247,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Phân khu mới The Light chính thức ra mắt',
     excerpt:
       'Phân khu thứ 6 với 250 căn hộ, hướng Đông Nam, view sông Sài Gòn. Mở bán ưu đãi đợt đầu.',
-    href: '/du-an/the-global-city',
+    href: '/gio-hang/the-global-city',
     createdAt: daysAgo(4),
     isRead: true,
   },
@@ -273,7 +273,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Flash sale 12 giờ: căn 3PN giảm 250 triệu',
     excerpt:
       'Chỉ trong hôm nay từ 10:00 - 22:00. Căn 3PN Grand Marina, view sông Sài Gòn. Cọc 100 triệu giữ chỗ.',
-    href: '/du-an/grand-marina',
+    href: '/gio-hang/grand-marina',
     createdAt: daysAgo(5),
     isRead: true,
   },
@@ -314,7 +314,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Bàn giao sổ hồng đợt đầu — Tháng 9/2026',
     excerpt:
       'Đợt bàn giao sổ hồng đầu tiên cho cư dân phân khu The Manhattan. Vui lòng chuẩn bị CMND/CCCD.',
-    href: '/du-an/vinhomes-grand-park',
+    href: '/gio-hang/vinhomes-grand-park',
     createdAt: daysAgo(10),
     isRead: true,
   },
@@ -340,7 +340,7 @@ export const MOCK_NOTIFICATIONS: NotificationItem[] = [
     title: 'Chính sách chiết khấu 5% cho khách thanh toán sớm',
     excerpt:
       'Áp dụng cho dự án Sun Grand City Thanh Hóa. Thanh toán 100% giá trị trong 30 ngày được giảm ngay 5%.',
-    href: '/du-an/sun-grand-city',
+    href: '/gio-hang/sun-grand-city',
     createdAt: daysAgo(13),
     isRead: true,
   },

@@ -10,7 +10,7 @@ export default function PhaseNotFound() {
       </p>
 
       <Link
-        href="/du-an"
+        href="/gio-hang"
         className="mt-6 inline-block rounded-md bg-brand-500 px-5 py-2.5 text-theme-sm font-semibold text-white transition hover:bg-brand-600"
       >
         Về danh sách dự án

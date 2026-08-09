@@ -3,7 +3,7 @@
  * thi chi can doi than ham trong services/home.service.ts.
  *
  * Dung luon MOCK_PROJECTS tu module project de featured khong bi "lech" voi
- * trang /du-an (cung ten, cung dia chi, cung thumbnail).
+ * trang /gio-hang (cung ten, cung dia chi, cung thumbnail).
  */
 import { MOCK_PROJECTS } from '@/modules/project/mocks/projects.mock';
 import type {

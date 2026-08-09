@@ -8,7 +8,7 @@ type FeaturedProjectsProps = {
 };
 
 /**
- * Khoi 6 du an noi bat - dung lai ProjectCard de giu dung UI voi /du-an.
+ * Khoi 6 du an noi bat - dung lai ProjectCard de giu dung UI voi /gio-hang.
  * Section title "Dự án nổi bật" cung pattern voi NewsSection.
  */
 const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => (
@@ -24,7 +24,7 @@ const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => (
           </p>
         </div>
         <Link
-          href="/du-an"
+          href="/gio-hang"
           className="inline-flex items-center gap-1 text-theme-sm font-medium text-brand-600 transition hover:text-brand-700"
         >
           Xem tất cả

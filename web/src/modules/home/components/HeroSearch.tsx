@@ -39,7 +39,7 @@ type HeroSearchProps = {
  * shadow de van doc duoc tren cac vung sang cua anh.
  *
  * Thanh tim kiem submit bang GET nen SEO se thay URL, nguoi dung chia se link
- * cung ra dung ket qua. Trang /du-an se doc `q` qua useSearchParams nen hai
+ * cung ra dung ket qua. Trang /gio-hang se doc `q` qua useSearchParams nen hai
  * trang giao tiep thong qua URL - khong can API.
  */
 type TypePhase = 'typing' | 'pausing' | 'deleting';
@@ -97,7 +97,7 @@ const HeroSearch = ({ slides }: HeroSearchProps) => {
   const submitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmed = keyword.trim();
-    router.push(trimmed ? `/du-an?q=${encodeURIComponent(trimmed)}` : '/du-an');
+    router.push(trimmed ? `/gio-hang?q=${encodeURIComponent(trimmed)}` : '/gio-hang');
   };
 
   const [firstBanner] = slides;
