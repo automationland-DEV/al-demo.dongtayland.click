@@ -92,14 +92,21 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <button
           type="button"
-          onClick={() => toggle(project.publicId)}
+          onClick={(event) => {
+            // Nut nam trong <Link> bao quanh thumbnail, can chan ca mac dinh
+            // (Link navigate) lan bubble de click chi toggle favorite ma
+            // khong nhay trang / cuon len dau.
+            event.preventDefault();
+            event.stopPropagation();
+            toggle(project.publicId);
+          }}
           aria-pressed={isFavorite}
           aria-label={
             isFavorite
               ? `Bỏ lưu dự án ${project.name}`
               : `Lưu dự án ${project.name}`
           }
-          className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15 text-lg backdrop-blur-md transition duration-200 ease-out hover:scale-110 hover:border-white/70 hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-0 active:scale-90"
+          className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15 text-lg backdrop-blur-md transition duration-200 ease-out hover:scale-110 hover:border-white-70 hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-0 active:scale-90"
         >
           {/* Nen trong suot nen icon phai co bong do rieng, neu khong se chim
               vao nhung tam anh sang mau. */}

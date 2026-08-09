@@ -7,6 +7,7 @@ import ConsultForm from './ConsultForm';
 import FeaturedProjects from './FeaturedProjects';
 import HeroSearch from './HeroSearch';
 import QuickUtilities from './QuickUtilities';
+import TestimonialsSection from './TestimonialsSection';
 import Thongbao from './Thongbao';
 import WhyUs from './WhyUs';
 
@@ -29,10 +30,15 @@ const HomePage = ({ initialContent }: HomePageProps) => {
 
       <HeroSearch slides={content.banners} />
       <Thongbao />
-      <div className="bg-white pb-12 mt-20">
+      {/* Search bar cua HeroSearch overlap xuong section nay nen can
+          pt-28 (md) de khong bi card de len content. */}
+      <div className="bg-white pb-12 pt-20 md:pt-28">
         <QuickUtilities />
       </div>
       <FeaturedProjects projects={content.featuredProjects} />
+      {/* Testimonials chen giua featured projects va news - phan tach 2 khoi
+          noi dung nang (du an + tin tuc) bang khoi danh gia emotional. */}
+      <TestimonialsSection testimonials={content.testimonials} />
       {/* NewsSection tu quan ly padding/mau nen, boc trong site-container de can vao layout */}
       <div className="bg-white">
         <div className="site-container">

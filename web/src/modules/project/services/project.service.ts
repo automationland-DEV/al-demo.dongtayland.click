@@ -83,7 +83,24 @@ const sortUnits = (units: ProjectUnit[], sort: UnitQuery['sort']): ProjectUnit[]
 };
 
 export const ProjectService = {
-  /** Danh sach du an da loc + phan trang */
+  /**
+   * Tra ve toan bo du lieu cua mot du an theo publicId. Dung cho trang
+   * "Yeu thich" - can day du field de render card, khong phai Pick.
+   * Tra ve null neu khong tim thay (du an bi xoa khoi data sau khi user
+   * da luu).
+   *
+   * KHI CO BACKEND: GET /projects/by-ids?ids=a,b,c (hoac POST voi body)
+   */
+  byIds: async (publicIds: string[]): Promise<Project[]> => {
+    if (publicIds.length === 0) return [];
+    const idSet = new Set(publicIds);
+    const projects = MOCK_PROJECTS.filter((project) => idSet.has(project.publicId));
+    return delay(projects);
+  },
+
+  /**
+   * Danh sach du an da loc + phan trang
+   */
   list: async (query: ProjectQuery): Promise<PaginatedProjects> => {
     const matched = MOCK_PROJECTS.filter((project) => matchesQuery(project, query));
     const start = (query.page - 1) * query.limit;

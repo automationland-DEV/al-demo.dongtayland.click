@@ -24,7 +24,7 @@ const ANNOUNCEMENTS: { label: string }[] = [
     label: 'CHÚC MỪNG NHÀ MÔI GIỚI TRẦN THỊ MAI ĐÃ CHỐT CỌC THÀNH CÔNG CĂN HỘ 3 PHÒNG NGỦ TẠI THE EMERALD 68!',
   },
   {
-    label: 'SALEPLUS TUYỂN DỤNG 20 NHÀ MÔI GIỚI BẤT ĐỘNG SẢN - HOA HỒNG HẤP DẪN LÊN ĐẾN 8%!',
+    label: 'REALTYHUB TUYỂN DỤNG 20 NHÀ MÔI GIỚI BẤT ĐỘNG SẢN - HOA HỒNG HẤP DẪN LÊN ĐẾN 8%!',
   },
   {
     label: 'ĐĂNG KÝ THAM QUAN NHÀ MẪU 5 DỰ ÁN TRONG THÁNG 8 - MIỄN PHÍ ĐƯA ĐÓN!',

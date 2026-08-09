@@ -82,4 +82,44 @@ export const MOCK_NEWS: NewsArticle[] = [
     thumbnailUrl: '/images/news/news-008.jpg',
     publishedAt: '2026-08-05T11:00:00.000Z',
   },
+  {
+    publicId: 'news-009',
+    slug: 'bao-gia-dat-nen-vung-ven-2026-tang-15',
+    title: 'Bảng giá đất nền vùng ven 2026 tăng 15%',
+    excerpt:
+      'Số liệu từ các sàn lớn cho thấy đất nền vùng ven ghi nhận mức tăng 15% so với cùng kỳ, trong khi nguồn cung tiếp tục thu hẹp.',
+    category: 'phan-tich-nhan-dinh',
+    thumbnailUrl: '/images/news/news-009.jpg',
+    publishedAt: '2026-08-04T03:00:00.000Z',
+  },
+  {
+    publicId: 'news-010',
+    slug: 'the-arcadia-giai-doan-2-da-co-giay-phep-xay-dung',
+    title: 'The Arcadia giai đoạn 2 đã có giấy phép xây dựng',
+    excerpt:
+      'Chủ đầu tư chính thức công bố giấy phép xây dựng giai đoạn 2, đồng thời xác nhận tiến độ bàn giao vào cuối năm 2027.',
+    category: 'tin-tuc-du-an',
+    thumbnailUrl: '/images/news/news-010.jpg',
+    publishedAt: '2026-08-03T08:30:00.000Z',
+  },
+  {
+    publicId: 'news-011',
+    slug: 'chuyen-gia-nhan-dinh-thi-truong-shophouse-2026',
+    title: 'Chuyên gia nhận định thị trường shophouse 2026',
+    excerpt:
+      'Shophouse tiếp tục là kênh đầu tư được yêu thích nhờ khả năng kết hợp kinh doanh và cho thuê, nhưng cần cân nhắc kỹ vị trí.',
+    category: 'phan-tich-nhan-dinh',
+    thumbnailUrl: '/images/news/news-011.jpg',
+    publishedAt: '2026-08-02T02:45:00.000Z',
+  },
+  {
+    publicId: 'news-012',
+    slug: 'thu-tuc-sang-ten-nha-dat-duoc-don-gian-hoa',
+    title: 'Thủ tục sang tên nhà đất được đơn giản hóa',
+    excerpt:
+      'Nhiều thủ tục hành chính về sang tên, cấp sổ đỏ được rút ngắn còn 5-7 ngày làm việc nhờ ứng dụng công nghệ số.',
+    category: 'tin-tuc-du-an',
+    thumbnailUrl: '/images/news/news-012.jpg',
+    publishedAt: '2026-08-01T09:15:00.000Z',
+  },
 ];

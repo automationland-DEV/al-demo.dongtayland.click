@@ -19,10 +19,30 @@ export const metadata: Metadata = {
   // thanh URL tuyet doi. Thieu no thi Next canh bao va tam lay localhost.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'Saleplust',
-    template: '%s | Saleplust',
+    default: 'RealtyHub',
+    template: '%s | RealtyHub',
   },
   description: 'Nền tảng công nghệ hỗ trợ kinh doanh bất động sản.',
+  /**
+   * Favicon / icon cho trinh duyet va home screen.
+   *
+   * Next 16 tu dong nhan file app/icon.png va app/apple-icon.png - ta copy
+   * tu public/images/home/icon_realtyhub.png. Neu muon nhieu size, dat
+   * app/icon-16.png, app/icon-32.png,... Next se tu generate tag <link>
+   * voi size tuong ung. O day chi dung 1 file PNG cho don gian, browser
+   * se scale xuong 16x16 / 32x32 khi can.
+   *
+   * `shortcut` giu tuong thich voi trinh duyet rat cu (IE11, Edge cu).
+   */
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/icon.png',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({

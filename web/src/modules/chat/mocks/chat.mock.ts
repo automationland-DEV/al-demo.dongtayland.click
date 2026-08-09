@@ -11,7 +11,7 @@ export const MOCK_HISTORY: ChatMessage[] = [
   {
     publicId: 'msg-seed-1',
     role: 'bot',
-    text: 'Chào anh/chị! Em là trợ lý ảo của Saleplust, hỗ trợ tra cứu dự án, bảng giá, quỹ căn và chính sách bán hàng.',
+    text: 'Chào anh/chị! Em là trợ lý ảo của RealtyHub, hỗ trợ tra cứu dự án, bảng giá, quỹ căn và chính sách bán hàng.',
     sentAt: '2026-08-09T02:00:00.000Z',
   },
   {

@@ -134,7 +134,19 @@ const AccountMenu = () => {
   const logout = useLogout();
   const [isOpen, setIsOpen] = useState(false);
   const [lang, setLang] = useState<Lang>('vi');
+  const [isHydrated, setIsHydrated] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Danh dau da hydrate xong: server va client render CUNG mot skeleton
+  // (placeholder) o lan dau, sau khi mount o client moi cap nhat state
+  // thanh giao dien that (login button hoac avatar). Tranh hoan toan
+  // hydration mismatch vi server khong co localStorage.
+  useEffect(() => {
+    // Read-on-mount can thiet cho hydration: server khong co localStorage,
+    // client phai danh dau "da hydrate" de swap tu skeleton -> that.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsHydrated(true);
+  }, []);
 
   // Click outside / Esc de dong
   useEffect(() => {
@@ -157,6 +169,17 @@ const AccountMenu = () => {
   // de tranh "dang nhap -> dang nhap" vo ly. An luon ca 2 nhanh (login & user).
   // Dat early-return SAU tat ca hook de tuan thu rules-of-hooks.
   if (pathname === '/login') return null;
+
+  // SSR placeholder: giu div container voi chieu cao co dinh de layout
+  // khong nhay khi hydrate xong (tranh CLS). Server va client render
+  // cung mot markup o lan dau -> khong hydration mismatch.
+  if (!isHydrated) {
+    return (
+      <div className="flex h-9 items-center" aria-hidden>
+        <span className="h-9 w-9 rounded-full bg-gray-100" />
+      </div>
+    );
+  }
 
   const close = () => setIsOpen(false);
 
