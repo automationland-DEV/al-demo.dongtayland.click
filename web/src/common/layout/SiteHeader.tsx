@@ -6,40 +6,39 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiBell, FiChevronDown, FiMenu, FiMessageSquare, FiX } from 'react-icons/fi';
 import AccountMenu from '@/common/components/AccountMenu';
+import FavoriteButton from '@/common/layout/FavoriteButton';
 
 const NAV_ITEMS = [
   { label: 'Giới thiệu', href: '/gioi-thieu' },
   { label: 'giỏ hàng', href: '/gio-hang' },
   { label: 'Đào tạo', href: '/dao-tao' },
   { label: 'Tiện ích', href: '/tien-ich' },
-  { label: 'Trở thành môi giới', href: '/tro-thanh-moi-gioi' },
+  { label: 'Tin tức', href: '/tin-tuc' },
+    { label: 'Sự kiện', href: '/su-kien' },
 ];
 
 /** Nhom "Khac" hien thi dropdown o desktop. 3 muc con nay cu cung duoc
     an tu header (chi truy cap qua dropdown) de tranh lap 2 lan. */
 const MORE_MENU = {
-  label: 'Khác',
+  label: 'mục Khác',
   children: [
-    { label: 'Tin tức', href: '/tin-tuc' },
-    { label: 'Sự kiện', href: '/su-kien' },
-    { label: 'Hướng dẫn sử dụng', href: '/huong-dan' },
-    { label: 'Quản lý khách hàng  ', href: '/quan-ly-khach-hang' },
-    { label: 'So sánh lãi vay', href: '/so-sanh-lai-vay' },
-    { label: 'So sánh căn hộ', href: '/so-sanh-can-ho' },
-    { label: 'Liên hệ', href: '/lien-he' },
+  { label: 'Trở thành môi giới', href: '/tro-thanh-moi-gioi' },
+    { label: 'Liên hệ chúng tôi', href: '/lien-he-chung-toi' },
     { label: 'Góp ý & phản hồi', href: '/gop-y-va-phan-hoi' },
+    { label: 'Hướng dẫn sử dụng', href: '/huong-dan' },
+
   ],
 };
 
 const BrandMark = () => (
-  <Link href="/du-an" className="flex items-center" aria-label="Trang chủ">
+  <Link href="/" className="flex items-center" aria-label="Trang chủ">
     <Image
-      src="/images/home/logo_realtyhub.png"
+      src="/images/home/realtyhub_new.svg"
       alt="RealtyHub"
       priority
-      width={140}
-      height={40}
-      className="h-8 w-auto"
+      width={180}
+      height={60}
+      className="h-12 w-auto"
     />
   </Link>
 );
@@ -204,16 +203,20 @@ const SiteHeader = () => {
         </nav>
 
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
+          <Link
+            href="/tin-nhan"
             aria-label="Tin nhắn"
             className={`flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
           >
             <FiMessageSquare aria-hidden />
-          </button>
+          </Link>
 
-          <button
-            type="button"
+          {/* Icon yeu thich: badge so du an da luu. Component tu handle
+              SSR (khong badge lan dau) + hydrate sau mount. */}
+          <FavoriteButton iconClass={iconColor} />
+
+          <Link
+            href="/thong-bao"
             aria-label="Thông báo"
             className={`relative flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
           >
@@ -221,7 +224,7 @@ const SiteHeader = () => {
             <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-error-500 px-1 text-[10px] font-bold text-white">
               3
             </span>
-          </button>
+          </Link>
 
           {/* Account popover: avatar + ten neu da dang nhap, hoac nut "Dang nhap"
               neu chua. Click mo menu xo ra voi cac tuy chon tai khoan. */}

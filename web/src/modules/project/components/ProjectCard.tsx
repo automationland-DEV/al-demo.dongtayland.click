@@ -91,7 +91,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <button
           type="button"
-          onClick={() => toggle(project.publicId)}
+          onClick={(event) => {
+            // Nut nam trong <Link> bao quanh thumbnail, can chan ca mac dinh
+            // (Link navigate) lan bubble de click chi toggle favorite ma
+            // khong nhay trang / cuon len dau.
+            event.preventDefault();
+            event.stopPropagation();
+            toggle(project.publicId);
+          }}
           aria-pressed={isFavorite}
           aria-label={
             isFavorite

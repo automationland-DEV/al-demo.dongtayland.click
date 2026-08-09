@@ -46,11 +46,11 @@ const LocationTab = ({ location, name, seed }: LocationTabProps) => {
         <h2 className="mb-3 text-base font-bold uppercase tracking-wide text-gray-900">
           {location.headline}
         </h2>
-        <p className="mb-4 text-theme-sm leading-relaxed text-gray-600">{location.intro}</p>
+        <p className="mb-4 text-base leading-relaxed text-gray-600">{location.intro}</p>
 
         <ul className="mb-4 space-y-3">
           {location.highlights.map((highlight) => (
-            <li key={highlight.publicId} className="flex gap-3 text-theme-sm">
+            <li key={highlight.publicId} className="flex gap-3 text-base">
               <span className="mt-0.5 shrink-0 text-base text-jade-500">
                 {HIGHLIGHT_ICONS[highlight.icon]}
               </span>
@@ -62,7 +62,7 @@ const LocationTab = ({ location, name, seed }: LocationTabProps) => {
           ))}
         </ul>
 
-        <p className="text-theme-sm leading-relaxed text-gray-600">{location.closing}</p>
+        <p className="text-base leading-relaxed text-gray-600">{location.closing}</p>
       </section>
 
       <section>
@@ -76,7 +76,7 @@ const LocationTab = ({ location, name, seed }: LocationTabProps) => {
             className="h-full w-full border-0"
           />
         </div>
-        <p className="mt-2 text-theme-xs text-gray-500">{location.mapLabel}</p>
+        <p className="mt-2 text-theme-sm text-gray-500">{location.mapLabel}</p>
       </section>
     </div>
   );

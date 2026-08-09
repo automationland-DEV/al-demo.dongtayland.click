@@ -55,7 +55,7 @@ const ConsultForm = () => {
               Để chuyên viên gọi lại trong 30 phút
             </h2>
             <p className="mt-3 max-w-md text-theme-sm leading-relaxed text-white/80">
-              Để lại thông tin, đội ngũ Saleplust sẽ liên hệ tư vấn miễn phí về
+              Để lại thông tin, đội ngũ RealtyHub sẽ liên hệ tư vấn miễn phí về
               dự án, pháp lý và phương án tài chính phù hợp với bạn.
             </p>
 

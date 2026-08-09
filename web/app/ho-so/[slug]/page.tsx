@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const profile = await profileService.findBySlug(slug);
   if (!profile) return { title: 'Không tìm thấy trang cá nhân' };
   return {
-    title: `${profile.name} - Saleplust`,
-    description: `Trang cá nhân của ${profile.name} trên Saleplust.`,
+    title: `${profile.name} - RealtyHub`,
+    description: `Trang cá nhân của ${profile.name} trên RealtyHub.`,
   };
 }
 
