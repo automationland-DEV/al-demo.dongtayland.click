@@ -28,6 +28,8 @@ type PlaceholderThumbProps = {
   label?: string;
   src?: string;
   alt?: string;
+  
+  fit?: 'cover' | 'contain';
   className?: string;
 };
 
@@ -36,6 +38,7 @@ const PlaceholderThumb = ({
   label,
   src,
   alt,
+  fit = 'cover',
   className = '',
 }: PlaceholderThumbProps) => {
   if (src) {
@@ -44,7 +47,7 @@ const PlaceholderThumb = ({
       <img
         src={src}
         alt={alt ?? label ?? ''}
-        className={`h-full w-full object-cover ${className}`}
+        className={`h-full w-full ${fit === 'contain' ? 'object-contain' : 'object-cover'} ${className}`}
         loading="lazy"
       />
     );

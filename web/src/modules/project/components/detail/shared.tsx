@@ -104,6 +104,7 @@ export const MediaFrame = ({
   alt,
   label,
   ratio = 'aspect-16/9',
+  fit = 'cover',
   className = '',
 }: {
   seed: string;
@@ -111,12 +112,14 @@ export const MediaFrame = ({
   alt: string;
   label?: string;
   ratio?: string;
+  /** `contain` cho ban ve mat bang - xem chu thich trong PlaceholderThumb */
+  fit?: 'cover' | 'contain';
   className?: string;
 }) => (
   <div
     className={`relative ${ratio} w-full overflow-hidden rounded-xl bg-gray-100 ${className}`}
   >
-    <PlaceholderThumb seed={seed} src={src || undefined} alt={alt} label={label} />
+    <PlaceholderThumb seed={seed} src={src || undefined} alt={alt} label={label} fit={fit} />
   </div>
 );
 

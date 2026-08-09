@@ -35,12 +35,15 @@ const PhaseOverviewTab = ({ phase }: { phase: ProjectPhase }) => (
       {phase.masterPlanImages.map((sheet) => (
         <figure key={sheet.publicId}>
           <div className="rounded-xl bg-jade-600 p-2 shadow-panel sm:p-3">
+            {/* Ban ve mat bang phai xem tron - xem chu thich o OverviewTab */}
             <MediaFrame
               seed={sheet.publicId}
               src={sheet.imageUrl}
               alt={sheet.caption}
               label={sheet.caption}
-              ratio="aspect-16/10"
+              ratio="aspect-3/2"
+              fit="contain"
+              className="bg-white"
             />
           </div>
           <figcaption className="mt-2 text-center text-theme-xs text-gray-500">

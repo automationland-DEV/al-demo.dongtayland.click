@@ -125,14 +125,15 @@ const OverviewTab = ({ project }: { project: ProjectDetail }) => {
             ))}
           </div>
 
-          {/* Truoc day ban ve nam trong mot khung xanh dam - anh mat bang von da
-              nhieu chi tiet nho, them vien mau chi lam roi mat. Gio de tran. */}
+         
           <MediaFrame
             seed={`${project.publicId}-plan-${activeSheet.key}`}
             src={activeSheet.imageUrl}
             alt={`Mặt bằng ${activeSheet.label} - ${project.name}`}
             label={`Mặt bằng ${activeSheet.label}`}
-            ratio="aspect-16/9"
+            ratio="aspect-3/2"
+            fit="contain"
+            className="bg-white"
           />
         </section>
       )}

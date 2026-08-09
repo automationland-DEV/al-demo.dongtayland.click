@@ -29,6 +29,8 @@ export const MOCK_DEVELOPERS: FilterOption[] = [
   { value: 'cdt-dong-duong', label: 'Đông Dương Land' },
   { value: 'cdt-thai-binh-duong', label: 'Thái Bình Dương Holdings' },
   { value: 'cdt-truong-son', label: 'Trường Sơn Invest' },
+  // Chu dau tu CO THAT - chi dung cho du an that Vinhomes Ocean Park (index 5)
+  { value: 'cdt-vingroup', label: 'Vingroup' },
 ];
 
 // Sau khong doi thu tu 6 muc dau: projects.seed.json tro toi khu vuc bang chi
@@ -197,6 +199,46 @@ const publishedAtFor = (index: number) => {
   return base.toISOString();
 };
 
+/**
+ * Ghi de bang SO LIEU THAT cho du an that duy nhat trong danh sach.
+ *
+ * Cac du an con lai deu hu cau nen so lieu sinh ngau nhien la du. Rieng
+ * Vinhomes Ocean Park dung de demo "du lieu that hien ra sao", nen moi con so
+ * o day deu tra tu nguon cong khai - xem vinhomes-ocean-park.mock.ts.
+ */
+const REAL_PROJECT_FACTS: Record<string, Partial<Project>> = {
+  'vinhomes-ocean-park-gia-lam': {
+    scaleHa: 420,
+    latitude: 20.9942646,
+    longitude: 105.948475,
+    // Can ho Sapphire 35-85 m2 (nguon: vinhomes.vn)
+    areaFrom: 35,
+    areaTo: 85,
+    bedroomOptions: [1, 2, 3],
+    handoverYear: 2024,
+    legal: 'so-50-nam',
+    amenityTags: [
+      'be-boi',
+      'cong-vien',
+      'truong-hoc',
+      'phong-gym',
+      'khu-bbq',
+      'san-the-thao',
+      'trung-tam-thuong-mai',
+      'ham-do-xe',
+      'an-ninh-24-7',
+      'khu-vui-choi',
+    ],
+    viewpoints: ['view-ho', 'view-cong-vien', 'view-thanh-pho'],
+    thumbnailUrl: '/images/projects/vinhomes-ocean-park-gia-lam/hero-1-hoang-hon-ho-trung-tam.jpg',
+    thumbnailUrls: [
+      '/images/projects/vinhomes-ocean-park-gia-lam/hero-1-hoang-hon-ho-trung-tam.jpg',
+      '/images/projects/vinhomes-ocean-park-gia-lam/hero-2-bien-ho-nuoc-man.jpg',
+      '/images/projects/vinhomes-ocean-park-gia-lam/hero-3-phoi-canh-tong-the.jpg',
+    ],
+  },
+};
+
 export const MOCK_PROJECTS: Project[] = SEEDS.map((seed, index) => {
   const developer = MOCK_DEVELOPERS[seed.developerIndex];
   const region = MOCK_REGIONS[seed.regionIndex];
@@ -243,5 +285,8 @@ export const MOCK_PROJECTS: Project[] = SEEDS.map((seed, index) => {
     legal: pickOne(rng, LEGAL_BY_STATUS[seed.status]),
     hasDiscount: rng() < 0.45,
     hasBankSupport: rng() < 0.7,
+
+    // Du an that thi so lieu that de len tren; du an hu cau khong bi anh huong
+    ...REAL_PROJECT_FACTS[seed.slug],
   };
 });
