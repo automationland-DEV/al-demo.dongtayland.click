@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiBell, FiChevronDown, FiMenu, FiMessageSquare, FiX } from 'react-icons/fi';
-import { FaApple, FaGooglePlay } from 'react-icons/fa';
 import AccountMenu from '@/common/components/AccountMenu';
 import FavoriteButton from '@/common/layout/FavoriteButton';
 
@@ -30,61 +29,6 @@ const MORE_MENU = {
     { label: 'Hướng dẫn sử dụng', href: '/huong-dan' },
   ],
 };
-
-/**
- * Duong dan tai ung dung.
- *
- * CHUA CO ung dung that - thay hai duong dan nay bang link cua hang khi phat
- * hanh. De o day de doi mot cho la xong.
- */
-const APP_LINKS = {
-  android: '#',
-  ios: '#',
-};
-
-/**
- * Khoi tai ung dung o day ngan keo, hoc theo "Find homes on the go!" cua trang
- * mau.
- *
- * Khong dung huy hieu "Get it on Google Play" / "Download on the App Store"
- * chinh chu: do la tai san thuong hieu, dung sai quy cach la vi pham. Nut tu
- * ve theo he mau cua site vua an toan vua dong bo giao dien.
- */
-const AppDownloadBlock = () => (
-  <div className="shrink-0 border-t border-gray-200 bg-gray-50 px-5 py-4">
-    <p className="mb-3 text-theme-sm font-bold text-gray-900">
-      Tìm dự án mọi lúc mọi nơi
-    </p>
-
-    <div className="flex flex-col gap-2">
-      <a
-        href={APP_LINKS.android}
-        className="flex items-center gap-3 rounded-lg bg-gray-900 px-3 py-2 text-white transition hover:bg-gray-800"
-      >
-        <FaGooglePlay aria-hidden className="shrink-0 text-xl" />
-        <span className="flex flex-col leading-tight">
-          <span className="text-[10px] uppercase tracking-wide text-gray-300">
-            Tải về trên
-          </span>
-          <span className="text-theme-sm font-semibold">Google Play</span>
-        </span>
-      </a>
-
-      <a
-        href={APP_LINKS.ios}
-        className="flex items-center gap-3 rounded-lg bg-gray-900 px-3 py-2 text-white transition hover:bg-gray-800"
-      >
-        <FaApple aria-hidden className="shrink-0 text-xl" />
-        <span className="flex flex-col leading-tight">
-          <span className="text-[10px] uppercase tracking-wide text-gray-300">
-            Tải về trên
-          </span>
-          <span className="text-theme-sm font-semibold">App Store</span>
-        </span>
-      </a>
-    </div>
-  </div>
-);
 
 const BrandMark = () => (
   <Link href="/" className="flex items-center" aria-label="Trang chủ">
@@ -391,8 +335,6 @@ const SiteHeader = () => {
                 </details>
               </li>
             </ul>
-
-            <AppDownloadBlock />
           </nav>
         </div>
       )}
