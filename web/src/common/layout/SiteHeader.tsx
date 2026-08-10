@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiBell, FiChevronDown, FiMenu, FiMessageSquare, FiX } from 'react-icons/fi';
+import { FaApple, FaGooglePlay, FaRegHeart } from 'react-icons/fa';
 import AccountMenu from '@/common/components/AccountMenu';
 import FavoriteButton from '@/common/layout/FavoriteButton';
 
@@ -30,6 +31,61 @@ const MORE_MENU = {
   ],
 };
 
+/**
+ * Duong dan tai ung dung.
+ *
+ * CHUA CO ung dung that - thay hai duong dan nay bang link cua hang khi phat
+ * hanh. De o day de doi mot cho la xong.
+ */
+const APP_LINKS = {
+  android: '#',
+  ios: '#',
+};
+
+/**
+ * Khoi tai ung dung o day ngan keo, hoc theo "Find homes on the go!" cua trang
+ * mau.
+ *
+ * Khong dung huy hieu "Get it on Google Play" / "Download on the App Store"
+ * chinh chu: do la tai san thuong hieu, dung sai quy cach la vi pham. Nut tu
+ * ve theo he mau cua site vua an toan vua dong bo giao dien.
+ */
+const AppDownloadBlock = () => (
+  <div className="shrink-0 border-t border-gray-200 bg-gray-50 px-5 py-4">
+    <p className="mb-3 text-theme-sm font-bold text-gray-900">
+      Tìm dự án mọi lúc mọi nơi
+    </p>
+
+    <div className="flex flex-col gap-2">
+      <a
+        href={APP_LINKS.android}
+        className="flex items-center gap-3 rounded-lg bg-gray-900 px-3 py-2 text-white transition hover:bg-gray-800"
+      >
+        <FaGooglePlay aria-hidden className="shrink-0 text-xl" />
+        <span className="flex flex-col leading-tight">
+          <span className="text-[10px] uppercase tracking-wide text-gray-300">
+            Tải về trên
+          </span>
+          <span className="text-theme-sm font-semibold">Google Play</span>
+        </span>
+      </a>
+
+      <a
+        href={APP_LINKS.ios}
+        className="flex items-center gap-3 rounded-lg bg-gray-900 px-3 py-2 text-white transition hover:bg-gray-800"
+      >
+        <FaApple aria-hidden className="shrink-0 text-xl" />
+        <span className="flex flex-col leading-tight">
+          <span className="text-[10px] uppercase tracking-wide text-gray-300">
+            Tải về trên
+          </span>
+          <span className="text-theme-sm font-semibold">App Store</span>
+        </span>
+      </a>
+    </div>
+  </div>
+);
+
 const BrandMark = () => (
   <Link href="/" className="flex items-center" aria-label="Trang chủ">
     <Image
@@ -41,6 +97,45 @@ const BrandMark = () => (
       className="h-12 w-auto"
     />
   </Link>
+);
+
+/**
+ * Mot quick action trong ngan keo mobile (Tin nhan / Yeu thich / Thong bao).
+ *
+ * Layout: icon + label ngan phia duoi - phu hop voi chieu rong ngan keo
+ * (khoang 360px max-w-sm). Icon co badge neu co. Bam se auto-close drawer
+ * de nguoi dung thay ngay trang dich dang load.
+ */
+const DrawerActionItem = ({
+  href,
+  icon,
+  label,
+  badge,
+  onClose,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  badge?: string;
+  onClose: () => void;
+}) => (
+  <li className="flex-1">
+    <Link
+      href={href}
+      onClick={onClose}
+      className="group relative flex flex-col items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-theme-xs font-semibold text-gray-700 transition hover:bg-brand-50 hover:text-brand-700"
+    >
+      <span className="relative flex h-9 w-9 items-center justify-center text-lg">
+        {icon}
+        {badge && (
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-error-500 px-1 text-[10px] font-bold leading-none text-white">
+            {badge}
+          </span>
+        )}
+      </span>
+      <span className="leading-none">{label}</span>
+    </Link>
+  </li>
 );
 
 const SiteHeader = () => {
@@ -95,6 +190,24 @@ const SiteHeader = () => {
     };
   }, [isMoreOpen]);
 
+  // Ngan keo phu kin man hinh: khoa cuon nen va cho Escape dong lai
+  useEffect(() => {
+    if (!isMobileOpen) return undefined;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMobileOpen(false);
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isMobileOpen]);
+
   const variant: 'solid' | 'transparent' =
     pathname === '/' && !isScrolled ? 'transparent' : 'solid';
   const isTransparent = variant === 'transparent';
@@ -105,22 +218,14 @@ const SiteHeader = () => {
     ? {
         active: 'text-white underline decoration-white decoration-2 underline-offset-8',
         idle: 'text-white/85 hover:text-white',
-        mobile: 'text-white',
-        mobileActive: 'text-white',
       }
     : {
         active: 'text-navy-700 underline decoration-brand-500 decoration-2 underline-offset-8',
         idle: 'text-gray-600 hover:text-brand-600',
-        mobile: 'text-gray-700',
-        mobileActive: 'text-brand-600',
       };
   const iconColor = isTransparent
     ? 'text-white/90 hover:bg-white/15 hover:text-white'
     : 'text-gray-500 hover:bg-gray-100 hover:text-brand-600';
-  const mobilePanelClass = isTransparent
-    ? 'border-t border-white/20 bg-black/40 backdrop-blur-md'
-    : 'border-t border-gray-200 bg-white';
-
   // Mau dropdown "Khac" - mo phong theo tone header (trang / den).
   const moreBtnActive = isMoreActive
     ? navColor.active
@@ -138,6 +243,18 @@ const SiteHeader = () => {
   return (
     <header className={`sticky top-0 z-40 border-b transition-colors ${headerColor}`}>
       <div className="site-container flex h-16 items-center justify-between gap-4">
+        {/* Nut menu mobile dat o goc trai, truoc BrandMark. Tren desktop
+            nut nay an di boi lg:hidden (desktop co nav inline). */}
+        <button
+          type="button"
+          onClick={() => setIsMobileOpen((open) => !open)}
+          aria-label={isMobileOpen ? 'Đóng menu' : 'Mở menu'}
+          aria-expanded={isMobileOpen}
+          className={`order-first flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition lg:hidden ${iconColor}`}
+        >
+          {isMobileOpen ? <FiX aria-hidden /> : <FiMenu aria-hidden />}
+        </button>
+
         <BrandMark />
 
         <nav aria-label="Điều hướng chính" className="hidden lg:block">
@@ -203,22 +320,26 @@ const SiteHeader = () => {
         </nav>
 
         <div className="flex items-center gap-1.5">
+          {/* Ba icon nhanh (Tin nhan, Yeu thich, Thong bao) chi hien tren
+              desktop. Tren mobile chung duoc dua vao ngan keo (xem drawer
+              ben duoi) de giam chen chan header va tap trung vao dieu
+              huong chinh. */}
           <Link
             href="/tin-nhan"
             aria-label="Tin nhắn"
-            className={`flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
+            className={`hidden lg:flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
           >
             <FiMessageSquare aria-hidden />
           </Link>
 
           {/* Icon yeu thich: badge so du an da luu. Component tu handle
               SSR (khong badge lan dau) + hydrate sau mount. */}
-          <FavoriteButton iconClass={iconColor} />
+          <FavoriteButton iconClass={`hidden lg:flex ${iconColor}`} />
 
           <Link
             href="/thong-bao"
             aria-label="Thông báo"
-            className={`relative flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
+            className={`relative hidden lg:flex h-9 w-9 items-center justify-center rounded-full transition ${iconColor}`}
           >
             <FiBell aria-hidden />
             <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-error-500 px-1 text-[10px] font-bold text-white">
@@ -229,81 +350,124 @@ const SiteHeader = () => {
           {/* Account popover: avatar + ten neu da dang nhap, hoac nut "Dang nhap"
               neu chua. Click mo menu xo ra voi cac tuy chon tai khoan. */}
           <AccountMenu />
-
-          <button
-            type="button"
-            onClick={() => setIsMobileOpen((open) => !open)}
-            aria-label={isMobileOpen ? 'Đóng menu' : 'Mở menu'}
-            aria-expanded={isMobileOpen}
-            className={`flex h-9 w-9 items-center justify-center rounded-full transition lg:hidden ${iconColor}`}
-          >
-            {isMobileOpen ? <FiX aria-hidden /> : <FiMenu aria-hidden />}
-          </button>
         </div>
       </div>
 
+      {/* ── Ngan keo dieu huong tren dien thoai ─────────────────────────────
+          Truot tu mep trai, phu het chieu cao - khac han kieu xo xuong duoi
+          header truoc day. Nen luon trang du header dang trong suot: chu tren
+          nen anh se khong doc duoc. */}
       {isMobileOpen && (
-        <nav
-          aria-label="Điều hướng di động"
-          className={`lg:hidden ${mobilePanelClass}`}
-        >
-          <ul className="site-container flex flex-col py-2">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setIsMobileOpen(false)}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                  className={`block py-2.5 text-theme-sm font-semibold uppercase tracking-wide ${
-                    isActive(item.href) ? navColor.mobileActive : navColor.mobile
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            aria-hidden
+            onClick={() => setIsMobileOpen(false)}
+            className="absolute inset-0 bg-gray-900/50"
+          />
 
-            {/* Nhom "Khac" mobile - de mo dropdown noi truc tiep, dung <details>
-                de khong can them state rieng. Mac dinh mo neu co muc con dang active. */}
-            <li>
-              <details
-                open={isMoreActive || isMoreOpen}
-                className="group"
+          <nav
+            aria-label="Điều hướng di động"
+            className="absolute inset-y-0 left-0 flex w-[86%] max-w-sm flex-col bg-white shadow-panel"
+          >
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-4 py-3">
+              <span onClick={() => setIsMobileOpen(false)}>
+                <BrandMark />
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsMobileOpen(false)}
+                aria-label="Đóng menu"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition hover:bg-gray-100"
               >
-                <summary
-                  className={`flex cursor-pointer items-center justify-between py-2.5 text-theme-sm font-semibold uppercase tracking-wide ${
-                    isMoreActive ? navColor.mobileActive : navColor.mobile
-                  }`}
-                >
-                  {MORE_MENU.label}
-                  <FiChevronDown
-                    aria-hidden
-                    className="h-4 w-4 transition-transform group-open:rotate-180"
-                  />
-                </summary>
-                <ul className="mb-1 ml-4 flex flex-col border-l border-current/20 pl-3">
-                  {MORE_MENU.children.map((child) => {
-                    const active = isActive(child.href);
-                    return (
-                      <li key={child.href}>
-                        <Link
-                          href={child.href}
-                          onClick={() => setIsMobileOpen(false)}
-                          aria-current={active ? 'page' : undefined}
-                          className={`block py-2 text-theme-sm font-medium ${
-                            active ? navColor.mobileActive : navColor.mobile
-                          }`}
-                        >
-                          {child.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </details>
-            </li>
-          </ul>
-        </nav>
+                <FiX aria-hidden className="text-xl" />
+              </button>
+            </div>
+
+            {/* Khu vuc quick actions tren mobile: 3 icon Tin nhan / Yeu
+                thich / Thong bao. Dat len dau ngan keo de user mo menu
+                la thay ngay, khong phai cuon xuong moi tim. */}
+            <ul
+              aria-label="Truy cập nhanh"
+              className="flex shrink-0 items-stretch border-b border-gray-200 px-2 py-2"
+            >
+              <DrawerActionItem
+                href="/tin-nhan"
+                icon={<FiMessageSquare aria-hidden />}
+                label="Tin nhắn"
+                onClose={() => setIsMobileOpen(false)}
+              />
+              <DrawerActionItem
+                href="/yeu-thich"
+                icon={<FaRegHeart aria-hidden />}
+                label="Yêu thích"
+                onClose={() => setIsMobileOpen(false)}
+              />
+              <DrawerActionItem
+                href="/thong-bao"
+                icon={<FiBell aria-hidden />}
+                label="Thông báo"
+                badge="3"
+                onClose={() => setIsMobileOpen(false)}
+              />
+            </ul>
+
+            <ul className="flex-1 overflow-y-auto">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.href} className="border-b border-gray-100">
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMobileOpen(false)}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    className={`block px-5 py-4 text-base font-medium capitalize transition hover:bg-gray-50 ${
+                      isActive(item.href) ? 'text-brand-600' : 'text-gray-800'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+
+              {/* Nhom "Khac" - dung <details> de khong phai them state rieng.
+                  Mac dinh mo neu co muc con dang active. */}
+              <li className="border-b border-gray-100">
+                <details open={isMoreActive} className="group">
+                  <summary
+                    className={`flex cursor-pointer list-none items-center justify-between px-5 py-4 text-base font-medium capitalize transition hover:bg-gray-50 ${
+                      isMoreActive ? 'text-brand-600' : 'text-gray-800'
+                    }`}
+                  >
+                    {MORE_MENU.label}
+                    <FiChevronDown
+                      aria-hidden
+                      className="h-5 w-5 shrink-0 text-gray-400 transition-transform group-open:rotate-180"
+                    />
+                  </summary>
+                  <ul className="bg-gray-50 pb-1">
+                    {MORE_MENU.children.map((child) => {
+                      const active = isActive(child.href);
+                      return (
+                        <li key={child.href}>
+                          <Link
+                            href={child.href}
+                            onClick={() => setIsMobileOpen(false)}
+                            aria-current={active ? 'page' : undefined}
+                            className={`block py-3 pl-9 pr-5 text-theme-sm transition hover:text-brand-600 ${
+                              active ? 'font-semibold text-brand-600' : 'text-gray-600'
+                            }`}
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </details>
+              </li>
+            </ul>
+
+            <AppDownloadBlock />
+          </nav>
+        </div>
       )}
     </header>
   );

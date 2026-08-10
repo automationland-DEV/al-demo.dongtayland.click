@@ -19,9 +19,10 @@ type ThumbCarouselProps = {
 /**
  * Bang anh tu chuyen canh cho the du an.
  *
- * Tu chay 3 giay mot anh; nguoi dung cham vao cham tron thi dung han - da chon
- * tay roi ma anh van tu troi di thi rat kho chiu. Ro chuot len the cung tam
- * dung (prop `paused`) de con kip nhin.
+ * Chay het luot anh cua du an, 3 giay mot tam. KHONG co cham dieu huong: mot
+ * du an that co the co hang chuc anh, luc do day cham vua chat vua vo nghia -
+ * cu de anh chay het la du. Ro chuot len the thi tam dung (prop `paused`) de
+ * con kip nhin.
  *
  * Cac anh xep chong len nhau va chuyen bang do mo chu khong truot ngang: the
  * nam trong luoi, truot ngang se de lo mep anh ben canh luc dang chay.
@@ -34,11 +35,10 @@ const ThumbCarousel = ({
   className = '',
 }: ThumbCarouselProps) => {
   const [index, setIndex] = useState(0);
-  const [isLocked, setIsLocked] = useState(false);
 
   // Danh sach rong van phai ve mot khung, de PlaceholderThumb lo phan anh thay the
   const slides = images.length > 0 ? images : [''];
-  const canPlay = slides.length > 1 && !paused && !isLocked;
+  const canPlay = slides.length > 1 && !paused;
 
   // Dung ban cap nhat theo ham thay vi doc `index`: de `index` vao mang phu
   // thuoc se lam dong ho bi dat lai sau MOI lan doi anh, khong con dung 3 giay.
@@ -75,31 +75,6 @@ const ThumbCarousel = ({
         </div>
       ))}
 
-      {slides.length > 1 && (
-        <div className="absolute inset-x-0 bottom-2 z-10 flex justify-center gap-1.5">
-          {slides.map((src, slideIndex) => (
-            <button
-              key={`${src}-${slideIndex}`}
-              type="button"
-              onClick={(event) => {
-                // Nut nam trong the <Link> bao quanh anh nen phai chan ca mac
-                // dinh lan bubble, neu khong bam cham se nhay sang trang chi tiet.
-                event.preventDefault();
-                event.stopPropagation();
-                setIndex(slideIndex);
-                setIsLocked(true);
-              }}
-              aria-label={`Xem ảnh ${slideIndex + 1}`}
-              aria-current={slideIndex === index}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                slideIndex === index
-                  ? 'w-5 bg-white'
-                  : 'w-1.5 bg-white/60 hover:bg-white/90'
-              }`}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 };

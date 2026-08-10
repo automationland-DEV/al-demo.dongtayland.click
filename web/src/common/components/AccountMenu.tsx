@@ -15,7 +15,6 @@ import {
 
 import {
   hasAdminAccess,
-  slugifyName,
   useCurrentUser,
   useLogout,
   type UserRole,
@@ -208,11 +207,13 @@ const AccountMenu = () => {
 
   return (
     <div className="relative flex items-center" ref={containerRef}>
-      {/* Avatar -> di den trang profile public cua user dang login.
-          Wrap trong Link de SSR/SEO cung hoat dong tot. */}
+      {/* Avatar -> di den trang tai khoan cua user dang login. Truoc day
+          link den /ho-so/{slug} (public profile) nhung user hay bam nham
+          mong muon xem trang thong tin ca nhan cua minh. Mac dinh giup
+          user vao trang /tai-khoan nhanh nhat khi bam avatar. */}
       <Link
-        href={`/ho-so/${slugifyName(user.name)}`}
-        aria-label={`Xem trang cá nhân của ${user.name}`}
+        href="/tai-khoan"
+        aria-label="Mở trang tài khoản"
         className="rounded-full p-0.5 transition hover:bg-brand-50"
       >
         <UserAvatar name={user.name} src={user.avatar} size={40} />

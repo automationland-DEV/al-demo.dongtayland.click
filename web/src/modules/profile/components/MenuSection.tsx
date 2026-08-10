@@ -1,62 +1,81 @@
+'use client';
+
 import Link from 'next/link';
+import { FiChevronRight } from 'react-icons/fi';
 
 import type { MenuItem as MenuItemType } from '../mocks/profile.mock';
-import { TONE_TILE } from './ProfileCard';
+
+const TONE_TILE: Record<string, string> = {
+  brand: 'bg-brand-50 text-brand-600',
+  navy: 'bg-navy-50 text-navy-700',
+  warning: 'bg-warning-50 text-warning-700',
+  success: 'bg-success-50 text-success-700',
+  gray: 'bg-gray-100 text-gray-600',
+  accent: 'bg-accent-50 text-accent-600',
+};
 
 const BADGE_STYLES: Record<string, string> = {
-  // Badge "Tinh nang moi" - xanh nhat
-  new: 'bg-success-50 text-success-700 border-success-500/30',
+  // Badge "Moi" - xanh nhat
+  new: 'bg-success-500 text-white',
   // Badge "Tao ngay" - vang gold
-  gold: 'bg-warning-500 text-white border-warning-600',
-  // Badge "PRO" - den, in dam
-  pro: 'bg-navy-800 text-white border-navy-800',
+  gold: 'bg-warning-500 text-white',
+  // Badge "PRO" - navy, in dam
+  pro: 'bg-navy-700 text-white',
 };
 
 /**
- * Mot dong item: tile icon (emoji) + label + arrow, co the kem badge.
- * Click vao: neu co `href` -> next/link; neu khong -> button vo hieu (placeholder).
+ * Mot dong item: icon tile + label + description + arrow, co the kem badge.
+ * Click vao: neu co `href` -> next/link; neu khong -> div vo hieu.
+ *
+ * Design 2026: tile icon 40px square (khong phai 44x44 emoji), hover bg nhe,
+ * arrow chi xuat hien on hover de giam visual noise.
  */
 const MenuItem = ({ item }: { item: MenuItemType }) => {
+  const { icon: Icon, description } = item;
+  const tileClass = TONE_TILE[item.tone] ?? TONE_TILE.gray;
+  const badgeClass = BADGE_STYLES[item.badge?.variant ?? 'new'];
+
   const inner = (
     <>
-      {/* Tile icon emoji */}
+      {/* Icon tile - hinh vuong 40px */}
       <span
         aria-hidden
-        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl ${TONE_TILE[item.tone] ?? TONE_TILE.gray}`}
+        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tileClass}`}
       >
-        {item.emoji}
+        <Icon className="h-5 w-5" />
       </span>
 
-      {/* Label + badge */}
-      <span className="flex flex-1 items-center gap-2">
-        <span className="flex-1 text-theme-sm font-semibold text-gray-800">
-          {item.label}
+      {/* Label + description + badge */}
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-2">
+          <span className="truncate text-theme-sm font-semibold text-gray-900">
+            {item.label}
+          </span>
+          {item.badge && (
+            <span
+              className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${badgeClass}`}
+            >
+              {item.badge.text}
+            </span>
+          )}
         </span>
-        {item.badge && (
-          <span
-            className={`shrink-0 rounded-md border px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${BADGE_STYLES[item.badge.variant] ?? BADGE_STYLES.new}`}
-          >
-            {item.badge.text}
+        {description && (
+          <span className="mt-0.5 block truncate text-theme-xs text-gray-500">
+            {description}
           </span>
         )}
       </span>
 
-      {/* Arrow ben phai */}
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
+      {/* Arrow ben phai - chi hien on hover (md+) */}
+      <FiChevronRight
         aria-hidden
-        className="h-4 w-4 shrink-0 text-gray-400"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-      </svg>
+        className="h-4 w-4 shrink-0 text-gray-400 transition-opacity group-hover:text-brand-500 md:opacity-0 md:group-hover:opacity-100"
+      />
     </>
   );
 
   const className =
-    'group flex w-full items-center gap-3 px-4 py-3 transition hover:bg-gray-50 active:bg-gray-100';
+    'group flex w-full items-center gap-3 px-4 py-3.5 transition hover:bg-gray-50 active:bg-gray-100';
 
   if (item.href) {
     return (
@@ -75,11 +94,12 @@ const MenuItem = ({ item }: { item: MenuItemType }) => {
 const MenuSection = ({
   title,
   items,
-  /** Mau vien: mac dinh trang, co the set 'warning'/'error' de nhan manh. */
+  description,
   variant = 'default',
 }: {
   title?: string;
   items: MenuItemType[];
+  description?: string;
   variant?: 'default' | 'warning' | 'error';
 }) => {
   const borderClass =
@@ -91,10 +111,15 @@ const MenuSection = ({
 
   return (
     <section className={`overflow-hidden rounded-2xl border bg-white shadow-theme-sm ${borderClass}`}>
-      {title && (
-        <h2 className="px-4 pt-3.5 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-          {title}
-        </h2>
+      {(title || description) && (
+        <header className="border-b border-gray-100 px-5 py-4">
+          {title && (
+            <h2 className="text-theme-sm font-semibold text-gray-900">{title}</h2>
+          )}
+          {description && (
+            <p className="mt-0.5 text-theme-xs text-gray-500">{description}</p>
+          )}
+        </header>
       )}
       <ul className="divide-y divide-gray-100">
         {items.map((item, idx) => (

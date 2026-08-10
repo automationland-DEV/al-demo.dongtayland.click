@@ -17,6 +17,15 @@ type HeroCarouselProps = {
  * Render dung <picture> thong qua <Image fill> cua next/image voi object-cover
  * de 3 3 banner co 3 ty le khac nhau van full khung. Khong dung PlaceholderThumb
  * nua vi banner co anh that.
+ *
+ * Responsive image chain (3 breakpoint):
+ *   - mobile  (<768px)  : mobileImageUrl   - anh doc ~1:2
+ *   - tablet  (768-1023): tabletImageUrl   - anh portrait ~3:4
+ *   - desktop (>=1024px): desktopImageUrl  - anh ngang ~2:1
+ *
+ * Browser chon <source> dau tien match media query (CSS standard). Neu
+ * tabletImageUrl undefined, source tablet khong render => browser bo qua,
+ * tiep tuc kiem source tiep theo.
  */
 const HeroCarousel = ({ slides, intervalMs = 5000 }: HeroCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -65,7 +74,22 @@ const HeroCarousel = ({ slides, intervalMs = 5000 }: HeroCarouselProps) => {
             aria-label={`${index + 1} / ${slides.length}`}
           >
             <picture>
-              <source media="(max-width: 767px)" srcSet={slide.mobileImageUrl} />
+              {/* Tablet (768-1023px) - kiem truoc vi media query max-width
+                  1023px cung match mobile. Dat max-width: 1023px nhung co
+                  768px breakpoint ngay duoi de tablet khong bi mobile de len. */}
+              {slide.tabletImageUrl && (
+                <source
+                  media="(min-width: 768px) and (max-width: 1023px)"
+                  srcSet={slide.tabletImageUrl}
+                />
+              )}
+              {/* Mobile (<768px) - media query max-width: 767px match dung
+                  dien thoai, browser khong matching tablet source o tren. */}
+              {slide.mobileImageUrl && (
+                <source media="(max-width: 767px)" srcSet={slide.mobileImageUrl} />
+              )}
+              {/* Fallback: desktop + bat ky viewport nao khong match 2 source
+                  tren (vi du khi thieu tabletImageUrl). */}
               <Image
                 src={slide.desktopImageUrl}
                 alt=""

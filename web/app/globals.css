@@ -358,59 +358,94 @@
 }
 
 /* ── Ghim du an tren ban do khu vuc (Leaflet divIcon) ────────────────────
-   Cung ly do nhu .plan-pin: Leaflet nhan HTML tho nen phai la CSS that. */
+   Leaflet ghi `transform: translate3d(...)` INLINE len the ghim de dinh vi no.
+   Inline de len stylesheet, nen moi transform cua ta (phong to khi ro chuot,
+   keo ve giua) deu phai dat tren <span> BEN TRONG. Ban than the ghim chi con
+   la mot diem neo 0x0 nam dung toa do - nho vay o chu co dan theo do dai chu
+   ma van luon can giua ghim, khong can tinh iconAnchor. */
 .map-pin {
+  --pin-bg: var(--color-error-600);
+  width: 0;
+  height: 0;
+}
+
+.map-pin > span {
+  position: absolute;
+  left: 0;
+  top: 0;
   display: block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
+  width: 12px;
+  height: 12px;
   border: 2px solid #fff;
-  background: var(--color-error-600);
-  box-shadow: 0 1px 4px rgb(16 24 40 / 0.45);
-  /* Chi doi transform: doi width/height se lam ghim lech khoi toa do that,
-     vi Leaflet dat goc icon theo iconAnchor tinh mot lan luc tao. */
+  border-radius: 50%;
+  background: var(--pin-bg);
+  box-shadow: 0 1px 3px rgb(16 24 40 / 0.4);
+  transform: translate(-50%, -50%);
   transition: transform 0.15s ease;
 }
 
+/* Ghim chong len nhau khi cac du an nam sat: cai dang ro chuot phai noi len
+   tren, neu khong doc duoc chu. Leaflet gan z-index theo vi do nen phai dat
+   cao han hon. */
 .map-pin:hover {
-  transform: scale(1.35);
+  z-index: 500;
 }
 
-/* Ghim cua du an dang tro toi - phong to va doi sang mau thuong hieu */
-.map-pin--active {
-  background: var(--color-brand-500);
-  transform: scale(1.6);
-  box-shadow: 0 0 0 4px rgb(15 111 209 / 0.25);
+.map-pin:hover > span {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+/* O chu (gia, dien tich, nam ban giao...) - co dan theo do dai chu.
+   Bo goc vua phai thay vi vien vien: o cang ngan thi vien vien cang tron xoe
+   ra, nhin to hon thuc te. */
+.map-pin--label > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  padding: 2px 5px;
+  border-width: 1px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.map-pin--label:hover > span {
+  transform: translate(-50%, -50%) scale(1.18);
 }
 
 /* Ghim cua du an da luu */
 .map-pin--favorite {
-  background: var(--color-accent-500);
+  --pin-bg: var(--color-accent-500);
 }
 
-/* Ghim mang chu (gia, dien tich, nam ban giao...) - vien vien thay vi cham tron */
-.map-pin--label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  height: 24px;
-  min-width: 46px;
-  padding: 0 8px;
-  border-radius: 999px;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
+/* Bang mau khi ghim duoc to theo loai hinh / trang thai - dat sau --favorite
+   de che do to mau giu dung bang chu thich */
+.map-pin--c1 { --pin-bg: var(--color-brand-500); }
+.map-pin--c2 { --pin-bg: var(--color-accent-500); }
+.map-pin--c3 { --pin-bg: var(--color-jade-500); }
+.map-pin--c4 { --pin-bg: var(--color-error-600); }
+.map-pin--c5 { --pin-bg: var(--color-navy-600); }
+
+/* Ghim cua du an dang tro toi - luon thang moi mau khac */
+.map-pin--active {
+  --pin-bg: var(--color-brand-500);
+  z-index: 600;
 }
 
-/* Bang mau khi ghim duoc to theo loai hinh / trang thai */
-.map-pin--c1 { background: var(--color-brand-500); }
-.map-pin--c2 { background: var(--color-accent-500); }
-.map-pin--c3 { background: var(--color-jade-500); }
-.map-pin--c4 { background: var(--color-error-600); }
-.map-pin--c5 { background: var(--color-navy-600); }
+.map-pin--active > span {
+  transform: translate(-50%, -50%) scale(1.5);
+  box-shadow: 0 0 0 4px rgb(15 111 209 / 0.25);
+}
+
+.map-pin--label.map-pin--active > span {
+  transform: translate(-50%, -50%) scale(1.25);
+}
 
 /* ── Chu thich tren anh 360 (Pannellum) ─────────────────────────────────
    Pannellum ve hotspot bang DOM tho, khong ap duoc class Tailwind sinh theo

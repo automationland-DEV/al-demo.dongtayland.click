@@ -18,10 +18,21 @@ export type HomeBannerSlide = {
   primaryCtaLabel: string;
   /** Chu tren nut phu (neu co) */
   secondaryCtaLabel?: string;
-  /** URL anh bia desktop. Rong => khong render carousel. */
+  /**
+   * URL anh bia desktop (>=1024px). Rong => khong render carousel.
+   * Anh ngang, ti le ~2:1.
+   */
   desktopImageUrl: string;
-  /** URL anh bia mobile (ty le doc hon). Neu rong => fallback ve desktop. */
-  mobileImageUrl: string;
+  /**
+   * URL anh bia tablet (768px-1023px). Neu rong => fallback ve desktop.
+   * Anh portrait, ti le ~3:4 - dung cho iPad/tablet dung doc.
+   */
+  tabletImageUrl?: string;
+  /**
+   * URL anh bia mobile (<768px). Neu rong => fallback ve desktop (hoac tablet
+   * neu co). Anh doc, ti le ~1:2.
+   */
+  mobileImageUrl?: string;
 };
 
 /** Mot muc trong khoi "Vi sao chon chung toi" */

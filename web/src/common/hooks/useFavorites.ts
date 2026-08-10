@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
 /**
  * Module shared luu tru + doc danh sach "yeu thich" (cac du an da bookmark).
@@ -70,50 +70,80 @@ const readFavoritesFromStorage = (): FavoriteEntry[] => {
   }
 };
 
+/**
+ * Kho dung chung cho MOI noi goi useFavorites.
+ *
+ * Truoc day moi component giu mot useState rieng, nen bam tim tren the chi
+ * component do biet: header khong doi so dem, danh sach khong day du an da luu
+ * len dau, ghim tren ban do khong doi mau. Su kien `storage` cua trinh duyet
+ * KHONG bao cho chinh tab dang ghi, nen no khong lap duoc khoang trong nay -
+ * phai co danh sach nguoi nghe cua rieng minh.
+ */
+const listeners = new Set<() => void>();
+
+const EMPTY: FavoriteEntry[] = [];
+
+/**
+ * getSnapshot bat buoc tra ve CUNG mot tham chieu khi du lieu khong doi, neu
+ * khong React se render lai vo han. Vi the cache theo chuoi JSON tho.
+ */
+let cachedRaw: string | null = null;
+let cachedValue: FavoriteEntry[] = EMPTY;
+
+const readSnapshot = (): FavoriteEntry[] => {
+  if (typeof window === 'undefined') return EMPTY;
+
+  const raw = window.localStorage.getItem(STORAGE_KEY);
+  if (raw === cachedRaw) return cachedValue;
+
+  cachedRaw = raw;
+  cachedValue = readFavoritesFromStorage();
+  return cachedValue;
+};
+
+/** Server khong co localStorage - lan render dau hai ben phai giong nhau */
+const getServerSnapshot = () => EMPTY;
+
+const subscribe = (onChange: () => void) => {
+  listeners.add(onChange);
+  // Dong bo giua nhieu tab dang mo
+  window.addEventListener('storage', onChange);
+  return () => {
+    listeners.delete(onChange);
+    window.removeEventListener('storage', onChange);
+  };
+};
+
 const writeFavoritesToStorage = (next: FavoriteEntry[]) => {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  listeners.forEach((listener) => listener());
 };
 
 export const useFavorites = () => {
-  const [favorites, setFavorites] = useState<FavoriteEntry[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const favorites = useSyncExternalStore(subscribe, readSnapshot, getServerSnapshot);
+  // Server tra ve false, client tra ve true - dung de phan biet "chua hydrate"
+  // voi "da hydrate nhung chua luu du an nao"
+  const isHydrated = useSyncExternalStore(subscribe, () => true, () => false);
 
-  // Sau khi mount o client, doc localStorage va cap nhat state.
-  useEffect(() => {
-    // Read-on-mount can thiet cho hydration: server khong co localStorage,
-    // client phai doc localStorage va cap nhat state sau mount.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFavorites(readFavoritesFromStorage());
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsHydrated(true);
-
-    // Dong bo giua nhieu tab dang mo.
-    const handleStorage = (event: StorageEvent) => {
-      if (event.key === STORAGE_KEY) {
-        setFavorites(readFavoritesFromStorage());
-      }
-    };
-    window.addEventListener('storage', handleStorage);
-    return () => {
-      window.removeEventListener('storage', handleStorage);
-    };
-  }, []);
-
+  /**
+   * Doc - ghi thang, KHONG boc trong ham cap nhat cua setState.
+   *
+   * Dat viec ghi localStorage vao trong ham cap nhat la nguyen nhan nut tim
+   * hong: React duoc phep goi ham do nhieu lan (o StrictMode la hai lan) de
+   * phat hien ham khong thuan tuy. Lan hai doc lai localStorage thay du an DA
+   * co nen lai xoa di, ket qua la giao dien bao "da luu" con localStorage van
+   * rong.
+   */
   const toggle = useCallback((publicId: string) => {
-    setFavorites((current) => {
-      const latest = readFavoritesFromStorage();
-      const exists = latest.some((entry) => entry.publicId === publicId);
-      // Stamp thoi gian moi: khi THEM thi savedAt = now; khi XOA thi
-      // entry cu bay luon (khong giu lai lich su timestamp).
-      const next = exists
+    const latest = readSnapshot();
+    const exists = latest.some((entry) => entry.publicId === publicId);
+
+    // Them thi dong dau thoi gian moi; xoa thi bo han entry (khong giu lich su)
+    writeFavoritesToStorage(
+      exists
         ? latest.filter((entry) => entry.publicId !== publicId)
-        : [
-            ...latest,
-            { publicId, savedAt: Date.now() },
-          ];
-      writeFavoritesToStorage(next);
-      return next;
-    });
+        : [...latest, { publicId, savedAt: Date.now() }],
+    );
   }, []);
 
   const isFavorite = useCallback(
@@ -122,10 +152,7 @@ export const useFavorites = () => {
   );
 
   /** Xoa toan bo - dung cho nut "Xoa tat ca" tren trang /yeu-thich. */
-  const clearAll = useCallback(() => {
-    writeFavoritesToStorage([]);
-    setFavorites([]);
-  }, []);
+  const clearAll = useCallback(() => writeFavoritesToStorage([]), []);
 
   return { favorites, isFavorite, toggle, clearAll, isHydrated };
 };
