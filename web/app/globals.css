@@ -299,50 +299,89 @@
 
 /* ── Pin gia tren ban do mat bang (Leaflet divIcon) ──────────────────────
    Leaflet dung HTML tho cho icon nen khong ap dung duoc class Tailwind sinh
-   theo nhu cau; cac lop nay phai la CSS that. */
+   theo nhu cau; cac lop nay phai la CSS that.
+
+   Cung mot rang buoc voi .map-pin ben duoi: Leaflet ghi
+   `transform: translate3d(...)` INLINE len the ghim de dinh vi, ma inline de
+   len stylesheet - nen the ghim chi con la diem neo 0x0 nam dung toa do, con o
+   gia la mot <span> ben trong. Nho vay o gia tu co dan theo do dai tung muc
+   gia (khong con khung 44px cung), va hieu ung phong to khi ro chuot moi co
+   cho de song. */
 .plan-pin {
   --pin: var(--color-jade-500);
+  width: 0;
+  height: 0;
+}
 
-  display: flex;
+/* O gia: rong theo noi dung, dat ngay tren toa do va chua 5px cho mui nhon.
+   Bo goc vua phai thay vi vien vien - gia cang ngan thi vien vien cang tron
+   xoe ra, nhin to hon thuc te. */
+.plan-pin > span {
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 38px;
-  height: 22px;
-  padding: 0 7px;
-  border-radius: 999px;
+  padding: 3px 6px;
+  border-radius: 6px;
   background: var(--pin);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   white-space: nowrap;
   box-shadow: 0 2px 6px rgb(16 24 40 / 0.35);
+  /* Phong to lay mui nhon lam goc, de dau ghim khong roi khoi can nha */
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
   transition: transform 0.15s ease;
 }
 
-.plan-pin::after {
+.plan-pin > span::after {
   content: '';
   position: absolute;
   left: 50%;
-  bottom: -4px;
+  bottom: -5px;
   margin-left: -4px;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 5px solid var(--pin);
 }
 
+/* O gia chong len nhau day dac: cai dang ro chuot phai noi len tren, neu khong
+   phong to ra cung van bi o khac che mat. Leaflet ghi z-index theo vi do
+   thanh style INLINE tren tung ghim, nen day la cho bat buoc phai !important
+   moi de duoc len. */
 .plan-pin:hover {
-  transform: scale(1.12);
-  z-index: 500;
+  z-index: 500 !important;
 }
 
-.plan-pin--dot {
-  min-width: 0;
+.plan-pin:hover > span {
+  transform: translateX(-50%) scale(1.12);
+}
+
+/* Tat gia: con lai cham tron nam DUNG TAM toa do, nen phai bo mui nhon di -
+   neu khong dau ghim se tro xuong duoi vi tri that khoang 10px. */
+.plan-pin--dot > span {
   width: 13px;
   height: 13px;
   padding: 0;
-  border-radius: 50%;
   border: 2px solid #fff;
+  border-radius: 50%;
+  top: 0;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.plan-pin--dot > span::after {
+  content: none;
+}
+
+.plan-pin--dot:hover > span {
+  transform: translate(-50%, -50%) scale(1.3);
 }
 
 .plan-pin--doc-quyen {
@@ -355,6 +394,19 @@
 
 .plan-pin--thuong {
   --pin: var(--color-success-500);
+}
+
+/* Toan man hinh: khung ngoai duoc trinh duyet keo kin man hinh, nhung khung
+   ban do ben trong van giu chieu cao co dinh cua Tailwind (h-140/sm:h-170) nen
+   ban do chi nam gon phan tren, con lai la nen xam. Phai tra chieu cao ve 100%
+   thi invalidateSize() moi co gi de do lai. */
+.plan-map-shell:fullscreen {
+  border-radius: 0;
+  border-width: 0;
+}
+
+.plan-map-shell:fullscreen .plan-map-canvas {
+  height: 100%;
 }
 
 /* ── Ghim du an tren ban do khu vuc (Leaflet divIcon) ────────────────────

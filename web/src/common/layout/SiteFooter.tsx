@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
 import { FaFacebookF, FaTiktok, FaYoutube } from 'react-icons/fa';
+import AppStoreBadges from '@/common/components/AppStoreBadges';
 
 const COMPANY_LINKS = [
   { label: 'Về chúng tôi', href: '/gioi-thieu' },
@@ -109,6 +110,13 @@ const SiteFooter = () => (
             </li>
           ))}
         </ul>
+
+        {/* Khoi tai ung dung: truoc nam trong ngan keo dien thoai, dua ra day
+            de hien tren moi trang va ca o may tinh. */}
+        <p className="mb-3 mt-8 text-theme-sm font-bold text-white">
+          Tìm dự án mọi lúc mọi nơi
+        </p>
+        <AppStoreBadges />
       </div>
     </div>
 

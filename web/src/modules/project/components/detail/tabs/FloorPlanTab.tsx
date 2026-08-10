@@ -66,6 +66,7 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   const [isMapReady, setIsMapReady] = useState(false);
+  const [canFullscreen, setCanFullscreen] = useState(false);
   const [funds, setFunds] = useState<UnitFundType[]>(FUND_TYPES);
   const [showPrice, setShowPrice] = useState(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -125,7 +126,10 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
         zoomControl: false,
         minZoom: -3,
         maxZoom: 2,
-        zoomSnap: 0.25,
+        // Phai la 0: moi bac zoom deu lam tron XUONG, nen voi bac 0.25 thi
+        // fitBounds co the thu anh mat bang nho hon khung toi ~16% chieu dai
+        // (con lai la hai dai xam hai ben). Zoom le cho anh vua khit khung.
+        zoomSnap: 0,
         maxBoundsViscosity: 0.9,
       });
 
@@ -169,11 +173,14 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
     layer.clearLayers();
 
     visibleMarkers.forEach((marker) => {
+      // Ghim la diem neo 0x0 nam dung toa do, o gia nam trong <span>: xem
+      // .plan-pin trong globals.css. Nho vay o gia rong theo do dai tung muc
+      // gia, va Leaflet khong giat mat transform cua hieu ung phong to.
       const icon = L.divIcon({
         className: `plan-pin plan-pin--${marker.fundType}${showPrice ? '' : ' plan-pin--dot'}`,
-        html: showPrice ? `<span>${escapeHtml(formatBillionShort(marker.price))}</span>` : '',
-        iconSize: showPrice ? [44, 22] : [13, 13],
-        iconAnchor: showPrice ? [22, 26] : [6, 6],
+        html: `<span>${showPrice ? escapeHtml(formatBillionShort(marker.price)) : ''}</span>`,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
       });
 
       L.marker(toLatLng(marker), { icon, title: marker.code })
@@ -203,14 +210,27 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
+  // Safari tren iPhone khong cho <div> vao toan man hinh - an nut di thay vi de
+  // no bam khong len gi. Phai do o effect vi server khong co `document`.
+  useEffect(() => {
+    setCanFullscreen(
+      document.fullscreenEnabled && typeof wrapperRef.current?.requestFullscreen === 'function',
+    );
+  }, []);
+
   const toggleFund = (fund: UnitFundType) =>
     setFunds((current) =>
       current.includes(fund) ? current.filter((item) => item !== fund) : [...current, fund],
     );
 
+  /**
+   * Ca hai ham deu tra ve Promise co the bi tu choi (trinh duyet chan, khong
+   * phai thao tac cua nguoi dung...). `void` khong nuot duoc loi do - thieu
+   * `catch` la co mot TypeError chua bat van ra console.
+   */
   const toggleFullscreen = () => {
-    if (document.fullscreenElement) void document.exitFullscreen();
-    else void wrapperRef.current?.requestFullscreen?.();
+    if (document.fullscreenElement) void document.exitFullscreen().catch(() => {});
+    else void wrapperRef.current?.requestFullscreen().catch(() => {});
   };
 
   /** Bay toi can dau tien khop tu khoa */
@@ -346,9 +366,9 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
       
       <div
         ref={wrapperRef}
-        className="relative isolate overflow-hidden rounded-lg border border-gray-200 bg-gray-100 shadow-card"
+        className="plan-map-shell relative isolate overflow-hidden rounded-lg border border-gray-200 bg-gray-100 shadow-card"
       >
-        <div ref={containerRef} className="h-140 w-full sm:h-170" />
+        <div ref={containerRef} className="plan-map-canvas h-140 w-full sm:h-170" />
 
         {/* Dieu khien tu ve de bam dung thiet ke; Leaflet control mac dinh da tat */}
         <div className="absolute left-3 top-3 z-900 flex flex-col gap-2">
@@ -358,9 +378,11 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
           <MapButton label="Thu nhỏ" onClick={() => mapRef.current?.zoomOut()}>
             <FiMinus aria-hidden />
           </MapButton>
-          <MapButton label="Toàn màn hình" onClick={toggleFullscreen}>
-            <FiMaximize aria-hidden />
-          </MapButton>
+          {canFullscreen && (
+            <MapButton label="Toàn màn hình" onClick={toggleFullscreen}>
+              <FiMaximize aria-hidden />
+            </MapButton>
+          )}
 
           <button
             type="button"
