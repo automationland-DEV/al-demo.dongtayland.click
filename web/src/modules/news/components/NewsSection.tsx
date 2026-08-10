@@ -115,7 +115,7 @@ const NewsSection = ({ limit = 8, articles }: NewsSectionProps) => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section className="pb-12 pt-4">
+    <section className="pb-8 pt-2">
       <div className="mb-5 flex items-end justify-between gap-4">
         <h2 className="text-xl font-bold uppercase tracking-wide text-gray-900">Tin tức</h2>
         <Link

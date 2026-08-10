@@ -32,7 +32,7 @@ const HomePage = ({ initialContent }: HomePageProps) => {
       <Thongbao />
       {/* Search bar cua HeroSearch overlap xuong section nay nen can
           pt-28 (md) de khong bi card de len content. */}
-      <div className="bg-white pb-12 pt-20 md:pt-28">
+      <div className="bg-white pb-8 pt-16 md:pt-24">
         <QuickUtilities />
       </div>
       <FeaturedProjects projects={content.featuredProjects} />

@@ -73,7 +73,12 @@ const HeroCarousel = ({ slides, intervalMs = 5000 }: HeroCarouselProps) => {
             aria-roledescription="slide"
             aria-label={`${index + 1} / ${slides.length}`}
           >
-            <picture>
+            {/* `absolute inset-0`: <Image fill> tu dat minh `position: absolute`
+                nen the CHA TRUC TIEP phai la mot khoi da dinh vi. Cha truc tiep
+                o day la <picture> - mac dinh inline va `position: static` - nen
+                anh se bam vao <body> thay vi khung slide. Div ben ngoai co
+                `absolute` khong cuu duoc, vi Image chi nhin len mot cap. */}
+            <picture className="absolute inset-0">
               {/* Tablet (768-1023px) - kiem truoc vi media query max-width
                   1023px cung match mobile. Dat max-width: 1023px nhung co
                   768px breakpoint ngay duoi de tablet khong bi mobile de len. */}

@@ -174,16 +174,50 @@ const MessageBubble = ({ message }: { message: Message }) => {
 // Chat input
 // ============================================================================
 
+/**
+ * Tran chieu cao o nhap = 4 dong x 24px (leading-6) + 28px padding (py-3.5)
+ * + 2px vien. Qua nguong nay textarea moi bat thanh cuon thay vi day cao mai.
+ * Doi padding hoac leading o className ben duoi thi phai sua lai so nay.
+ */
+const MAX_INPUT_HEIGHT = 126;
+
 const ChatInput = ({ onSend }: { onSend: (content: string) => void }) => {
   const [draft, setDraft] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-grow textarea (max 4 rows)
+  // Auto-grow textarea (toi da 4 dong)
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
-    ta.style.height = 'auto';
-    ta.style.height = `${Math.min(ta.scrollHeight, 96)}px`;
+
+    const fit = () => {
+      ta.style.height = 'auto';
+
+      // `scrollHeight` do noi dung + padding nhung KHONG gom duong vien, trong
+      // khi `box-sizing: border-box` cua Tailwind lai coi chieu cao la da gom
+      // vien. Gan thang scrollHeight se hut mat dung phan vien do va cat ngang
+      // dong chu. Doc vien tu computed style thay vi `offsetHeight -
+      // clientHeight`: hieu do phu thuoc vao thoi diem trinh duyet tinh xong
+      // layout, con computed style thi luon dung.
+      const style = getComputedStyle(ta);
+      const border =
+        parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+
+      const wanted = ta.scrollHeight + border;
+      ta.style.height = `${Math.min(wanted, MAX_INPUT_HEIGHT)}px`;
+
+      // Chi bat cuon khi that su cham tran. De `overflow: auto` mac dinh thi
+      // sai so lam tron nua pixel cung du lam thanh cuon hien ra ngay khi moi
+      // co mot dong - dung cai thanh cuon dang lo trong o nhap.
+      ta.style.overflowY = wanted > MAX_INPUT_HEIGHT ? 'auto' : 'hidden';
+    };
+
+    fit();
+
+    // Qua breakpoint md co chu doi tu 14px sang 16px, keo theo chieu cao dong
+    // doi. Chieu cao da ghim bang px o tren se khong con vua nua neu khong do lai.
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
   }, [draft]);
 
   const handleSubmit = (e: FormEvent) => {
@@ -197,12 +231,16 @@ const ChatInput = ({ onSend }: { onSend: (content: string) => void }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-end gap-2 border-t border-gray-100 bg-white px-4 py-3 md:px-6 md:py-4"
+      // Le tren mong hon le duoi: keo ca hang nhap nhich len, sat vao khung
+      // hoi thoai hon thay vi troi giua mot vung trong.
+      className="flex items-end gap-2 border-t border-gray-100 bg-white px-4 pb-3 pt-2 md:px-6 md:pb-4 md:pt-2.5"
     >
       <button
         type="button"
         aria-label="Emoji"
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-700"
+        // `mb-2` canh tam nut vao dung tam DONG CHU CUOI cua o nhap - xem
+        // phep tinh o nut Gui ben duoi.
+        className="mb-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-700"
       >
         <FiSmile aria-hidden className="h-5 w-5" />
       </button>
@@ -220,16 +258,28 @@ const ChatInput = ({ onSend }: { onSend: (content: string) => void }) => {
         placeholder="Nhập tin nhắn..."
         rows={1}
         aria-label="Tin nhắn"
-        className="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 md:text-base"
+        // `leading-6` co dinh o ca hai co chu: neu de line-height chay theo
+        // text-sm/md:text-base thi chieu cao dong doi luc qua breakpoint.
+        // `overflow-hidden` la trang thai truoc khi JS chay, tranh nhap nhay
+        // thanh cuon o lan ve dau tien.
+        // `pt-3 pb-4` thay vi `py-3.5`: tong van 28px nen chieu cao o khong
+        // doi, nhung dong chu nhich len 2px. Chu Viet co nhieu dau duoi (ậ, ẻ)
+        // nen can giua theo toan hoc lai nhin nhu bi tut xuong.
+        className="flex-1 resize-none overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 px-4 pb-4 pt-3 text-sm leading-6 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 md:text-base"
       />
 
       <button
         type="submit"
         disabled={!draft.trim()}
         aria-label="Gửi"
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white shadow-theme-sm transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-gray-300"
+        // Hang dung `items-end` nen nut von nam sat day o nhap, thap hon dong
+        // chu. Nang len 8px (`mb-2`) la tam nut trung dung tam dong cuoi:
+        // day o nhap - pb-4 (16px) - nua dong (12px) = tam dong cuoi;
+        // day nut  - mb-2 (8px)  - nua nut  (20px) = tam nut. Bang nhau.
+        // Cong thuc dung cho ca khi o nhap gian ra 4 dong.
+        className="mb-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white shadow-theme-sm transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-gray-300"
       >
-        <FiSend aria-hidden className="h-4 w-4" />
+        <FiSend aria-hidden className="h-5 w-5" />
       </button>
     </form>
   );

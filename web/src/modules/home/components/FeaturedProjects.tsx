@@ -79,7 +79,7 @@ const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section className="bg-gray-50 py-12 md:py-16">
+    <section className="bg-gray-50 py-8 md:py-12">
       <div className="site-container">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
