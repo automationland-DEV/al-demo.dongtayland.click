@@ -30,7 +30,10 @@ const TaiKhoanPage = () => {
       <div className="site-container py-6 md:py-10">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-4 md:mb-6">
-          <ol className="flex items-center gap-1.5 text-theme-xs text-gray-500">
+          {/* Tren dien thoai ca cum dau trang can giua cho khop voi the ho so
+              ben duoi (avatar + ten deu can giua). Tu md tro len quay ve can
+              trai theo bo cuc 2 cot. */}
+          <ol className="flex items-center justify-center gap-1.5 text-theme-xs text-gray-500 md:justify-start">
             <li>
               <Link
                 href="/"
@@ -50,7 +53,7 @@ const TaiKhoanPage = () => {
         </nav>
 
         {/* Page header */}
-        <header className="mb-6 md:mb-8">
+        <header className="mb-6 text-center md:mb-8 md:text-left">
           <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
             Tài khoản của tôi
           </h1>

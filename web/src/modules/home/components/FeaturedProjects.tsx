@@ -119,13 +119,16 @@ const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => {
               </div>
             </div>
 
-            {/* Nut prev/next: absolute 2 ben, z-10 de phu len card ngoai. */}
+            {/* Nut prev/next: absolute 2 ben, z-10 de phu len card ngoai.
+                Khoi nay chi co tren dien thoai nen nut phai nam HAN trong
+                khung - keo ra ngoai bang -translate-x-1/2 la lo ra khoi man
+                hinh va lam ca trang cuon ngang 4px. */}
             <button
               type="button"
               onClick={() => emblaApi?.scrollPrev()}
               disabled={!canLoop && selectedIndex === 0}
               aria-label="Dự án trước"
-              className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-card transition hover:bg-brand-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-gray-700"
+              className="absolute left-1 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-card transition hover:bg-brand-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-gray-700"
             >
               <FiChevronLeft aria-hidden className="h-5 w-5" />
             </button>
@@ -134,7 +137,7 @@ const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => {
               onClick={() => emblaApi?.scrollNext()}
               disabled={!canLoop && selectedIndex === scrollSnaps.length - 1}
               aria-label="Dự án tiếp theo"
-              className="absolute right-0 top-1/2 z-10 flex h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-card transition hover:bg-brand-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-gray-700"
+              className="absolute right-1 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-card transition hover:bg-brand-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-gray-700"
             >
               <FiChevronRight aria-hidden className="h-5 w-5" />
             </button>

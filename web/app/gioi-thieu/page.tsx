@@ -182,10 +182,13 @@ const GioiThieuPage = () => (
                 key={milestone.year}
                 className="relative flex flex-col gap-4 pl-12 md:items-center md:gap-8 md:pl-0"
               >
-                {/* Dot */}
+                {/* Dot - tren dien thoai phai dat o `left-4` cho khop duong doc
+                    (cung `left-4`). De `left-0`, cham vua lech khoi duong vua
+                    bi cat mat 2px o mep man hinh vi no rong 36px ma le trang
+                    chi co 16px. */}
                 <span
                   aria-hidden
-                  className="absolute left-0 top-2 inline-flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-500 shadow-theme-md md:left-1/2"
+                  className="absolute left-4 top-2 inline-flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-500 shadow-theme-md md:left-1/2"
                 >
                   <span className="h-2 w-2 rounded-full bg-white" />
                 </span>
