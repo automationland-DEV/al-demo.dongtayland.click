@@ -44,7 +44,7 @@ const ConsultForm = () => {
   };
 
   return (
-    <section className="bg-gradient-to-br from-navy-700 via-navy-700 to-brand-700 py-12 md:py-16">
+    <section className="bg-linear-to-br from-navy-700 via-navy-700 to-brand-700 py-8 md:py-12">
       <div className="site-container">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
           <div className="text-white">

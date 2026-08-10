@@ -29,7 +29,7 @@ const TestimonialsSection = ({ testimonials }: { testimonials: HomeTestimonial[]
 
   return (
     <section
-      className="bg-white py-16 md:py-24"
+      className="bg-white py-10 md:py-16"
       aria-labelledby="testimonials-heading"
     >
       <div className="site-container">
@@ -119,7 +119,7 @@ const Carousel = ({ testimonials }: CarouselProps) => {
 
   return (
     <div
-      className="mt-12"
+      className="mt-8"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}

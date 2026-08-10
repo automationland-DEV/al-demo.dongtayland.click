@@ -22,7 +22,7 @@ type WhyUsProps = {
  * Pattern giong mot page section thong thuong: container + grid 4 cot.
  */
 const WhyUs = ({ features }: WhyUsProps) => (
-  <section className="site-container py-12 md:py-16">
+  <section className="site-container py-8 md:py-12">
     <div className="mb-8 text-center md:mb-10">
       <p className="mb-2 text-theme-xs font-bold uppercase tracking-[0.2em] text-brand-600">
         Vì sao chọn RealtyHub

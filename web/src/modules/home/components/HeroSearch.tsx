@@ -177,16 +177,19 @@ const HeroSearch = ({ slides }: HeroSearchProps) => {
           </div>
           <button
             type="submit"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-brand-500 px-5 py-2.5 text-theme-sm font-semibold text-white shadow-theme-xs transition hover:bg-brand-600"
+            aria-label="Tìm kiếm"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-brand-500 px-3 py-2.5 text-theme-sm font-semibold text-white shadow-theme-xs transition hover:bg-brand-600 sm:px-5"
           >
-           
-            Tìm kiếm
+            {/* Tren dien thoai o nhap con rat it cho, nen bo chu chi giu icon.
+                Chu van nam trong DOM cho trinh doc man hinh, va nut da co
+                aria-label rieng phong khi CSS chua kip nap. */}
+            <span className="hidden sm:inline">Tìm kiếm</span>
             <svg
               data-testid="icon-ai-search"
               viewBox="0 0 24 24"
               aria-hidden="true"
               fill="currentColor"
-              style={{ display: 'inline-block', width: '1em', height: '1em' }}
+              className="inline-block size-5 shrink-0 sm:size-4"
             >
               <path
                 fillRule="evenodd"
