@@ -101,10 +101,10 @@ export const MOCK_ABOUT_CONTENT: AboutContent = {
   },
 
   metrics: [
-    { value: '6', label: 'Năm kinh nghiệm', suffix: '+' },
-    { value: '1.200', label: 'Dự án trên nền tảng' },
+    { value: '12', label: 'Năm kinh nghiệm', suffix: '+' },
+    { value: '1.500', label: 'Dự án trên nền tảng', suffix: '+' },
     { value: '50', label: 'Khách hàng tin tưởng', suffix: 'K+' },
-    { value: '300', label: 'Chuyên viên tư vấn' },
+    { value: '1000', label: 'Chuyên viên tư vấn', suffix: '+' },
   ],
 
   milestones: [

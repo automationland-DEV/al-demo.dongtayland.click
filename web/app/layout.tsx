@@ -24,10 +24,40 @@ export const metadata: Metadata = {
   // thanh URL tuyet doi. Thieu no thi Next canh bao va tam lay localhost.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'RealtyHub',
+    default: 'Realty Hub - Nền tảng công nghệ dành riêng cho môi giới bất động sản',
     template: '%s | RealtyHub',
   },
   description: 'Nền tảng công nghệ dành riêng cho môi giới, cung cấp thông tin dự án và công cụ hỗ trợ bán hàng, giúp tư vấn nhanh và chốt giao dịch hiệu quả.',
+
+  /**
+   * Thẻ hiển thị khi dán link vào Zalo, Messenger, Facebook, Telegram...
+   * Ảnh phải là URL tuyệt đối - `metadataBase` ở trên lo việc đó.
+   */
+  openGraph: {
+    type: 'website',
+    siteName: 'RealtyHub',
+    locale: 'vi_VN',
+    url: '/',
+    title: 'Realty Hub - Nền tảng công nghệ dành riêng cho môi giới bất động sản',
+    description:
+      'Thông tin dự án, bảng giá, mặt bằng và công cụ hỗ trợ bán hàng — tất cả ở một nơi.',
+    images: [
+      {
+        url: '/images/og-cover.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'RealtyHub - Nền tảng công nghệ dành riêng cho môi giới bất động sản',
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Realty Hub - Nền tảng công nghệ dành riêng cho môi giới bất động sản',
+    description:
+      'Thông tin dự án, bảng giá, mặt bằng và công cụ hỗ trợ bán hàng — tất cả ở một nơi.',
+    images: ['/images/og-cover.jpg'],
+  },
   /**
    * Favicon / icon cho trinh duyet va home screen.
    *
