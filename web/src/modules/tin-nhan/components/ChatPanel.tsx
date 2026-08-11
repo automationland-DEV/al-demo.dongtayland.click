@@ -1,18 +1,32 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 
-import { FiSearch, FiSend, FiSmile } from 'react-icons/fi';
+import {
+  FiChevronLeft,
+  FiImage,
+  FiInfo,
+  FiMic,
+  FiPhone,
+  FiSend,
+  FiSmile,
+  FiThumbsUp,
+  FiVideo,
+} from 'react-icons/fi';
 
 import PlaceholderThumb from '@/common/components/PlaceholderThumb';
 
+import ConversationAvatar from './ConversationAvatar';
 import {
+  buildMessageRows,
   CHANNEL_LABELS,
   CHANNEL_TONE,
   formatMessageTime,
+  isGroupConversation,
   type Conversation,
   type Message,
+  type MessageRow,
 } from '../models/tin-nhan.model';
 
 type ChatPanelProps = {
@@ -22,149 +36,159 @@ type ChatPanelProps = {
   onBack: () => void;
 };
 
+const STATUS_LABEL: Record<Conversation['status'], string> = {
+  online: 'Đang hoạt động',
+  away: 'Vắng mặt',
+  offline: 'Hoạt động 5 giờ trước',
+};
+
+const STATUS_DOT: Record<Conversation['status'], string> = {
+  online: 'bg-jade-500',
+  away: 'bg-accent-500',
+  offline: 'bg-gray-400',
+};
+
 // ============================================================================
-// Conversation header (moi conversation trong chat panel)
+// Header
 // ============================================================================
+
+const HeaderAction = ({
+  icon,
+  label,
+}: {
+  icon: React.ReactNode;
+  label: string;
+}) => (
+  <button
+    type="button"
+    aria-label={label}
+    className="flex h-9 w-9 items-center justify-center rounded-full text-xl text-brand-500 transition hover:bg-brand-50"
+  >
+    {icon}
+  </button>
+);
 
 const ConversationHeader = ({
   conversation,
   onBack,
 }: Pick<ChatPanelProps, 'conversation' | 'onBack'>) => {
   const channel = CHANNEL_TONE[conversation.channel];
-  const statusLabel =
-    conversation.status === 'online'
-      ? 'Đang hoạt động'
-      : conversation.status === 'away'
-        ? 'Vắng mặt'
-        : 'Ngoại tuyến';
+  const isGroup = isGroupConversation(conversation);
 
-  const statusColor =
-    conversation.status === 'online'
-      ? 'bg-jade-500'
-      : conversation.status === 'away'
-        ? 'bg-accent-500'
-        : 'bg-gray-400';
+  // Nhom thi dong duoi liet ke thanh vien; chat doi mot thi bao trang thai
+  const subtitle = isGroup
+    ? `${(conversation.memberNames ?? []).length + 1} thành viên · ${(
+        conversation.memberNames ?? []
+      ).join(', ')}`
+    : STATUS_LABEL[conversation.status];
 
   return (
-    <div className="flex items-center gap-3 border-b border-gray-100 bg-white/95 px-4 py-3 backdrop-blur-md md:px-6 md:py-4">
-      {/* Back button (mobile only) */}
+    <header className="flex items-center gap-3 border-b border-gray-200 px-3 py-2.5 md:px-4">
       <button
         type="button"
         onClick={onBack}
         aria-label="Quay lại danh sách"
-        className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-gray-700 transition hover:bg-gray-100 lg:hidden"
+        className="-ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl text-brand-500 transition hover:bg-gray-100 lg:hidden"
       >
-        <svg
-          aria-hidden
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-5 w-5"
-        >
-          <path d="m15 18-6-6 6-6" />
-        </svg>
+        <FiChevronLeft aria-hidden />
       </button>
 
-      {/* Avatar */}
-      <div className="relative shrink-0">
-        <div className="h-10 w-10 overflow-hidden rounded-full md:h-11 md:w-11">
-          <PlaceholderThumb
-            seed={conversation.id}
-            label={conversation.name.charAt(0)}
-            className="h-full w-full"
+      <span className="relative shrink-0">
+        <ConversationAvatar conversation={conversation} size={10} />
+        {/* Nhom khong co trang thai online chung nen bo cham trang thai di */}
+        {!isGroup && (
+          <span
+            aria-hidden
+            className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white ${
+              STATUS_DOT[conversation.status]
+            }`}
           />
-        </div>
-        <span
-          aria-hidden
-          className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white ${statusColor}`}
-        />
-      </div>
+        )}
+      </span>
 
-      {/* Name + status */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
-          <h2 className="truncate font-serif text-base font-bold text-gray-900 md:text-lg">
+          <h2 className="truncate text-theme-sm font-bold text-gray-900">
             {conversation.name}
           </h2>
-          {conversation.isVerified && (
-            <span
-              aria-label="Đã xác minh"
-              title="Đã xác minh"
-              className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white"
-            >
-              <svg
-                aria-hidden
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-2.5 w-2.5"
-              >
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
-            </span>
-          )}
+          <span
+            className={`hidden shrink-0 rounded-full px-2 py-0.5 text-theme-xs font-semibold md:inline-flex ${channel.bg} ${channel.text}`}
+          >
+            {CHANNEL_LABELS[conversation.channel]}
+          </span>
         </div>
-        <p className="truncate text-theme-xs text-gray-600 md:text-theme-sm">
-          {statusLabel}
-        </p>
+        <p className="truncate text-theme-xs text-gray-500">{subtitle}</p>
       </div>
 
-      {/* Channel badge */}
-      <span
-        className={`hidden shrink-0 rounded-full px-2.5 py-1 text-theme-xs font-semibold md:inline-flex ${channel.bg} ${channel.text}`}
-      >
-        {CHANNEL_LABELS[conversation.channel]}
-      </span>
-    </div>
+      <div className="flex shrink-0 items-center gap-0.5">
+        <HeaderAction icon={<FiPhone aria-hidden />} label="Gọi thoại" />
+        <HeaderAction icon={<FiVideo aria-hidden />} label="Gọi video" />
+        <HeaderAction icon={<FiInfo aria-hidden />} label="Thông tin hội thoại" />
+      </div>
+    </header>
   );
 };
 
 // ============================================================================
-// Message bubble
+// Bubble
 // ============================================================================
 
-const MessageBubble = ({ message }: { message: Message }) => {
+
+const bubbleRadius = (isMe: boolean, isFirst: boolean, isLast: boolean) => {
+  const corners = [
+    isFirst ? '' : isMe ? 'rounded-tr-md' : 'rounded-tl-md',
+    isLast ? '' : isMe ? 'rounded-br-md' : 'rounded-bl-md',
+  ].filter(Boolean);
+
+  return ['rounded-2xl', ...corners].join(' ');
+};
+
+const MessageBubble = ({
+  row,
+  conversation,
+}: {
+  row: Extract<MessageRow, { kind: 'message' }>;
+  conversation: Conversation;
+}) => {
+  const { message, isFirstOfGroup, isLastOfGroup } = row;
+
+  // Thong bao he thong khong phai loi ai noi ra -> khong bong bong, nam giua
+  if (message.sender === 'system') {
+    return (
+      <p className="px-6 py-3 text-center text-theme-xs leading-relaxed text-gray-500">
+        {message.content}
+      </p>
+    );
+  }
+
   const isMe = message.sender === 'me';
 
   return (
-    <div
-      className={`flex items-end gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}
-    >
-      {/* Avatar (chi hien thi khi nhan tin tu 'them') */}
-      {!isMe && (
-        <div className="hidden h-7 w-7 shrink-0 overflow-hidden rounded-full md:block">
-          <PlaceholderThumb seed="them" label="T" className="h-full w-full" />
-        </div>
-      )}
+    <div className={`flex items-end gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
+      {/* Avatar chi deo o dong cuoi cum; cac dong tren chua o trong cung be
+          rong de ca cum thang hang. */}
+      {!isMe &&
+        (isLastOfGroup ? (
+          <span className="h-7 w-7 shrink-0 overflow-hidden rounded-full">
+            <PlaceholderThumb
+              seed={conversation.id}
+              label={conversation.name.charAt(0)}
+              className="h-full w-full"
+            />
+          </span>
+        ) : (
+          <span aria-hidden className="h-7 w-7 shrink-0" />
+        ))}
 
       <div
-        className={`max-w-[78%] md:max-w-[68%] ${isMe ? 'items-end' : 'items-start'} flex flex-col`}
+        title={formatMessageTime(message.sentAt)}
+        className={`max-w-[75%] px-3 py-2 text-theme-sm leading-relaxed md:max-w-[65%] ${bubbleRadius(
+          isMe,
+          isFirstOfGroup,
+          isLastOfGroup,
+        )} ${isMe ? 'bg-brand-500 text-white' : 'bg-gray-100 text-gray-900'}`}
       >
-        <div
-          className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-theme-xs md:text-base ${
-            isMe
-              ? 'rounded-br-sm bg-brand-500 text-white'
-              : 'rounded-bl-sm bg-white text-gray-900'
-          }`}
-        >
-          {message.content}
-        </div>
-        <span
-          className={`mt-1 px-1 text-theme-xs ${isMe ? 'text-gray-500' : 'text-gray-500'}`}
-        >
-          {formatMessageTime(message.sentAt)}
-          {isMe && message.status === 'read' && (
-            <span aria-label="Đã đọc" className="ml-1 text-brand-500">
-              · Đã đọc
-            </span>
-          )}
-        </span>
+        {message.content}
       </div>
     </div>
   );
@@ -175,53 +199,59 @@ const MessageBubble = ({ message }: { message: Message }) => {
 // ============================================================================
 
 /**
- * Tran chieu cao o nhap = 4 dong x 24px (leading-6) + 28px padding (py-3.5)
- * + 2px vien. Qua nguong nay textarea moi bat thanh cuon thay vi day cao mai.
- * Doi padding hoac leading o className ben duoi thi phai sua lai so nay.
+ * Tran chieu cao o nhap = 4 dong x 20px (leading-5) + 20px padding (py-2.5)
+ * + 0px vien (o nhap khong co vien). Qua nguong nay textarea moi bat cuon.
  */
-const MAX_INPUT_HEIGHT = 126;
+const MAX_INPUT_HEIGHT = 100;
+
+const ComposerAction = ({
+  icon,
+  label,
+}: {
+  icon: React.ReactNode;
+  label: string;
+}) => (
+  <button
+    type="button"
+    aria-label={label}
+    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl text-brand-500 transition hover:bg-brand-50"
+  >
+    {icon}
+  </button>
+);
 
 const ChatInput = ({ onSend }: { onSend: (content: string) => void }) => {
   const [draft, setDraft] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const hasDraft = draft.trim().length > 0;
 
-  // Auto-grow textarea (toi da 4 dong)
   useEffect(() => {
-    const ta = textareaRef.current;
-    if (!ta) return;
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
     const fit = () => {
-      ta.style.height = 'auto';
+      textarea.style.height = 'auto';
 
-      // `scrollHeight` do noi dung + padding nhung KHONG gom duong vien, trong
-      // khi `box-sizing: border-box` cua Tailwind lai coi chieu cao la da gom
-      // vien. Gan thang scrollHeight se hut mat dung phan vien do va cat ngang
-      // dong chu. Doc vien tu computed style thay vi `offsetHeight -
-      // clientHeight`: hieu do phu thuoc vao thoi diem trinh duyet tinh xong
-      // layout, con computed style thi luon dung.
-      const style = getComputedStyle(ta);
+      // `scrollHeight` gom noi dung + padding nhung KHONG gom duong vien, con
+      // `box-sizing: border-box` thi chieu cao lai da tinh ca vien. Doc vien tu
+      // computed style de cong bu, khong thi o nhap hut vai px va cat dong chu.
+      const style = getComputedStyle(textarea);
       const border =
         parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
 
-      const wanted = ta.scrollHeight + border;
-      ta.style.height = `${Math.min(wanted, MAX_INPUT_HEIGHT)}px`;
-
-      // Chi bat cuon khi that su cham tran. De `overflow: auto` mac dinh thi
-      // sai so lam tron nua pixel cung du lam thanh cuon hien ra ngay khi moi
-      // co mot dong - dung cai thanh cuon dang lo trong o nhap.
-      ta.style.overflowY = wanted > MAX_INPUT_HEIGHT ? 'auto' : 'hidden';
+      const wanted = textarea.scrollHeight + border;
+      textarea.style.height = `${Math.min(wanted, MAX_INPUT_HEIGHT)}px`;
+      textarea.style.overflowY = wanted > MAX_INPUT_HEIGHT ? 'auto' : 'hidden';
     };
 
     fit();
-
-    // Qua breakpoint md co chu doi tu 14px sang 16px, keo theo chieu cao dong
-    // doi. Chieu cao da ghim bang px o tren se khong con vua nua neu khong do lai.
+    // Khung doi be ngang thi chu xuong dong khac di, phai do lai chieu cao
     window.addEventListener('resize', fit);
     return () => window.removeEventListener('resize', fit);
   }, [draft]);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const submit = (event: FormEvent) => {
+    event.preventDefault();
     const trimmed = draft.trim();
     if (!trimmed) return;
     onSend(trimmed);
@@ -230,57 +260,65 @@ const ChatInput = ({ onSend }: { onSend: (content: string) => void }) => {
 
   return (
     <form
-      onSubmit={handleSubmit}
-      // Le tren mong hon le duoi: keo ca hang nhap nhich len, sat vao khung
-      // hoi thoai hon thay vi troi giua mot vung trong.
-      className="flex items-end gap-2 border-t border-gray-100 bg-white px-4 pb-3 pt-2 md:px-6 md:pb-4 md:pt-2.5"
+      onSubmit={submit}
+      className="flex items-end gap-1 border-t border-gray-200 px-2 py-2 md:px-3"
     >
-      <button
-        type="button"
-        aria-label="Emoji"
-        // `mb-2` canh tam nut vao dung tam DONG CHU CUOI cua o nhap - xem
-        // phep tinh o nut Gui ben duoi.
-        className="mb-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-700"
-      >
-        <FiSmile aria-hidden className="h-5 w-5" />
-      </button>
+      {/* An bot nut phu tren man hinh hep de o nhap con du cho */}
+      <span className="hidden items-center sm:flex">
+        <ComposerAction icon={<FiMic aria-hidden />} label="Ghi âm" />
+        <ComposerAction icon={<FiImage aria-hidden />} label="Gửi ảnh" />
+      </span>
 
-      <textarea
-        ref={textareaRef}
-        value={draft}
-        onChange={(e) => setDraft(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSubmit(e);
-          }
-        }}
-        placeholder="Nhập tin nhắn..."
-        rows={1}
-        aria-label="Tin nhắn"
-        // `leading-6` co dinh o ca hai co chu: neu de line-height chay theo
-        // text-sm/md:text-base thi chieu cao dong doi luc qua breakpoint.
-        // `overflow-hidden` la trang thai truoc khi JS chay, tranh nhap nhay
-        // thanh cuon o lan ve dau tien.
-        // `pt-3 pb-4` thay vi `py-3.5`: tong van 28px nen chieu cao o khong
-        // doi, nhung dong chu nhich len 2px. Chu Viet co nhieu dau duoi (ậ, ẻ)
-        // nen can giua theo toan hoc lai nhin nhu bi tut xuong.
-        className="flex-1 resize-none overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 px-4 pb-4 pt-3 text-sm leading-6 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 md:text-base"
-      />
+      <label htmlFor="chat-draft" className="sr-only">
+        Nhập tin nhắn
+      </label>
+      <div className="relative flex-1">
+        <textarea
+          id="chat-draft"
+          ref={textareaRef}
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+              event.preventDefault();
+              submit(event);
+            }
+          }}
+          placeholder="Aa"
+          rows={1}
+          // `leading-5` co dinh o moi co chu de chieu cao dong khong doi khi
+          // qua breakpoint; `overflow-hidden` la trang thai truoc khi JS chay.
+          className="w-full resize-none overflow-hidden rounded-3xl bg-gray-100 py-2.5 pl-4 pr-11 text-theme-sm leading-5 text-gray-900 placeholder:text-gray-500 focus:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
+        />
+        <button
+          type="button"
+          aria-label="Chèn biểu tượng cảm xúc"
+          className="absolute bottom-1.5 right-1.5 flex h-8 w-8 items-center justify-center rounded-full text-lg text-brand-500 transition hover:bg-white"
+        >
+          <FiSmile aria-hidden />
+        </button>
+      </div>
 
-      <button
-        type="submit"
-        disabled={!draft.trim()}
-        aria-label="Gửi"
-        // Hang dung `items-end` nen nut von nam sat day o nhap, thap hon dong
-        // chu. Nang len 8px (`mb-2`) la tam nut trung dung tam dong cuoi:
-        // day o nhap - pb-4 (16px) - nua dong (12px) = tam dong cuoi;
-        // day nut  - mb-2 (8px)  - nua nut  (20px) = tam nut. Bang nhau.
-        // Cong thuc dung cho ca khi o nhap gian ra 4 dong.
-        className="mb-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white shadow-theme-sm transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-gray-300"
-      >
-        <FiSend aria-hidden className="h-5 w-5" />
-      </button>
+      {/* Chua go gi thi la nut tha tim nhanh; go roi thi thanh nut gui - dung
+          cach Messenger doi vai tro mot o nut duy nhat. */}
+      {hasDraft ? (
+        <button
+          type="submit"
+          aria-label="Gửi"
+          className="mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl text-brand-500 transition hover:bg-brand-50"
+        >
+          <FiSend aria-hidden />
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => onSend('👍')}
+          aria-label="Gửi biểu tượng thích"
+          className="mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl text-brand-500 transition hover:bg-brand-50"
+        >
+          <FiThumbsUp aria-hidden />
+        </button>
+      )}
     </form>
   );
 };
@@ -289,21 +327,15 @@ const ChatInput = ({ onSend }: { onSend: (content: string) => void }) => {
 // ChatPanel
 // ============================================================================
 
-/**
- * Chat panel ben phai - hien thi conversation dang chon.
- * - Conversation header (avatar, ten, status)
- * - Message list (scroll, chat bubbles)
- * - Input (auto-grow textarea, Enter de gui)
- */
-const ChatPanel = ({
-  conversation,
-  messages,
-  onSend,
-  onBack,
-}: ChatPanelProps) => {
+const ChatPanel = ({ conversation, messages, onSend, onBack }: ChatPanelProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const rows = useMemo(() => buildMessageRows(messages), [messages]);
 
-  // Auto-scroll xuong cuoi khi messages thay doi
+  const lastReadOwnId = useMemo(() => {
+    const read = messages.filter((item) => item.sender === 'me' && item.status === 'read');
+    return read.length > 0 ? read[read.length - 1].id : null;
+  }, [messages]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -311,18 +343,57 @@ const ChatPanel = ({
   }, [messages.length]);
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-gradient-to-b from-gray-50 to-white">
+    <div className="flex h-full min-h-0 flex-col bg-white">
       <ConversationHeader conversation={conversation} onBack={onBack} />
 
-      {/* Message list */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-4 md:px-6 md:py-6"
-      >
-        <div className="flex flex-col gap-3">
-          {messages.map((message) => (
-            <MessageBubble key={message.id} message={message} />
-          ))}
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-3 py-4 md:px-4">
+        {/* Cuoc vua tao tu "Tin nhan moi" chua co dong nao - de trong thi nguoi
+            dung tuong trang loi, nen noi ro la chua ai nhan gi. */}
+        {rows.length === 0 && (
+          <div className="flex h-full flex-col items-center justify-center px-6 text-center">
+            <ConversationAvatar conversation={conversation} size={14} />
+            <p className="mt-3 text-theme-sm font-bold text-gray-900">
+              {conversation.name}
+            </p>
+            <p className="mt-1 text-theme-xs text-gray-500">
+              Chưa có tin nhắn nào. Gửi lời chào để bắt đầu.
+            </p>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-0.5">
+          {rows.map((row) =>
+            row.kind === 'divider' ? (
+              <p
+                key={row.id}
+                className="py-4 text-center text-theme-xs font-medium text-gray-400"
+              >
+                {row.label}
+              </p>
+            ) : (
+              <div key={row.id}>
+                <MessageBubble row={row} conversation={conversation} />
+
+                {/* Avatar ti hon duoi tin cuoi cung da duoc doc - dau hieu
+                    "da xem" cua Messenger, thay cho dong chu "Da doc". */}
+                {row.message.id === lastReadOwnId && (
+                  <div className="mt-1 flex justify-end">
+                    <span
+                      title="Đã xem"
+                      aria-label="Đã xem"
+                      className="block h-4 w-4 overflow-hidden rounded-full ring-1 ring-white"
+                    >
+                      <PlaceholderThumb
+                        seed={conversation.id}
+                        label={conversation.name.charAt(0)}
+                        className="h-full w-full"
+                      />
+                    </span>
+                  </div>
+                )}
+              </div>
+            ),
+          )}
         </div>
       </div>
 

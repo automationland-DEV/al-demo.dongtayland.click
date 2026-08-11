@@ -63,20 +63,29 @@ const AppleIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+
+type Variant = 'dark' | 'light';
+
+const VARIANT_CLASSES: Record<Variant, string> = {
+  dark: 'bg-black text-white ring-1 ring-white/20 hover:ring-white/45',
+  light: 'bg-white text-gray-900 ring-1 ring-gray-300 hover:ring-gray-400 hover:shadow-card',
+};
+
 type BadgeProps = {
   href: string;
   /** Dong nho phia tren - giu nguyen tieng Anh theo quy cach cua hang */
   caption: string;
   /** Ten cua hang, dong chu lon */
   store: string;
+  variant: Variant;
   children: React.ReactNode;
 };
 
-const Badge = ({ href, caption, store, children }: BadgeProps) => (
+const Badge = ({ href, caption, store, variant, children }: BadgeProps) => (
   <a
     href={href}
     aria-label={`${caption} ${store}`}
-    className="flex h-12 min-w-40 items-center gap-2.5 rounded-lg bg-black px-3.5 text-white ring-1 ring-white/20 transition hover:ring-white/45"
+    className={`flex h-12 min-w-40 items-center gap-2.5 rounded-lg px-3.5 transition ${VARIANT_CLASSES[variant]}`}
   >
     {children}
     <span className="flex flex-col items-start leading-none">
@@ -89,19 +98,19 @@ const Badge = ({ href, caption, store, children }: BadgeProps) => (
 );
 
 /**
- * Huy hieu tai ung dung, dung theo dung quy cach cua Google va Apple: nen den,
- * icon chinh chu, va cum chu tieng Anh co dinh ("GET IT ON" / "Download on
- * the"). Hai chu do la mot phan cua huy hieu - dich sang tieng Viet la sai
- * quy cach, nen o day co tinh khong dich.
+ * Huy hieu tai ung dung, dung theo dung quy cach cua Google va Apple: icon
+ * chinh chu va cum chu tieng Anh co dinh ("GET IT ON" / "Download on the").
+ * Hai chu do la mot phan cua huy hieu - dich sang tieng Viet la sai quy cach,
+ * nen o day co tinh khong dich.
  */
-const AppStoreBadges = () => (
+const AppStoreBadges = ({ variant = 'dark' }: { variant?: Variant }) => (
   <div className="flex flex-wrap items-center gap-3">
-    <Badge href={APP_LINKS.android} caption="GET IT ON" store="Google Play">
-      <GooglePlayIcon className="h-6 w-6 shrink-0" />
+    <Badge href={APP_LINKS.ios} caption="Download on the" store="App Store" variant={variant}>
+      <AppleIcon className="h-7 w-7 shrink-0" />
     </Badge>
 
-    <Badge href={APP_LINKS.ios} caption="Download on the" store="App Store">
-      <AppleIcon className="h-7 w-7 shrink-0" />
+    <Badge href={APP_LINKS.android} caption="GET IT ON" store="Google Play" variant={variant}>
+      <GooglePlayIcon className="h-6 w-6 shrink-0" />
     </Badge>
   </div>
 );

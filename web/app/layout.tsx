@@ -6,7 +6,11 @@ import SiteFooter from '@/common/layout/SiteFooter';
 import MobileBottomTabs from '@/common/layout/MobileBottomTabs';
 import BackToTop from '@/common/components/BackToTop';
 import ChatWidget from '@/modules/chat/components/ChatWidget';
+import HideOnPaths from '@/common/layout/HideOnPaths';
 import QueryProvider from '@/common/providers/QueryProvider';
+
+
+const FULLSCREEN_PATHS = ['/tin-nhan'];
 
 
 const openSans = Open_Sans({
@@ -68,10 +72,14 @@ export default function RootLayout({
           {/* pb-16 = 64px: du cho thanh tabs (56px) + safe-area inset (8px).
               Tren desktop pb-16 khong co tac dung vi tabs an (lg:hidden). */}
           <main className="flex-1 pb-16 lg:pb-0">{children}</main>
-          <SiteFooter />
+          <HideOnPaths paths={FULLSCREEN_PATHS}>
+            <SiteFooter />
+          </HideOnPaths>
           <MobileBottomTabs />
           <BackToTop />
-          <ChatWidget />
+          <HideOnPaths paths={FULLSCREEN_PATHS}>
+            <ChatWidget />
+          </HideOnPaths>
         </QueryProvider>
       </body>
     </html>

@@ -1,26 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { FiMessageSquare } from 'react-icons/fi';
 
 import ChatPanel from './ChatPanel';
 import ConversationList from './ConversationList';
+import NewChatDialog, { type NewChatMode } from './NewChatDialog';
 import {
+  createGroupConversation,
   CONVERSATIONS,
   MESSAGES_BY_CONVERSATION,
+  SUGGESTED_CONTACTS,
   type Conversation,
   type Message,
 } from '../models/tin-nhan.model';
 
-/**
- * Inbox client wrapper - quan ly state chung:
- * - selectedConversationId: id dang chon
- * - conversations: list (co the update unread count)
- * - messagesByConversation: messages (co the update khi send)
- * - searchQuery: filter trong list
- * - showChatMobile: false (list) -> true (chat) tren mobile
- */
+
 const InboxClient = () => {
   const [selectedId, setSelectedId] = useState<string | null>(CONVERSATIONS[0]?.id ?? null);
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
@@ -36,6 +32,8 @@ const InboxClient = () => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [showChatMobile, setShowChatMobile] = useState(false);
+  /** `null` = dong; con lai la che do hop thoai dang mo */
+  const [dialogMode, setDialogMode] = useState<NewChatMode | null>(null);
 
   const selectedConversation = selectedId
     ? conversations.find((c) => c.id === selectedId) ?? null
@@ -56,6 +54,41 @@ const InboxClient = () => {
   };
 
   const handleBack = () => setShowChatMobile(false);
+
+  
+  const directory = useMemo(
+    () => [
+      ...conversations,
+      ...SUGGESTED_CONTACTS.filter(
+        (contact) => !conversations.some((item) => item.id === contact.id),
+      ),
+    ],
+    [conversations],
+  );
+
+  
+  const handleDialogSubmit = (people: Conversation[], groupName: string) => {
+    if (dialogMode === 'group') {
+      const { conversation, welcome } = createGroupConversation(groupName, people);
+
+      setConversations((prev) => [conversation, ...prev]);
+      setMessagesByConversation((prev) => ({ ...prev, [conversation.id]: [welcome] }));
+      setSelectedId(conversation.id);
+    } else {
+      const person = people[0];
+      if (!person) return;
+
+      const isExisting = conversations.some((item) => item.id === person.id);
+      if (!isExisting) {
+        setConversations((prev) => [person, ...prev]);
+        setMessagesByConversation((prev) => ({ ...prev, [person.id]: [] }));
+      }
+      setSelectedId(person.id);
+    }
+
+    setShowChatMobile(true);
+    setDialogMode(null);
+  };
 
   // Send message -> append vao conversation
   const handleSend = (content: string) => {
@@ -100,41 +133,45 @@ const InboxClient = () => {
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-theme-sm md:rounded-3xl md:shadow-theme-md">
-      <div className="grid h-[calc(100vh-16rem)] min-h-[500px] grid-cols-1 lg:grid-cols-[minmax(0,360px)_1fr]">
-        {/* ======= List (left) ======= */}
-        <div
-          className={`min-h-0 border-gray-100 ${
-            showChatMobile ? 'hidden lg:block' : 'block'
-          } lg:border-r`}
-        >
-          <ConversationList
-            conversations={conversations}
-            selectedId={selectedId}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            onSelect={handleSelect}
-          />
-        </div>
-
-        {/* ======= Chat (right) ======= */}
-        <div
-          className={`min-h-0 ${
-            showChatMobile ? 'block' : 'hidden lg:block'
-          }`}
-        >
-          {selectedConversation ? (
-            <ChatPanel
-              conversation={selectedConversation}
-              messages={selectedMessages}
-              onSend={handleSend}
-              onBack={handleBack}
-            />
-          ) : (
-            <EmptyState />
-          )}
-        </div>
+    
+    <div className="fullscreen-page grid h-[calc(100dvh-8rem)] grid-cols-1 lg:h-[calc(100dvh-4rem)] lg:grid-cols-[minmax(0,360px)_1fr]">
+      <div
+        className={`min-h-0 lg:border-r lg:border-gray-200 ${
+          showChatMobile ? 'hidden lg:block' : 'block'
+        }`}
+      >
+        <ConversationList
+          conversations={conversations}
+          selectedId={selectedId}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          onSelect={handleSelect}
+          onNewMessage={() => setDialogMode('direct')}
+          onCreateGroup={() => setDialogMode('group')}
+        />
       </div>
+
+      <div className={`min-h-0 ${showChatMobile ? 'block' : 'hidden lg:block'}`}>
+        {selectedConversation ? (
+          <ChatPanel
+            conversation={selectedConversation}
+            messages={selectedMessages}
+            onSend={handleSend}
+            onBack={handleBack}
+          />
+        ) : (
+          <EmptyState />
+        )}
+      </div>
+
+      {dialogMode && (
+        <NewChatDialog
+          mode={dialogMode}
+          people={directory}
+          onClose={() => setDialogMode(null)}
+          onSubmit={handleDialogSubmit}
+        />
+      )}
     </div>
   );
 };
@@ -144,15 +181,14 @@ const InboxClient = () => {
 // ============================================================================
 
 const EmptyState = () => (
-  <div className="flex h-full min-h-[400px] flex-col items-center justify-center px-6 py-12 text-center">
-    <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-50 text-brand-500">
+  <div className="flex h-full flex-col items-center justify-center bg-white px-6 text-center">
+    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-50 text-brand-500">
       <FiMessageSquare aria-hidden className="h-10 w-10" />
     </div>
-    <h3 className="mt-5 font-serif text-xl font-bold text-gray-900">
-      Chọn một hội thoại
-    </h3>
-    <p className="mt-2 max-w-xs text-sm text-gray-600">
-      Chọn cuộc trò chuyện bên trái để bắt đầu nhắn tin với môi giới, chủ đầu tư hoặc đội ngũ hỗ trợ.
+    <h3 className="mt-5 text-xl font-bold text-gray-900">Chọn một hội thoại</h3>
+    <p className="mt-2 max-w-xs text-theme-sm text-gray-600">
+      Chọn cuộc trò chuyện bên trái để bắt đầu nhắn tin với môi giới, chủ đầu tư
+      hoặc đội ngũ hỗ trợ.
     </p>
   </div>
 );

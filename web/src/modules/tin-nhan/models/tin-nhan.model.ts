@@ -1,18 +1,16 @@
-/**
- * Model hop thoai - chat inbox (Messenger / Zalo style).
- *
- * Phan biet:
- * - Conversation: 1 dong tren list (ben trai)
- * - Message: 1 bubble trong chat panel (ben phai)
- *
- * Khi backend san sang, mock se duoc thay the bang service that.
- */
+
 
 export type ConversationStatus = 'online' | 'offline' | 'away';
 
-export type ConversationChannel = 'moi-gioi' | 'chu-dau-tu' | 'ho-tro' | 'khach-hang';
+export type ConversationChannel =
+  | 'moi-gioi'
+  | 'chu-dau-tu'
+  | 'ho-tro'
+  | 'khach-hang'
+  | 'nhom';
 
-export type MessageSender = 'me' | 'them';
+
+export type MessageSender = 'me' | 'them' | 'system';
 
 export type Conversation = {
   id: string;
@@ -36,6 +34,8 @@ export type Conversation = {
   isOwnLastMessage?: boolean;
   /** Tick xanh - moi gioi chinh thuc */
   isVerified?: boolean;
+  
+  memberNames?: string[];
 };
 
 export type Message = {
@@ -49,10 +49,7 @@ export type Message = {
   status?: 'sending' | 'sent' | 'delivered' | 'read';
 };
 
-/**
- * 8 cuoc tro chuyen - trong do 3 cai co unread.
- * Avatar dung gradient (PlaceholderThumb pattern) khi co seed.
- */
+
 export const CONVERSATIONS: Conversation[] = [
   {
     id: 'c-001',
@@ -144,10 +141,53 @@ export const CONVERSATIONS: Conversation[] = [
   },
 ];
 
-/**
- * 1 conversation detail - gom message theo conversationId.
- * Mock 1 cuoc day du de demo UI ngay khi open.
- */
+
+export const SUGGESTED_CONTACTS: Conversation[] = [
+  {
+    id: 'p-001',
+    name: 'Anh Đức Thắng',
+    channel: 'moi-gioi',
+    status: 'online',
+    lastMessage: '',
+    lastMessageTime: '',
+    lastMessageAt: '2026-08-09T00:00:00+07:00',
+    unreadCount: 0,
+    isVerified: true,
+  },
+  {
+    id: 'p-002',
+    name: 'Chị Thu Hà',
+    channel: 'khach-hang',
+    status: 'offline',
+    lastMessage: '',
+    lastMessageTime: '',
+    lastMessageAt: '2026-08-09T00:00:00+07:00',
+    unreadCount: 0,
+  },
+  {
+    id: 'p-003',
+    name: 'Masterise Homes',
+    channel: 'chu-dau-tu',
+    status: 'online',
+    lastMessage: '',
+    lastMessageTime: '',
+    lastMessageAt: '2026-08-09T00:00:00+07:00',
+    unreadCount: 0,
+    isVerified: true,
+  },
+  {
+    id: 'p-004',
+    name: 'Anh Hoàng Nam',
+    channel: 'moi-gioi',
+    status: 'away',
+    lastMessage: '',
+    lastMessageTime: '',
+    lastMessageAt: '2026-08-09T00:00:00+07:00',
+    unreadCount: 0,
+  },
+];
+
+
 export const MESSAGES_BY_CONVERSATION: Record<string, Message[]> = {
   'c-001': [
     {
@@ -309,14 +349,95 @@ export const MESSAGES_BY_CONVERSATION: Record<string, Message[]> = {
 // Helpers
 // ============================================================================
 
-/**
- * Format message thoi gian (HH:mm) cho bubble ben phai.
- */
-export const formatMessageTime = (iso: string): string => {
-  const d = new Date(iso);
-  const hh = String(d.getHours()).padStart(2, '0');
-  const mm = String(d.getMinutes()).padStart(2, '0');
-  return `${hh}:${mm}`;
+
+const TIMEZONE = 'Asia/Ho_Chi_Minh';
+
+const timeFormatter = new Intl.DateTimeFormat('vi-VN', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+  timeZone: TIMEZONE,
+});
+
+/** Doc thu trong tuan theo mui gio da ghim, khong theo mui gio may chay */
+const weekdayFormatter = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short',
+  timeZone: TIMEZONE,
+});
+
+const WEEKDAY_VI: Record<string, string> = {
+  Sun: 'CN',
+  Mon: 'T2',
+  Tue: 'T3',
+  Wed: 'T4',
+  Thu: 'T5',
+  Fri: 'T6',
+  Sat: 'T7',
+};
+
+/** Gio (HH:mm) cho bubble */
+export const formatMessageTime = (iso: string): string =>
+  timeFormatter.format(new Date(iso));
+
+/** Nhan cua vach ngan giua cac cum tin nhan: "21:35 T7" */
+export const formatDividerLabel = (iso: string): string => {
+  const date = new Date(iso);
+  const weekday = WEEKDAY_VI[weekdayFormatter.format(date)] ?? '';
+  return `${timeFormatter.format(date)} ${weekday}`.trim();
+};
+
+
+export type MessageRow =
+  | { kind: 'divider'; id: string; label: string }
+  | {
+      kind: 'message';
+      id: string;
+      message: Message;
+      /** Dau cum - chi dong nay moi bo goc tren */
+      isFirstOfGroup: boolean;
+      /** Cuoi cum - chi dong nay moi hien avatar va gio */
+      isLastOfGroup: boolean;
+    };
+
+/** Cach nhau qua lau thi chen vach ngan thoi gian */
+const DIVIDER_GAP_MS = 30 * 60 * 1000;
+
+const GROUP_GAP_MS = 15 * 60 * 1000;
+
+
+export const buildMessageRows = (messages: Message[]): MessageRow[] => {
+  const rows: MessageRow[] = [];
+
+  messages.forEach((message, index) => {
+    const previous = messages[index - 1];
+    const next = messages[index + 1];
+
+    const sentAt = new Date(message.sentAt).getTime();
+    const gapBefore = previous ? sentAt - new Date(previous.sentAt).getTime() : Infinity;
+    const gapAfter = next ? new Date(next.sentAt).getTime() - sentAt : Infinity;
+
+    if (gapBefore >= DIVIDER_GAP_MS) {
+      rows.push({
+        kind: 'divider',
+        id: `divider-${message.id}`,
+        label: formatDividerLabel(message.sentAt),
+      });
+    }
+
+    const startsGroup =
+      !previous || previous.sender !== message.sender || gapBefore >= GROUP_GAP_MS;
+    const endsGroup = !next || next.sender !== message.sender || gapAfter >= GROUP_GAP_MS;
+
+    rows.push({
+      kind: 'message',
+      id: message.id,
+      message,
+      isFirstOfGroup: startsGroup,
+      isLastOfGroup: endsGroup,
+    });
+  });
+
+  return rows;
 };
 
 /**
@@ -327,15 +448,51 @@ export const CHANNEL_LABELS: Record<ConversationChannel, string> = {
   'chu-dau-tu': 'Chủ đầu tư',
   'ho-tro': 'Hỗ trợ',
   'khach-hang': 'Khách hàng',
+  nhom: 'Nhóm',
 };
 
+/** Hoi thoai nhom nhan biet qua danh sach thanh vien, xem chu thich o model */
+export const isGroupConversation = (conversation: Conversation): boolean =>
+  (conversation.memberNames?.length ?? 0) > 0;
+
 /**
- * Channel tone - dinh nghia mau sac cho channel badge.
- * - moi-gioi: brand (blue) - mac dinh
- * - chu-dau-tu: accent (orange) - quan trong
- * - ho-tro: jade (green) - tich cuc
- * - khach-hang: navy (gray) - trung tinh
+ * Dung mot hoi thoai nhom moi tu ten nhom va cac hoi thoai duoc chon.
+ *
+ * Chi tao du lieu, khong dong vao state - noi goi tu quyet dinh chen vao dau
+ * danh sach va co chon no ngay hay khong.
  */
+export const createGroupConversation = (
+  name: string,
+  members: Conversation[],
+): { conversation: Conversation; welcome: Message } => {
+  const id = `group-${Date.now()}`;
+  const now = new Date();
+  const memberNames = members.map((member) => member.name);
+
+  return {
+    conversation: {
+      id,
+      name,
+      channel: 'nhom',
+      status: 'online',
+      lastMessage: `Bạn đã tạo nhóm với ${memberNames.length} thành viên.`,
+      lastMessageTime: 'Vừa xong',
+      lastMessageAt: now.toISOString(),
+      unreadCount: 0,
+      isOwnLastMessage: true,
+      memberNames,
+    },
+    welcome: {
+      id: `m-${id}`,
+      conversationId: id,
+      sender: 'system',
+      content: `Bạn đã tạo nhóm "${name}" cùng ${memberNames.join(', ')}.`,
+      sentAt: now.toISOString(),
+    },
+  };
+};
+
+
 export const CHANNEL_TONE: Record<
   ConversationChannel,
   { bg: string; text: string }
@@ -344,4 +501,5 @@ export const CHANNEL_TONE: Record<
   'chu-dau-tu': { bg: 'bg-accent-50', text: 'text-accent-600' },
   'ho-tro': { bg: 'bg-jade-50', text: 'text-jade-700' },
   'khach-hang': { bg: 'bg-gray-100', text: 'text-gray-700' },
+  nhom: { bg: 'bg-brand-50', text: 'text-brand-700' },
 };

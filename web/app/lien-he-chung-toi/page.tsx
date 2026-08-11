@@ -22,8 +22,9 @@ import type { Metadata } from 'next';
  *   01 Hero (gradient navy -> jade, breadcrumb + 4 contact info cards)
  *   02 Form + sidebar (2 cot: form trai, info phai)
  *   03 Branches (3 chi nhanh HN/HCM/DN)
- *   04 FAQ (4 cau hoi thuong gap)
- *   05 CTA cuối (hotline + social)
+ *   04 Cong ty thanh vien (bang dia chi tru so)
+ *   05 FAQ (4 cau hoi thuong gap)
+ *   06 CTA cuối (hotline + social)
  *
  * Tone chinh: jade (xanh ngoc - matching ComingSoon tone).
  * Form do ContactForm.tsx (client) handle rieng.
@@ -116,6 +117,49 @@ const FAQ_ITEMS = [
     q: 'Làm sao để báo cáo tin đăng không đúng sự thật?',
     a: 'Bạn có thể nhấn nút "Báo cáo" trên mỗi tin đăng hoặc gửi email đến report@realtyhub.vn. Đội ngũ kiểm duyệt sẽ phản hồi trong vòng 4 giờ làm việc.',
   },
+];
+
+const MEMBER_COMPANIES = [
+  {
+    name: 'Công ty Cổ phần Đông Tây Land',
+    note: 'Trụ sở chính',
+    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
+  },
+  {
+    name: 'Công ty Cổ phần Bất động sản Đông Tây Property',
+    address: '1/21 Đông Tây 1, Khu nhà ở 4,8 ha, TP. Hồ Chí Minh',
+  },
+  {
+    name: 'Công ty Cổ phần Đông Tây Land Phú Mỹ Hưng',
+    address:
+      '1431 Nguyễn Văn Linh, Khu phố Mỹ Toàn 2-H4, Phường Tân Hưng, TP. Hồ Chí Minh',
+  },
+  {
+    name: 'Công ty Cổ phần Đông Tây Miền Bắc',
+    address: '17C2, KĐT Nam Trung Yên, Phường Yên Hòa, Hà Nội',
+  },
+  {
+    name: 'Công ty Cổ phần Đông Tây Global',
+    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
+  },
+  {
+    name: 'Công ty Cổ phần Đông Tây Hospitality',
+    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
+  },
+  {
+    name: 'Công ty TNHH Đầu tư Thương mại Du lịch Kim Sa',
+    address: 'Ấp Hồ Tràm, Xã Hồ Tràm, TP. Hồ Chí Minh',
+  },
+  {
+    name: 'Công ty Cổ phần Du lịch Long An (LATOURCO)',
+    address: 'Số 162 Hùng Vương, Phường Long An, Tỉnh Tây Ninh',
+  },
+  {
+    name: 'Công ty Cổ phần Đông Tây Holding',
+    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
+  },
+  { name: 'Công ty Cổ phần Đầu tư Cần Giuộc', address: '' },
+  { name: 'Công ty Cổ phần Đầu tư Cần Đước', address: '' },
 ];
 
 const SOCIAL_LINKS = [
@@ -377,7 +421,70 @@ const LienHeChungToiPage = () => (
       </div>
     </section>
 
-    {/* ============ 04 FAQ ============ */}
+    {/* ============ 04 CÔNG TY THÀNH VIÊN ============ */}
+    <section id="cong-ty-thanh-vien" className="site-container py-16 md:py-24">
+      <div className="mx-auto mb-12 max-w-2xl text-center md:mb-16">
+        <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-jade-600">
+          Hệ thống công ty thành viên
+        </span>
+        <h2 className="mt-3 font-serif text-3xl font-bold text-gray-900 md:text-4xl">
+          {MEMBER_COMPANIES.length} công ty thành viên
+        </h2>
+        <p className="mt-4 text-base leading-relaxed text-gray-600 md:text-lg">
+          Địa chỉ trụ sở của các công ty trong hệ thống Đông Tây Group.
+        </p>
+      </div>
+
+      <div className="overflow-x-auto rounded-2xl border border-gray-200">
+        <table className="w-full min-w-160 border-collapse text-left">
+          <thead className="bg-gray-50">
+            <tr className="text-theme-xs font-bold uppercase tracking-[0.15em] text-gray-500">
+              <th scope="col" className="w-14 px-4 py-4 text-center">
+                STT
+              </th>
+              <th scope="col" className="px-4 py-4">
+                Công ty
+              </th>
+              <th scope="col" className="px-4 py-4">
+                Địa chỉ
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100 bg-white">
+            {MEMBER_COMPANIES.map((company, index) => (
+              <tr key={company.name} className="align-top transition hover:bg-jade-50/40">
+                <td className="px-4 py-4 text-center text-theme-sm font-semibold text-gray-400">
+                  {index + 1}
+                </td>
+                <td className="px-4 py-4">
+                  <span className="block text-theme-sm font-bold text-gray-900">
+                    {company.name}
+                  </span>
+                  {company.note && (
+                    <span className="mt-1 inline-flex rounded-full bg-jade-50 px-2.5 py-0.5 text-theme-xs font-bold uppercase tracking-[0.15em] text-jade-700">
+                      {company.note}
+                    </span>
+                  )}
+                </td>
+                <td className="px-4 py-4 text-theme-sm leading-relaxed text-gray-600">
+                  {company.address || (
+                    <span className="italic text-gray-400">Đang cập nhật</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p className="mt-4 flex items-start gap-2 text-theme-xs leading-relaxed text-gray-500">
+        <FiMapPin aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400" />
+        Địa chỉ ghi &quot;Đang cập nhật&quot; là các đơn vị chưa công bố trụ sở trên
+        nguồn công khai — vui lòng liên hệ hotline để được hỗ trợ.
+      </p>
+    </section>
+
+    {/* ============ 05 FAQ ============ */}
     <section className="site-container py-16 md:py-24">
       <div className="mx-auto mb-12 max-w-2xl text-center md:mb-16">
         <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-jade-600">
@@ -406,7 +513,7 @@ const LienHeChungToiPage = () => (
       </div>
     </section>
 
-    {/* ============ 05 CTA CUỐI ============ */}
+    {/* ============ 06 CTA CUỐI ============ */}
     <section className="bg-gradient-to-br from-gray-900 via-brand-950 to-jade-950 py-16 text-white md:py-20">
       <div className="site-container">
         <div className="mx-auto max-w-3xl rounded-3xl bg-white/5 p-10 text-center backdrop-blur-sm md:p-16">
