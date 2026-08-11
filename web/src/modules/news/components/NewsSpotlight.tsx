@@ -113,12 +113,16 @@ const NewsSpotlight = ({
         <h2 className="text-xl font-bold uppercase tracking-wide text-gray-900">Tin tức</h2>
       </div>
 
+      {/* `min-w-0` tren tung cot: grid item mac dinh la `min-width: auto`, no
+          khong chiu co xuong duoi be rong noi dung. Danh sach ben duoi dung
+          `truncate` (white-space: nowrap) nen be rong toi thieu cua no bang ca
+          cau -> cot phinh ra, keo trang tran ngang tren dien thoai. */}
       <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
-        <div className="lg:col-span-7">
+        <div className="min-w-0 lg:col-span-7">
           <FeaturedArticle article={featured} />
         </div>
 
-        <div className="lg:col-span-5">
+        <div className="min-w-0 lg:col-span-5">
           <div className="mb-3 flex items-center justify-between gap-4">
             <h3 className="text-base font-bold text-gray-900">Tin mới khác</h3>
             <Link
