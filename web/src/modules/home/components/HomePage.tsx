@@ -1,6 +1,6 @@
 'use client';
 
-import NewsSection from '@/modules/news/components/NewsSection';
+import NewsSpotlight from '@/modules/news/components/NewsSpotlight';
 import { useHomeContent } from '../hooks/useHome';
 import type { HomeContent } from '../models/home.model';
 import FeaturedProjects from './FeaturedProjects';
@@ -30,16 +30,13 @@ const HomePage = ({ initialContent }: HomePageProps) => {
       <div className="bg-white pb-8 pt-16 md:pt-24">
         <QuickUtilities />
       </div>
-      <FeaturedProjects projects={content.featuredProjects} />
-      {/* Testimonials chen giua featured projects va news - phan tach 2 khoi
-          noi dung nang (du an + tin tuc) bang khoi danh gia emotional. */}
-      <TestimonialsSection testimonials={content.testimonials} />
-      {/* NewsSection tu quan ly padding/mau nen, boc trong site-container de can vao layout */}
       <div className="bg-white">
         <div className="site-container">
-          <NewsSection />
+          <NewsSpotlight />
         </div>
       </div>
+      <TestimonialsSection testimonials={content.testimonials} />
+      <FeaturedProjects projects={content.featuredProjects} />
       <WhyUs features={content.features} />
       </div>
     </>

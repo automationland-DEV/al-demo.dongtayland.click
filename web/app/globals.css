@@ -199,6 +199,30 @@
       opacity: 1;
     }
   }
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --animate-slow-zoom: slow-zoom 24s ease-out both;
+
+  @keyframes slow-zoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.12);
+    }
+  }
 }
 
 @layer base {
@@ -226,6 +250,29 @@
   
   html:has(.fullscreen-page) {
     overflow: hidden;
+  }
+}
+
+/* Hien dan khi cuon toi. Chi bat o trinh duyet ho tro scroll-driven animation
+   va khi nguoi dung khong tat hieu ung - noi khac phan tu hien binh thuong. */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
   }
 }
 
