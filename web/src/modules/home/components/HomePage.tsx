@@ -3,7 +3,6 @@
 import NewsSection from '@/modules/news/components/NewsSection';
 import { useHomeContent } from '../hooks/useHome';
 import type { HomeContent } from '../models/home.model';
-import ConsultForm from './ConsultForm';
 import FeaturedProjects from './FeaturedProjects';
 import HeroSearch from './HeroSearch';
 import QuickUtilities from './QuickUtilities';
@@ -16,10 +15,6 @@ type HomePageProps = {
   initialContent: HomeContent;
 };
 
-/**
- * Trang chu: HeroSearch + QuickUtilities + FeaturedProjects + News + WhyUs + ConsultForm.
- * Noi dung doc 1 lan tu server qua `initialContent`, hook chi refresh khi can.
- */
 const HomePage = ({ initialContent }: HomePageProps) => {
   const { data } = useHomeContent(initialContent);
   const content = data ?? initialContent;
@@ -46,7 +41,6 @@ const HomePage = ({ initialContent }: HomePageProps) => {
         </div>
       </div>
       <WhyUs features={content.features} />
-      <ConsultForm />
       </div>
     </>
   );
