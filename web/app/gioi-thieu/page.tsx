@@ -253,7 +253,7 @@ const GioiThieuPage = () => (
             Con số biết nói
           </span>
           <h2 className="mt-3 font-serif text-3xl font-bold text-gray-900 md:text-4xl">
-            6 năm đồng hành, một niềm tin
+            12 năm đồng hành, một niềm tin
           </h2>
         </div>
 
