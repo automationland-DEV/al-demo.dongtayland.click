@@ -25,8 +25,7 @@ const HomePage = ({ initialContent }: HomePageProps) => {
 
       <HeroSearch slides={content.banners} />
       <Thongbao />
-      {/* Search bar cua HeroSearch overlap xuong section nay nen can
-          pt-28 (md) de khong bi card de len content. */}
+      
       <div className="bg-white pb-8 pt-16 md:pt-24">
         <QuickUtilities />
       </div>

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import {
@@ -43,7 +44,18 @@ export const metadata: Metadata = {
 const ThongBaoPage = () => (
   <main className="bg-white">
     {/* ============ 01 PAGE HEADER ============ */}
-    <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-brand-950 to-indigo-950 py-12 text-white md:py-16">
+    <section className="relative isolate overflow-hidden bg-gray-900 py-12 text-white md:py-16">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <Image
+          src="/images/heroes/thong-bao.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/92 via-brand-950/88 to-indigo-950/92" />
+      </div>
       <div
         aria-hidden
         className="absolute inset-0 opacity-20"

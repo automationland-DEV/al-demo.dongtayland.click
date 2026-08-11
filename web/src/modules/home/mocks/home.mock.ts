@@ -17,9 +17,9 @@ import type {
 export const MOCK_BANNERS: HomeBannerSlide[] = [
   {
     publicId: 'banner-001',
-    headline: 'Tìm dự án bất động sản phù hợp với bạn',
+    headline: 'TÌM NGAY DỰ ÁN PHÙ HỢP VỚI KHÁCH HÀNG CỦA BẠN',
     subtitle:
-      'Hơn 1.200 dự án được tuyển chọn từ các chủ đầu tư uy tín trên toàn quốc.',
+      'Hơn 50+ dự án trên toàn quốc, đặc biệt tập trung nguồn hàng chất lượng tại thị trường miền Nam.',
     primaryCtaLabel: 'Khám phá dự án',
     secondaryCtaLabel: 'Đăng ký tư vấn',
     desktopImageUrl: '/images/home/banner/desktop/b1.jpg',

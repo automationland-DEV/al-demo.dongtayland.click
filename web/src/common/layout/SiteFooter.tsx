@@ -4,6 +4,7 @@ import { HiOutlineUserGroup } from 'react-icons/hi2';
 import { FaFacebookF, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
 import AppStoreBadges from '@/common/components/AppStoreBadges';
+import FooterHeading from '@/common/layout/FooterHeading';
 import FooterLinkList from '@/common/layout/FooterLinkList';
 
 
@@ -81,26 +82,26 @@ const OTHER_MORE_LINKS = [
 const SOCIAL_LINKS = [
   {
     label: 'Facebook',
-    stat: '3886.8k Fan',
+    stat: '56k follow',
     href: '#',
     color: '#1877F2',
     icon: <FaFacebookF aria-hidden />,
   },
   {
     label: 'YouTube',
-    stat: '678.9k Đăng ký',
+    stat: '12k follow',
     href: '#',
     color: '#FF0000',
     icon: <FaYoutube aria-hidden />,
   },
-  { label: 'Zalo', stat: 'Zalo', href: '#', color: '#0068FF', icon: <SiZalo aria-hidden /> },
   {
     label: 'TikTok',
-    stat: 'TikTok',
+    stat: '14k follow',
     href: '#',
     color: '#111827',
     icon: <FaTiktok aria-hidden />,
   },
+  { label: 'Zalo', stat: 'Zalo', href: '#', color: '#0068FF', icon: <SiZalo aria-hidden /> },
 ];
 
 /** Website cung tap doan - logo lay tu trang chinh chu cua tung don vi. */
@@ -228,7 +229,6 @@ const SiteFooter = () => (
         title="Dành cho môi giới"
         links={BROKER_LINKS}
         moreLinks={BROKER_MORE_LINKS}
-        moreStyle="button"
         className="lg:col-span-2"
       />
       <FooterLinkList
@@ -239,9 +239,7 @@ const SiteFooter = () => (
       />
 
       <div className="sm:col-span-2 lg:col-span-3">
-        {/* Tieu de duy nhat mau do va khong viet hoa - dung theo ban thiet ke,
-            no doi vai tro tu "cot lien ket" sang "khoi doi tac". */}
-        <h2 className="mb-5 text-lg font-bold text-error-500">Website cùng tập đoàn</h2>
+        <FooterHeading>Website cùng tập đoàn</FooterHeading>
 
         {/* The logo: ghim chieu cao anh de hai logo khac ti le van thang hang,
             ten don vi chi con o `alt` va tooltip - de ca chu lan logo la doc

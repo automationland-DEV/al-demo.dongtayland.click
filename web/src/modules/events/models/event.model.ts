@@ -65,6 +65,8 @@ export type EventItem = {
   speakers?: EventSpeaker[];
   /** Tags phu (VD: 'CRM', 'Phap ly', 'Marketing') */
   tags?: string[];
+  /** Anh bia. Su kien online khong co dia diem that nen de trong. */
+  coverImage?: string;
   /** URL thumbnail (chua co -> PlaceholderThumb) */
   thumbnailUrl?: string;
 };

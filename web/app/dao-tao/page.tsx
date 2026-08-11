@@ -1,4 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
+
+import UserAvatar from '@/common/components/UserAvatar';
 
 import { FiArrowRight, FiCheck, FiClock, FiMapPin, FiPlay, FiUsers, FiVideo } from 'react-icons/fi';
 import {
@@ -94,7 +97,19 @@ const DaoTaoPage = () => {
   return (
     <main className="bg-white">
       {/* ============ 01 HERO ============ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-brand-950 to-orange-950 py-20 text-white md:py-28">
+      <section className="relative overflow-hidden bg-gray-900 py-20 text-white md:py-28">
+        <div aria-hidden className="absolute inset-0">
+          <Image
+            src="/images/dao-tao/hero.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/92 via-brand-950/88 to-orange-950/92" />
+        </div>
+
         <div
           aria-hidden
           className="absolute inset-0 opacity-20"
@@ -342,17 +357,11 @@ const DaoTaoPage = () => {
               key={instructor.publicId}
               className="group flex flex-col rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-theme-xs transition hover:-translate-y-1 hover:shadow-theme-md"
             >
-              {/* Avatar gradient (deterministic) */}
-              <div
-                aria-hidden
-                className="mx-auto h-24 w-24 rounded-full bg-gradient-to-br from-orange-400 via-orange-500 to-orange-700 shadow-theme-md md:h-28 md:w-28"
-                style={{
-                  backgroundImage: `linear-gradient(135deg, hsl(${
-                    instructor.publicId.charCodeAt(instructor.publicId.length - 1) * 7
-                  }, 70%, 60%), hsl(${
-                    instructor.publicId.charCodeAt(instructor.publicId.length - 1) * 11
-                  }, 60%, 45%))`,
-                }}
+              <UserAvatar
+                name={instructor.name}
+                src={instructor.avatar}
+                size={112}
+                className="mx-auto shadow-theme-md ring-4 ring-white"
               />
 
               <h3 className="mt-5 font-serif text-lg font-bold text-gray-900 md:text-xl">

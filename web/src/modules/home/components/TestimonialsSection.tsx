@@ -8,22 +8,7 @@ import UserAvatar from '@/common/components/UserAvatar';
 
 import type { HomeTestimonial } from '../models/home.model';
 
-/**
- * Khoi "Khach hang noi gi" trang chu - modern clean style.
- *
- * Layout: carousel horizontal, moi card la 1 testimonial.
- *   - Desktop: 3 cards visible, scroll 1 card/lan
- *   - Tablet: 2 cards visible
- *   - Mobile: 1 card visible
- *
- * Moi card:
- *   - 5 sao rating (vang)
- *   - Quote (text lon, italic, can giua)
- *   - Avatar + ten + role + related project
- *   - Hover: lift shadow
- *
- * Auto-play 6s, pause khi hover/touch.
- */
+
 const TestimonialsSection = ({ testimonials }: { testimonials: HomeTestimonial[] }) => {
   if (testimonials.length === 0) return null;
 
