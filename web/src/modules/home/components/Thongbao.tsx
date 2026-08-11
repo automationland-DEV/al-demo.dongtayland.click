@@ -1,17 +1,4 @@
-/**
- * Thanh thong bao chay ngang (marquee) duoi hero.
- *
- * Moi item chi la 1 dong text ngan (vi du: "CHUC MUNG NHA MOI GIOI ...
- * DA BOOKING TAI ..."). CSS keyframe dich toan bo thanh tu 0 den -50%
- * (do nhan doi noi dung) nen khi loop diem cuoi se ghep lien diem dau,
- * khong bi giat. Hover toi viewport => dung lai de nguoi dung doc.
- *
- * Can thanh co nhieu hon 1 item de vong lap co y nghia. Lay noi dung trong
- * component de sau nay admin co the chinh tu backend.
- *
- * Tat ca item deu cung style (in hoa, bold, do error-500) de noi bat
- * giong bang "chuc mung nha moi gioi" - khong phan biet loai thong bao.
- */
+
 
 const ANNOUNCEMENTS: { label: string }[] = [
   {

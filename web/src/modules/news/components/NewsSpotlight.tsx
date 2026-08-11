@@ -7,25 +7,30 @@ import { NEWS_CATEGORY_LABELS, type NewsArticle } from '../models/news.model';
 
 const TIMEZONE = 'Asia/Ho_Chi_Minh';
 
-const dayFormatter = new Intl.DateTimeFormat('vi-VN', {
-  day: '2-digit',
-  timeZone: TIMEZONE,
-});
-
-const monthYearFormatter = new Intl.DateTimeFormat('vi-VN', {
-  month: '2-digit',
-  year: 'numeric',
-  timeZone: TIMEZONE,
-});
-
-const fullDateFormatter = new Intl.DateTimeFormat('vi-VN', {
+const dateFormatter = new Intl.DateTimeFormat('vi-VN', {
   day: '2-digit',
   month: '2-digit',
   year: 'numeric',
   timeZone: TIMEZONE,
 });
 
-const formatDots = (iso: string) => fullDateFormatter.format(new Date(iso)).replace(/\//g, '.');
+/**
+ * Rut tung phan tu formatToParts thay vi ghep chuoi da dinh dang: tieng Viet
+ * doi cach viet tuy to hop (chi thang + nam ra "tháng 08, 2026", khong phai
+ * "08/2026"), nen moi phep replace tren chuoi deu se hong.
+ */
+const datePartsOf = (iso: string) => {
+  const parts = dateFormatter.formatToParts(new Date(iso));
+  const pick = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value ?? '';
+
+  return { day: pick('day'), month: pick('month'), year: pick('year') };
+};
+
+const formatDots = (iso: string) => {
+  const { day, month, year } = datePartsOf(iso);
+  return `${day}.${month}.${year}`;
+};
 
 const FeaturedArticle = ({ article }: { article: NewsArticle }) => (
   <article className="group">
@@ -46,13 +51,13 @@ const FeaturedArticle = ({ article }: { article: NewsArticle }) => (
     <div className="mt-5 flex gap-4">
       <time
         dateTime={article.publishedAt}
-        className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-lg border border-gray-200 leading-none"
+        className="flex h-16 w-16 shrink-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white text-center"
       >
-        <span className="text-2xl font-bold text-gray-900">
-          {dayFormatter.format(new Date(article.publishedAt))}
+        <span className="flex flex-1 items-center justify-center text-2xl font-bold leading-none text-gray-900">
+          {datePartsOf(article.publishedAt).day}
         </span>
-        <span className="mt-1 text-theme-xs text-gray-500">
-          {monthYearFormatter.format(new Date(article.publishedAt)).replace('/', '.')}
+        <span className="bg-gray-50 py-1 text-[11px] font-medium leading-none text-gray-500">
+          {datePartsOf(article.publishedAt).month}.{datePartsOf(article.publishedAt).year}
         </span>
       </time>
 
@@ -115,9 +120,7 @@ const NewsSpotlight = ({
 
         <div className="lg:col-span-5">
           <div className="mb-3 flex items-center justify-between gap-4">
-            <span className="rounded-lg bg-brand-600 px-4 py-2 text-theme-sm font-bold text-white">
-              Tiêu điểm
-            </span>
+            <h3 className="text-base font-bold text-gray-900">Tin mới khác</h3>
             <Link
               href="/tin-tuc"
               className="inline-flex items-center gap-1.5 text-theme-sm font-medium text-gray-600 transition hover:text-brand-600"

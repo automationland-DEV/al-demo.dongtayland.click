@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { FiArrowRight } from 'react-icons/fi';
@@ -48,7 +49,18 @@ const TinhNangPage = () => {
   return (
     <main className="bg-white">
       {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-brand-950 to-gray-900 py-20 text-white md:py-28">
+      <section className="relative isolate overflow-hidden bg-gray-900 py-20 text-white md:py-28">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <Image
+          src="/images/heroes/tinh-nang.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/92 via-brand-950/88 to-gray-900/92" />
+      </div>
         {/* Background decoration */}
         <div
           aria-hidden

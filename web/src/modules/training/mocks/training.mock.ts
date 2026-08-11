@@ -241,7 +241,7 @@ const COURSES: TrainingCourse[] = [
     level: 'Trung cấp',
     price: 1490000,
     icon: HiOutlineChatBubbleLeftRight,
-    instructor: 'Trần Thanh Hà',
+    instructor: 'Trần Thanh Hải',
   },
   {
     publicId: 'legal-101',
@@ -254,7 +254,7 @@ const COURSES: TrainingCourse[] = [
     level: 'Trung cấp',
     price: 1990000,
     icon: HiOutlineScale,
-    instructor: 'Luật sư Phạm Thu Hà',
+    instructor: 'Luật sư Phạm Đức Thịnh',
   },
   {
     publicId: 'digital-marketing',
@@ -304,6 +304,7 @@ const COURSES: TrainingCourse[] = [
 const INSTRUCTORS: TrainingInstructor[] = [
   {
     publicId: 'instructor-khoa',
+    avatar: '/images/dao-tao/avatar-1.jpg',
     name: 'Nguyễn Minh Khoa',
     role: 'Giảng viên cao cấp · Nền tảng & CRM',
     experience: '11 năm',
@@ -312,7 +313,8 @@ const INSTRUCTORS: TrainingInstructor[] = [
   },
   {
     publicId: 'instructor-ha',
-    name: 'Trần Thanh Hà',
+    avatar: '/images/dao-tao/avatar-2.jpg',
+    name: 'Trần Thanh Hải',
     role: 'Giảng viên · Bán hàng & Tư vấn',
     experience: '8 năm',
     bio: 'Top 10 môi giới xuất sắc toàn quốc 2023. Chuyên gia xây dựng kịch bản tư vấn cho phân khúc cao cấp.',
@@ -320,7 +322,8 @@ const INSTRUCTORS: TrainingInstructor[] = [
   },
   {
     publicId: 'instructor-phamha',
-    name: 'Luật sư Phạm Thu Hà',
+    avatar: '/images/dao-tao/avatar-3.jpg',
+    name: 'Luật sư Phạm Đức Thịnh',
     role: 'Giảng viên · Pháp lý BĐS',
     experience: '14 năm',
     bio: 'Luật sư chuyên ngành BĐS, từng tư vấn cho hơn 500 giao dịch mua bán và sang tên. Đồng tác giả 2 cuốn sách về pháp lý BĐS.',
@@ -328,6 +331,7 @@ const INSTRUCTORS: TrainingInstructor[] = [
   },
   {
     publicId: 'instructor-bao',
+    avatar: '/images/dao-tao/avatar-4.jpg',
     name: 'Lê Quốc Bảo',
     role: 'Giảng viên · Marketing số',
     experience: '7 năm',

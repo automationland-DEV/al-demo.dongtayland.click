@@ -12,8 +12,7 @@ const QUICK_FILTERS = [
   { label: 'Thấp tầng', segment: 'thap-tang' as const, icon: HiOutlineHomeModern },
 ];
 
-// Placeholder xoay vong trong o tim kiem, khi input rong. Hieu ung typewriter
-// go tung chu, pause mot nhip roi xoa di de go cau tiep theo.
+
 const SEARCH_PROMPTS = [
   'Tên dự án, khu vực, chủ đầu tư...',
   'Vinhomes Grand Park',
@@ -31,17 +30,7 @@ type HeroSearchProps = {
   slides: HomeBannerSlide[];
 };
 
-/**
- * Hero dau trang chu: tieu de lon + thanh tim kiem + cac nut loc nhanh.
- *
- * Phan nen anh do HeroCarousel xu ly (3 banner.png xoay vong, mobile/desktop
- * rieng). Khong co lop phu mau - anh that 100%. Vi the chu dung white + drop
- * shadow de van doc duoc tren cac vung sang cua anh.
- *
- * Thanh tim kiem submit bang GET nen SEO se thay URL, nguoi dung chia se link
- * cung ra dung ket qua. Trang /gio-hang se doc `q` qua useSearchParams nen hai
- * trang giao tiep thong qua URL - khong can API.
- */
+
 type TypePhase = 'typing' | 'pausing' | 'deleting';
 
 const HeroSearch = ({ slides }: HeroSearchProps) => {
@@ -103,17 +92,12 @@ const HeroSearch = ({ slides }: HeroSearchProps) => {
   const [firstBanner] = slides;
 
   return (
-    // -mt-16 keo section len trum qua header sticky (h-16 = 64px) nen banner
-    // carousel thuc su cham top: 0 cua viewport. min-h tang 64px de bù lai.
-    // Header trong suot nam de len banner → can tang pt-16 cho container de
-    // tieu de khong bi header dinh.
+    
     <section className="relative isolate -mt-16 flex min-h-[704px] items-center overflow-hidden pt-16 lg:min-h-[824px]">
       {/* Carousel 3 anh that - mobile/desktop rieng */}
       <HeroCarousel slides={slides} />
 
-      {/* Lop phu mo: 35% den + gradient dam o top/bottom de chu trang noi ro
-          nhung van nhin thay phan nao net anh phia sau. Top gradient mo de
-          header trong suot va vung tiep giao banner khong bi toi that su. */}
+      
       <div
         aria-hidden
         className="absolute inset-0 -z-10 bg-black/35"
@@ -154,10 +138,7 @@ const HeroSearch = ({ slides }: HeroSearchProps) => {
                 className="w-full bg-transparent py-2.5 text-theme-sm text-gray-800 outline-none"
                 autoComplete="off"
               />
-              {/* Placeholder gợi ý dạng typewriter: từng chữ xuất hiện dần,
-                  dừng lại rồi xoá đi để gõ câu kế tiếp. Input rỗng + chưa
-                  focus mới chạy. Dùng overlay span thay vì native placeholder
-                  để kiểm soát animation. */}
+              
               {keyword === '' && (() => {
                 const text = SEARCH_PROMPTS[state.index] ?? '';
                 const visible = text.slice(0, state.charCount);
@@ -180,9 +161,7 @@ const HeroSearch = ({ slides }: HeroSearchProps) => {
             aria-label="Tìm kiếm"
             className="inline-flex shrink-0 items-center gap-2 rounded-full bg-brand-500 px-3 py-2.5 text-theme-sm font-semibold text-white shadow-theme-xs transition hover:bg-brand-600 sm:px-5"
           >
-            {/* Tren dien thoai o nhap con rat it cho, nen bo chu chi giu icon.
-                Chu van nam trong DOM cho trinh doc man hinh, va nut da co
-                aria-label rieng phong khi CSS chua kip nap. */}
+            
             <span className="hidden sm:inline">Tìm kiếm</span>
             <svg
               data-testid="icon-ai-search"

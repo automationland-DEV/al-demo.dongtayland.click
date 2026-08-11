@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useFavorites } from '@/common/hooks/useFavorites';
 import ProjectCard from '@/modules/project/components/ProjectCard';
 import type { Project } from '@/modules/project/models/project.model';
 
@@ -11,37 +12,23 @@ type FeaturedProjectsProps = {
   projects: Project[];
 };
 
-/**
- * Khoi 6 du an noi bat - dung lai ProjectCard de giu dung UI voi /gio-hang.
- *
- * Layout responsive:
- *   - Mobile (<sm): CAROUSEL Embla, moi lan 1 card full-width (~88vw) + peek
- *     12vw card ke ben canh. User vuot/khich nut prev/next. Co dots indicator
- *     o duoi.
- *   - Tablet (sm): grid 2 cot (carousel an).
- *   - Desktop (lg): grid 3 cot (carousel an).
- *
- * Vi sao Embla:
- *   - Dependency-free, ~3KB gzipped, khong them Tailwind plugin.
- *   - Hook API don gian (useEmblaCarousel + scrollPrev/Next/To).
- *   - Ho tro snap tuy bien, friction, drag threshold.
- *   - SSR-safe: useEffect init() chi chay client; SSR render markup tinh.
- *
- * SSR chieu rong embla:
- *   - Hook tra { emblaRef, emblaApi } - emblaRef gan vao div container.
- *   - Container can co 'overflow-hidden', con ben trong co 'flex'.
- *
- * Hydration: useEffect thiet lap carousel chi chay client, server render cards
- * nhu binh thuong trong div container -> khong can 'use client' cho card, chi
- * cho component nay.
- */
-const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => {
+
+const FeaturedProjects = ({ projects: initialProjects }: FeaturedProjectsProps) => {
+  const { favorites } = useFavorites();
+
+  // Du an da tim len dau, giong /gio-hang. Sort cua JS on dinh nen cac du an
+  // cung nhom giu nguyen thu tu goc.
+  const projects = useMemo(() => {
+    if (favorites.length === 0) return initialProjects;
+    const favorite = new Set(favorites.map((entry) => entry.publicId));
+    return [...initialProjects].sort(
+      (a, b) => Number(favorite.has(b.publicId)) - Number(favorite.has(a.publicId)),
+    );
+  }, [initialProjects, favorites]);
+
   // `loop: true` khi < projects.length se khong hoat dong -> check.
   const canLoop = projects.length > 3;
 
-  // `dragFree: false` de snap vao moi card (mac dinh). `align: 'start'` de card
-  // can trai viewport. `containScroll: 'trimSnaps'` cat snap o dau/cuoi.
-  // `slidesToScroll: 'auto'` cho phep scroll theo nhieu card neu viewport chua.
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
     loop: canLoop,
@@ -49,8 +36,7 @@ const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => {
     skipSnaps: false,
   });
 
-  // selectedSnap: index cua card dang active, [0, slideCount-1].
-  // scrollSnaps: danh sach vi tri snap.
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
@@ -61,16 +47,14 @@ const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => {
 
   useEffect(() => {
     if (!emblaApi) return;
-    // setState trong callback (reInit) thay vi effect body - tranh cascading
-    // renders theo rule React 19.
+
     const onReInit = () => {
       setScrollSnaps(emblaApi.scrollSnapList());
       setSelectedIndex(emblaApi.selectedScrollSnap());
     };
     emblaApi.on('reInit', onReInit);
     emblaApi.on('select', onSelect);
-    // Khoi tao lan dau: goi reInit() de no dispatch event => setState qua
-    // callback thay vi goi truc tiep setScrollSnaps/setSelectedIndex.
+
     emblaApi.reInit();
     return () => {
       emblaApi.off('select', onSelect);
@@ -119,10 +103,7 @@ const FeaturedProjects = ({ projects }: FeaturedProjectsProps) => {
               </div>
             </div>
 
-            {/* Nut prev/next: absolute 2 ben, z-10 de phu len card ngoai.
-                Khoi nay chi co tren dien thoai nen nut phai nam HAN trong
-                khung - keo ra ngoai bang -translate-x-1/2 la lo ra khoi man
-                hinh va lam ca trang cuon ngang 4px. */}
+            
             <button
               type="button"
               onClick={() => emblaApi?.scrollPrev()}

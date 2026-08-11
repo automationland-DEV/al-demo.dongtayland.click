@@ -33,6 +33,8 @@ export type GuideArticle = {
   title: string;
   excerpt: string;
   readMinutes: number;
+  /** Anh bia tam - thay bang anh chup man hinh ung dung khi co */
+  coverImage?: string;
   /** Step-by-step (markdown-like content, don gian) */
   steps: Array<{
     title: string;
@@ -148,6 +150,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   // ============ GETTING STARTED ============
   {
     publicId: 'gs-01',
+    coverImage: '/images/guide/guide-01.jpg',
     groupId: 'getting-started',
     audience: 'buyer',
     title: 'Đăng ký tài khoản trong 60 giây',
@@ -177,6 +180,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   },
   {
     publicId: 'gs-02',
+    coverImage: '/images/guide/guide-02.jpg',
     groupId: 'getting-started',
     audience: 'buyer',
     title: 'Hoàn thiện hồ sơ cá nhân',
@@ -199,6 +203,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   // ============ SEARCH ============
   {
     publicId: 'sr-01',
+    coverImage: '/images/guide/guide-03.jpg',
     groupId: 'search',
     audience: 'buyer',
     title: 'Dùng bộ lọc nâng cao để thu hẹp kết quả',
@@ -228,6 +233,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   },
   {
     publicId: 'sr-02',
+    coverImage: '/images/guide/guide-04.jpg',
     groupId: 'search',
     audience: 'buyer',
     title: 'Tìm kiếm trên bản đồ',
@@ -248,6 +254,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   },
   {
     publicId: 'sr-03',
+    coverImage: '/images/guide/guide-05.jpg',
     groupId: 'search',
     audience: 'agent',
     title: 'Xuất danh sách dự án ra Excel',
@@ -269,6 +276,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   // ============ FAVORITES ============
   {
     publicId: 'fv-01',
+    coverImage: '/images/guide/guide-06.jpg',
     groupId: 'favorites',
     audience: 'buyer',
     title: 'Lưu và quản lý danh sách yêu thích',
@@ -291,6 +299,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   },
   {
     publicId: 'fv-02',
+    coverImage: '/images/guide/guide-07.jpg',
     groupId: 'favorites',
     audience: 'buyer',
     title: 'So sánh tối đa 4 dự án cùng lúc',
@@ -311,6 +320,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   // ============ AGENT TOOLS ============
   {
     publicId: 'at-01',
+    coverImage: '/images/guide/guide-08.jpg',
     groupId: 'agent-tools',
     audience: 'agent',
     title: 'Thiết lập CRM cá nhân trong 15 phút',
@@ -339,6 +349,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   },
   {
     publicId: 'at-02',
+    coverImage: '/images/guide/guide-09.jpg',
     groupId: 'agent-tools',
     audience: 'agent',
     title: 'Đăng tin dự án tối ưu SEO',
@@ -361,6 +372,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   // ============ SECURITY ============
   {
     publicId: 'sc-01',
+    coverImage: '/images/guide/guide-10.jpg',
     groupId: 'security',
     audience: 'buyer',
     title: 'Bật xác thực 2 yếu tố (2FA)',
@@ -385,6 +397,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   },
   {
     publicId: 'sc-02',
+    coverImage: '/images/guide/guide-11.jpg',
     groupId: 'security',
     audience: 'buyer',
     title: 'Nhận biết tin đăng lừa đảo',
@@ -477,6 +490,7 @@ export const FAQS: FaqItem[] = [
 export const VIDEOS: VideoItem[] = [
   {
     publicId: 'v-01',
+    thumbnailUrl: '/images/guide/guide-11.jpg',
     audience: 'buyer',
     title: '5 bước mua căn hộ an toàn cho người mua lần đầu',
     description: 'Hướng dẫn chi tiết từ chọn dự án đến ký hợp đồng công chứng.',
@@ -485,6 +499,7 @@ export const VIDEOS: VideoItem[] = [
   },
   {
     publicId: 'v-02',
+    thumbnailUrl: '/images/guide/guide-12.jpg',
     audience: 'agent',
     title: 'CRM RealtyHub — Setup pipeline trong 15 phút',
     description: 'Walkthrough từ import leads đến chốt deal đầu tiên trên hệ thống.',
@@ -493,6 +508,7 @@ export const VIDEOS: VideoItem[] = [
   },
   {
     publicId: 'v-03',
+    thumbnailUrl: '/images/guide/guide-13.jpg',
     audience: 'agent',
     title: 'Cách viết tin đăng thu hút 100+ leads',
     description: 'Công thức SEO + ảnh + video để tin đăng viral trên RealtyHub.',
@@ -501,6 +517,7 @@ export const VIDEOS: VideoItem[] = [
   },
   {
     publicId: 'v-04',
+    thumbnailUrl: '/images/guide/guide-14.jpg',
     audience: 'developer',
     title: 'Quản lý dự án quy mô lớn trên RealtyHub',
     description: 'Case study Vinhomes Grand Park — 12.000 căn, 200 leads/ngày.',
@@ -509,6 +526,7 @@ export const VIDEOS: VideoItem[] = [
   },
   {
     publicId: 'v-05',
+    thumbnailUrl: '/images/guide/guide-15.jpg',
     audience: 'buyer',
     title: 'Phân biệt sổ đỏ thật - giả trong 2 phút',
     description: 'Hướng dẫn kiểm tra sổ đỏ thật - giả, tránh bị lừa khi mua BĐS.',

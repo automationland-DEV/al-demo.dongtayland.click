@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 
+import FooterHeading from './FooterHeading';
+
 export type FooterLink = { label: string; href: string };
 
 type FooterLinkListProps = {
@@ -12,11 +14,6 @@ type FooterLinkListProps = {
   links: FooterLink[];
   /** Cac muc nam sau nut "Xem them" - de trong thi khong render nut */
   moreLinks?: FooterLink[];
-  /**
-   * `button` = nut nen navy dac nhu cot "Danh cho moi gioi" trong ban thiet ke;
-   * `text` = dong chu tran nhu cot "Thong tin khac".
-   */
-  moreStyle?: 'button' | 'text';
   className?: string;
 };
 
@@ -40,7 +37,6 @@ const FooterLinkList = ({
   title,
   links,
   moreLinks = [],
-  moreStyle = 'text',
   className = '',
 }: FooterLinkListProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,10 +44,7 @@ const FooterLinkList = ({
 
   return (
     <div className={className}>
-      <h2 className="mb-5 text-theme-sm font-bold uppercase tracking-wide text-navy-800">
-        {title}
-        <span aria-hidden className="mt-2 block h-0.5 w-9 rounded-full bg-brand-500" />
-      </h2>
+      <FooterHeading>{title}</FooterHeading>
 
       <ul className="space-y-3">
         {links.map((link) => (
@@ -65,11 +58,7 @@ const FooterLinkList = ({
           type="button"
           onClick={() => setIsOpen((open) => !open)}
           aria-expanded={isOpen}
-          className={
-            moreStyle === 'button'
-              ? 'mt-5 inline-flex items-center gap-2 rounded-lg bg-navy-800 px-5 py-2.5 text-theme-sm font-semibold text-white transition hover:bg-navy-700'
-              : 'mt-4 inline-flex items-center gap-1.5 text-theme-sm text-gray-600 transition hover:text-brand-600'
-          }
+          className="mt-4 inline-flex items-center gap-1.5 text-theme-sm text-gray-600 transition hover:text-brand-600"
         >
           {isOpen ? 'Thu gọn' : 'Xem thêm'}
           <FiChevronDown

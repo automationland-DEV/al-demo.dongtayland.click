@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import {
@@ -107,7 +108,18 @@ const HuongDanPage = async ({ searchParams }: { searchParams: Promise<PageSearch
   return (
     <main className="bg-white">
       {/* ============ 01 HERO ============ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-brand-950 to-cyan-950 py-16 text-white md:py-20">
+      <section className="relative isolate overflow-hidden bg-gray-900 py-16 text-white md:py-20">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <Image
+          src="/images/heroes/huong-dan.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/92 via-brand-950/88 to-cyan-950/92" />
+      </div>
         <div
           aria-hidden
           className="absolute inset-0 opacity-20"
@@ -348,6 +360,7 @@ const HuongDanPage = async ({ searchParams }: { searchParams: Promise<PageSearch
                           >
                             <PlaceholderThumb
                               seed={article.publicId}
+                              src={article.coverImage}
                               label={article.title}
                               alt={article.title}
                               className="transition-transform duration-500 group-hover:scale-105"
@@ -528,6 +541,7 @@ const HuongDanPage = async ({ searchParams }: { searchParams: Promise<PageSearch
                 >
                   <PlaceholderThumb
                     seed={video.publicId}
+                    src={video.thumbnailUrl}
                     label={video.title}
                     alt={video.title}
                     className="transition-transform duration-500 group-hover:scale-105"

@@ -10,23 +10,7 @@ type HeroCarouselProps = {
   intervalMs?: number;
 };
 
-/**
- * Carousel 3 banner o dau trang chu. Auto-play, dung khi hover, co the chuyen
- * slide bang nut trai/phai hoac cham vao dot.
- *
- * Render dung <picture> thong qua <Image fill> cua next/image voi object-cover
- * de 3 3 banner co 3 ty le khac nhau van full khung. Khong dung PlaceholderThumb
- * nua vi banner co anh that.
- *
- * Responsive image chain (3 breakpoint):
- *   - mobile  (<768px)  : mobileImageUrl   - anh doc ~1:2
- *   - tablet  (768-1023): tabletImageUrl   - anh portrait ~3:4
- *   - desktop (>=1024px): desktopImageUrl  - anh ngang ~2:1
- *
- * Browser chon <source> dau tien match media query (CSS standard). Neu
- * tabletImageUrl undefined, source tablet khong render => browser bo qua,
- * tiep tuc kiem source tiep theo.
- */
+
 const HeroCarousel = ({ slides, intervalMs = 5000 }: HeroCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -37,7 +21,6 @@ const HeroCarousel = ({ slides, intervalMs = 5000 }: HeroCarouselProps) => {
   }, [slides.length]);
 
   const goNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
-  const goPrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
 
   // Auto-play: reset timer moi khi activeIndex hoac pause thay doi
   useEffect(() => {
@@ -73,15 +56,9 @@ const HeroCarousel = ({ slides, intervalMs = 5000 }: HeroCarouselProps) => {
             aria-roledescription="slide"
             aria-label={`${index + 1} / ${slides.length}`}
           >
-            {/* `absolute inset-0`: <Image fill> tu dat minh `position: absolute`
-                nen the CHA TRUC TIEP phai la mot khoi da dinh vi. Cha truc tiep
-                o day la <picture> - mac dinh inline va `position: static` - nen
-                anh se bam vao <body> thay vi khung slide. Div ben ngoai co
-                `absolute` khong cuu duoc, vi Image chi nhin len mot cap. */}
+            
             <picture className="absolute inset-0">
-              {/* Tablet (768-1023px) - kiem truoc vi media query max-width
-                  1023px cung match mobile. Dat max-width: 1023px nhung co
-                  768px breakpoint ngay duoi de tablet khong bi mobile de len. */}
+              
               {slide.tabletImageUrl && (
                 <source
                   media="(min-width: 768px) and (max-width: 1023px)"
@@ -112,23 +89,6 @@ const HeroCarousel = ({ slides, intervalMs = 5000 }: HeroCarouselProps) => {
       {/* Dots + arrow chi can khi co nhieu hon 1 slide */}
       {slides.length > 1 && (
         <>
-          <button
-            type="button"
-            onClick={goPrev}
-            aria-label="Slide trước"
-            className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/50 md:left-4 md:h-10 md:w-10"
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            aria-label="Slide sau"
-            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/50 md:right-4 md:h-10 md:w-10"
-          >
-            ›
-          </button>
-
           <div
             className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 md:bottom-6"
             role="tablist"

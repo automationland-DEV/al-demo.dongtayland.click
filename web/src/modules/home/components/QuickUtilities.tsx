@@ -20,15 +20,7 @@ type QuickUtility = {
   description?: string;
 };
 
-/**
- * 8 tien ich xuat hien ngay duoi Hero - truy cap nhanh cac chuc nang tien ich
- * cho nguoi mua nha + moi gioi: PDF tools, lich am phong thuy, CRM, so sanh.
- *
- * Moi o di den trang da co (hoac trang "Coming soon" - app/common/components/
- * ComingSoon.tsx, khi do no van la link noi - khong phai nut).
- *
- * Icon dung react-icons (da co trong repo) - khong them dependency moi.
- */
+
 const UTILITIES: QuickUtility[] = [
   {
     label: 'PDF Converter',
@@ -95,14 +87,7 @@ const TONE_CLASSES: Record<QuickUtility['tone'], string> = {
   gold: 'bg-gold-200 text-gold-500 group-hover:bg-gold-500 group-hover:text-white',
 };
 
-/**
- * Khoi 8 o tien ich nam ngay duoi Hero, can trang va co card boi nen trang
- * de noi bat giua Hero (nen dam) va FeaturedProjects (nen xam).
- *
- * Tren mobile (<sm): grid 4 cot, nho gon trong tam nhin.
- * Tren tablet (sm): grid 4 cot, them khoang tho.
- * Tren desktop (lg): grid 8 cot mot hang de moi o deu rat rong.
- */
+
 const QuickUtilities = () => (
   <section className="site-container -mt-10 md:-mt-14 lg:-mt-16">
     <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-card md:p-6">

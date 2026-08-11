@@ -29,6 +29,7 @@ export const MOCK_EVENTS: EventItem[] = [
   // ============ UPCOMING ============
   {
     publicId: 'event-001',
+    coverImage: '/images/projects/vinhomes-ocean-park-gia-lam/tien-ich-vincom-mega-mall-dem.jpg',
     slug: 'workshop-thuong-luong-giao-dich-bds',
     title: 'Workshop: Thương lượng giao dịch BĐS chuyên nghiệp',
     excerpt:
@@ -50,16 +51,17 @@ export const MOCK_EVENTS: EventItem[] = [
     price: 990000,
     speakers: [
       { publicId: 'sp-1', name: 'Nguyễn Minh Khoa', role: 'Giảng viên RealtyHub' },
-      { publicId: 'sp-2', name: 'Trần Thanh Hà', role: 'Top 10 Môi giới 2023' },
+      { publicId: 'sp-2', name: 'Trần Thanh Hải', role: 'Top 10 Môi giới 2023' },
     ],
     tags: ['Thương lượng', 'Bán hàng', 'Kỹ năng'],
   },
   {
     publicId: 'event-002',
+    coverImage: '/images/projects/vinhomes-ocean-park-gia-lam/tien-ich-dai-hoc-vinuni.jpg',
     slug: 'seminar-phap-ly-bds-cap-nhat-2026',
     title: 'Hội thảo: Cập nhật pháp lý BĐS 2026',
     excerpt:
-      'Luật sư Phạm Thu Hà phân tích 4 thay đổi pháp lý quan trọng nhất năm 2026 ảnh hưởng đến người mua và môi giới.',
+      'Luật sư Phạm Đức Thịnh phân tích 4 thay đổi pháp lý quan trọng nhất năm 2026 ảnh hưởng đến người mua và môi giới.',
     type: 'seminar',
     status: 'upcoming',
     startAt: iso(13, 19, 0), // 2026-08-22 19:00
@@ -73,12 +75,13 @@ export const MOCK_EVENTS: EventItem[] = [
     registered: 318,
     isFree: true,
     speakers: [
-      { publicId: 'sp-3', name: 'Luật sư Phạm Thu Hà', role: '14 năm kinh nghiệm BĐS' },
+      { publicId: 'sp-3', name: 'Luật sư Phạm Đức Thịnh', role: '14 năm kinh nghiệm BĐS' },
     ],
     tags: ['Pháp lý', 'Sổ đỏ', 'Hợp đồng'],
   },
   {
     publicId: 'event-003',
+    coverImage: '/images/projects/vinhomes-ocean-park-gia-lam/sp-cao-tang-ven-kenh.jpg',
     slug: 'open-house-green-harbor-ha-long',
     title: 'Open House: Trải nghiệm căn hộ mẫu Green Harbor Hạ Long',
     excerpt:
@@ -125,6 +128,7 @@ export const MOCK_EVENTS: EventItem[] = [
   // ============ ONGOING ============
   {
     publicId: 'event-005',
+    coverImage: '/images/projects/vinhomes-ocean-park-gia-lam/tien-ich-vincom-mega-mall.jpg',
     slug: 'networking-monthly-meetup-thang-8',
     title: 'Monthly Meetup: Gặp gỡ môi giới tháng 8',
     excerpt:
@@ -147,6 +151,7 @@ export const MOCK_EVENTS: EventItem[] = [
   // ============ PAST ============
   {
     publicId: 'event-006',
+    coverImage: '/images/projects/vinhomes-ocean-park-gia-lam/tien-ich-vinuni-chinh-dien.jpg',
     slug: 'workshop-crm-pipeline-thang-7',
     title: 'Workshop: Thiết lập CRM & Pipeline chuyên nghiệp',
     excerpt:
@@ -171,6 +176,7 @@ export const MOCK_EVENTS: EventItem[] = [
   },
   {
     publicId: 'event-007',
+    coverImage: '/images/projects/vinhomes-ocean-park-gia-lam/hero-3-phoi-canh-tong-the.jpg',
     slug: 'seminar-thi-truong-bds-nua-dau-nam-2026',
     title: 'Hội thảo: Toàn cảnh thị trường BĐS nửa đầu năm 2026',
     excerpt:
