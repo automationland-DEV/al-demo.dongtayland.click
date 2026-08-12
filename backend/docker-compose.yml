@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: demo_dongtayland_click:api
-    container_name: demo_dongtayland_click_api
+    image: al_demo_dongtayland_click:api
+    container_name: al_demo_dongtayland_click_api
     ports:
       - "8827:8827"
     env_file:
