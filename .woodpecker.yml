@@ -77,6 +77,7 @@ steps:
         - cd /home/demo_dongtayland_click/al-demo.dongtayland.click
         - GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch origin main && git reset --hard origin/main
         - cd backend
+        - docker compose -p al-demo-backend down
         - docker compose -p al-demo-backend up -d --build && docker ps
     when:
       branch: main
@@ -98,6 +99,7 @@ steps:
         - cd /home/demo_dongtayland_click/al-demo.dongtayland.click
         - GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch origin main && git reset --hard origin/main
         - cd admin
+        - docker compose -p al-demo-admin down
         - docker compose -p al-demo-admin up -d --build && docker ps
     when:
       branch: main
