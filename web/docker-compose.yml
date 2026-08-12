@@ -4,7 +4,8 @@ services:
   web:
     build:
       context: .
-      image: demo_dongtayland_click:web
+      dockerfile: Dockerfile
+    image: demo_dongtayland_click:web
     container_name: demo_dongtayland_click_web
     ports:
       - "8826:8826"
