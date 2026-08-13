@@ -57,6 +57,7 @@ export type AboutContent = {
     email: string;
     offices: AboutOffice[];
     awards: AboutAward[];
+    certifications: { label: string; image: string; href: string }[];
   };
   faq: { title: string; subtitle: string; items: AboutFaq[] };
   cta: {
@@ -241,6 +242,14 @@ export const MOCK_ABOUT_CONTENT: AboutContent = {
       { title: 'Đơn vị phân phối xuất sắc Vinhomes', period: '2023' },
       { title: 'Top thương hiệu uy tín ngành BĐS Việt Nam', period: '2023' },
       { title: 'Dot Property Awards — Best Developer Partner', period: '2024' },
+    ],
+    certifications: [
+      {
+        label: 'Đã thông báo Bộ Công Thương',
+        image: '/images/home/Bo_Cong_Thuong.jpg',
+        href: '#',
+      },
+      { label: 'DMCA Protected', image: '/images/home/DMCA.jpg', href: '#' },
     ],
   },
 
