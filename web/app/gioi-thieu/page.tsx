@@ -338,112 +338,199 @@ const GioiThieuPage = () => (
       </div>
     </section>
 
-    {/* ============ 07 PHÁP NHÂN ============ */}
-    <section className="border-y border-gray-200 bg-gray-50/70 py-20 md:py-28">
-      <div className="site-container">
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <Eyebrow>Pháp nhân</Eyebrow>
+    {/* ============ 07 THÀNH TỰU ============ */}
+    <section className="site-container py-20 md:py-28">
+      <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-5">
+          <Eyebrow>Thành tựu</Eyebrow>
           <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-navy-800 md:text-4xl">
-            {ABOUT.company.title}
+            Được thị trường ghi nhận
           </h2>
           <p className="mt-4 text-base leading-relaxed text-gray-600">
+            Những giải thưởng dành cho Đông Tây Land — đơn vị vận hành RealtyHub.
+          </p>
+
+          <div className="reveal mt-10 flex items-center gap-5 rounded-2xl border border-gold-200 bg-gold-200/30 p-6">
+            <span
+              aria-hidden
+              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gold-400 text-3xl text-white"
+            >
+              <HiOutlineTrophy />
+            </span>
+            <div className="min-w-0">
+              <p className="text-4xl font-bold leading-none tracking-tight text-navy-800">
+                {ABOUT.company.awards.length}
+              </p>
+              <p className="mt-1.5 text-theme-sm leading-snug text-gray-600">
+                giải thưởng ngành trong 4 năm liên tiếp
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <ol className="min-w-0 lg:col-span-7">
+          {ABOUT.company.awards.map((award) => (
+            <li
+              key={award.title}
+              className="reveal group flex items-start gap-5 border-b border-gray-200 py-5 first:pt-0 last:border-b-0"
+            >
+              <span className="w-24 shrink-0 pt-0.5 text-theme-sm font-bold tabular-nums text-gold-500">
+                {award.period}
+              </span>
+              <span className="min-w-0 flex-1 text-base font-semibold leading-snug text-navy-800 transition group-hover:text-brand-600">
+                {award.title}
+              </span>
+              <HiOutlineTrophy
+                aria-hidden
+                className="mt-0.5 h-5 w-5 shrink-0 text-gray-300 transition group-hover:text-gold-400"
+              />
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ============ 08 PHÁP NHÂN — khoi toi, anh nen toa nha ============ */}
+    <section className="relative isolate overflow-hidden bg-navy-900 py-20 text-white md:py-28">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <Image src={ABOUT.stats.image} alt="" fill sizes="100vw" className="object-cover" />
+        <div className="absolute inset-0 bg-linear-to-br from-navy-900/96 via-navy-900/92 to-brand-900/85" />
+      </div>
+
+      <div className="site-container">
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <Eyebrow tone="light">Pháp nhân</Eyebrow>
+          <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight md:text-4xl">
+            {ABOUT.company.title}
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-white/70">
             {ABOUT.company.subtitle}
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-12">
-          <div className="reveal rounded-2xl border-t-4 border-brand-500 bg-white p-7 shadow-card lg:col-span-5">
-            <h3 className="text-lg font-bold text-navy-800">{ABOUT.company.legalName}</h3>
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="reveal lg:col-span-5">
+            <div className="overflow-hidden rounded-2xl bg-white text-navy-800 shadow-card-hover">
+              <div className="bg-brand-600 px-7 py-5">
+                <p className="text-theme-xs uppercase tracking-[0.2em] text-white/70">
+                  Đơn vị vận hành
+                </p>
+                <p className="mt-1 text-lg font-bold leading-snug text-white">
+                  {ABOUT.company.legalName}
+                </p>
+              </div>
 
-            <dl className="mt-5 grid gap-4 sm:grid-cols-2">
-              {[
-                { label: 'Giấy phép ĐKKD', value: ABOUT.company.license },
-                { label: 'Đăng ký lần đầu', value: ABOUT.company.since },
-              ].map((row) => (
-                <div key={row.label} className="rounded-xl bg-gray-50 px-4 py-3">
-                  <dt className="text-theme-xs uppercase tracking-wide text-gray-500">
-                    {row.label}
-                  </dt>
-                  <dd className="mt-1 text-theme-sm font-bold text-navy-800">{row.value}</dd>
-                </div>
-              ))}
-            </dl>
-
-            <p className="mt-5 text-theme-sm text-gray-600">
-              <span className="text-gray-500">Đại diện pháp luật: </span>
-              <span className="font-semibold text-gray-800">
-                {ABOUT.company.representative}
-              </span>
-            </p>
-
-            <ul className="mt-6 space-y-3 border-t border-gray-100 pt-5 text-theme-sm">
-              <li className="flex items-start gap-2.5">
-                <FiMapPin aria-hidden className="mt-1 shrink-0 text-brand-500" />
-                <span className="text-gray-600">{ABOUT.company.headquarters}</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <FiPhone aria-hidden className="mt-1 shrink-0 text-brand-500" />
-                <span className="flex flex-wrap gap-x-3">
-                  {ABOUT.company.phones.map((phone) => (
-                    <a
-                      key={phone}
-                      href={`tel:${phone.replace(/\s/g, '')}`}
-                      className="font-semibold text-gray-700 transition hover:text-brand-600"
-                    >
-                      {phone}
-                    </a>
+              <div className="p-7">
+                <dl className="grid gap-4 sm:grid-cols-2">
+                  {[
+                    { label: 'Giấy phép ĐKKD', value: ABOUT.company.license },
+                    { label: 'Đăng ký lần đầu', value: ABOUT.company.since },
+                  ].map((row) => (
+                    <div key={row.label} className="rounded-xl bg-gray-50 px-4 py-3">
+                      <dt className="text-theme-xs uppercase tracking-wide text-gray-500">
+                        {row.label}
+                      </dt>
+                      <dd className="mt-1 text-lg font-bold tabular-nums text-navy-800">
+                        {row.value}
+                      </dd>
+                    </div>
                   ))}
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <FiMail aria-hidden className="mt-1 shrink-0 text-brand-500" />
-                <a
-                  href={`mailto:${ABOUT.company.email}`}
-                  className="text-gray-600 transition hover:text-brand-600"
-                >
-                  {ABOUT.company.email}
-                </a>
-              </li>
-            </ul>
+                </dl>
+
+                <p className="mt-5 text-theme-sm leading-relaxed text-gray-600">
+                  <span className="text-gray-500">Đại diện pháp luật: </span>
+                  <span className="font-semibold text-gray-800">
+                    {ABOUT.company.representative}
+                  </span>
+                </p>
+
+                <ul className="mt-6 space-y-3 border-t border-gray-100 pt-5 text-theme-sm">
+                  <li className="flex items-start gap-2.5">
+                    <FiMapPin aria-hidden className="mt-1 shrink-0 text-brand-500" />
+                    <span className="text-gray-600">{ABOUT.company.headquarters}</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <FiPhone aria-hidden className="mt-1 shrink-0 text-brand-500" />
+                    <span className="flex flex-wrap gap-x-3">
+                      {ABOUT.company.phones.map((phone) => (
+                        <a
+                          key={phone}
+                          href={`tel:${phone.replace(/\s/g, '')}`}
+                          className="font-semibold text-gray-700 transition hover:text-brand-600"
+                        >
+                          {phone}
+                        </a>
+                      ))}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <FiMail aria-hidden className="mt-1 shrink-0 text-brand-500" />
+                    <a
+                      href={`mailto:${ABOUT.company.email}`}
+                      className="text-gray-600 transition hover:text-brand-600"
+                    >
+                      {ABOUT.company.email}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
-          <div className="reveal rounded-2xl border border-gray-200 bg-white p-7 lg:col-span-3">
-            <h3 className="text-theme-sm font-bold uppercase tracking-wide text-navy-800">
-              Văn phòng
+          <div className="min-w-0 lg:col-span-7">
+            <h3 className="text-theme-sm font-bold uppercase tracking-[0.2em] text-white/60">
+              Văn phòng trên toàn quốc
             </h3>
-            <ul className="mt-5 space-y-4 text-theme-sm">
+
+            {/* Luoi thay cot doc: 5 van phong bay ra thanh mang luoi cho cam
+                giac quy mo, mot cot chu hep thi doc nhu danh ba. */}
+            <ul className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {ABOUT.company.offices.map((office) => (
-                <li key={office.city} className="border-l-2 border-gray-200 pl-3">
-                  <span className="block font-bold text-gray-800">{office.city}</span>
-                  <span className="mt-0.5 block leading-relaxed text-gray-500">
+                <li
+                  key={office.city}
+                  className="reveal rounded-xl border border-white/15 bg-white/5 p-5 backdrop-blur-sm transition hover:border-brand-400/50 hover:bg-white/10"
+                >
+                  <span className="flex items-center gap-2 text-base font-bold text-white">
+                    <FiMapPin aria-hidden className="h-4 w-4 shrink-0 text-brand-300" />
+                    {office.city}
+                  </span>
+                  <span className="mt-2 block text-theme-sm leading-relaxed text-white/65">
                     {office.address}
                   </span>
                 </li>
               ))}
             </ul>
-          </div>
 
-          <div className="reveal rounded-2xl bg-navy-800 p-7 text-white lg:col-span-4">
-            <h3 className="flex items-center gap-2 text-theme-sm font-bold uppercase tracking-wide">
-              <HiOutlineTrophy aria-hidden className="h-5 w-5 text-gold-400" />
-              Ghi nhận từ thị trường
-            </h3>
-            <ul className="mt-5 space-y-4">
-              {ABOUT.company.awards.map((award) => (
-                <li key={award.title} className="border-b border-white/10 pb-4 last:border-b-0">
-                  <span className="block text-theme-sm font-semibold leading-snug text-white">
-                    {award.title}
-                  </span>
-                  <span className="mt-1 block text-theme-xs text-gold-400">{award.period}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-8 border-t border-white/15 pt-6">
+              <p className="text-theme-xs uppercase tracking-[0.2em] text-white/50">Chứng nhận</p>
+              <ul className="mt-4 flex flex-wrap items-center gap-4">
+                {ABOUT.company.certifications.map((cert) => (
+                  <li key={cert.label}>
+                    <a
+                      href={cert.href}
+                      aria-label={cert.label}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="block rounded-md bg-white/95 p-1.5 transition hover:bg-white"
+                    >
+                      <Image
+                        src={cert.image}
+                        alt={cert.label}
+                        width={767}
+                        height={263}
+                        className="h-11 w-auto"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    {/* ============ 08 CÔNG TY THÀNH VIÊN ============ */}
+    {/* ============ 09 CÔNG TY THÀNH VIÊN ============ */}
     <section id="cong-ty-thanh-vien" className="site-container py-20 md:py-28">
       <div className="mx-auto mb-12 max-w-2xl text-center">
         <Eyebrow>Hệ thống</Eyebrow>
@@ -458,7 +545,7 @@ const GioiThieuPage = () => (
       <MemberCompaniesTable />
     </section>
 
-    {/* ============ 09 CÂU HỎI THẲNG ============ */}
+    {/* ============ 10 CÂU HỎI THẲNG ============ */}
     <section className="site-container py-20 md:py-28">
       <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
@@ -514,7 +601,7 @@ const GioiThieuPage = () => (
       </div>
     </section>
 
-    {/* ============ 10 CTA ============ */}
+    {/* ============ 11 CTA ============ */}
     <section className="relative isolate overflow-hidden bg-navy-900 py-20 text-white md:py-28">
       <div aria-hidden className="absolute inset-0 -z-10">
         <Image
