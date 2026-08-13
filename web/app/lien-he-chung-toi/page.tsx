@@ -13,6 +13,8 @@ import {
 import { FaFacebookF, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 import ContactForm from '@/modules/contact/components/ContactForm';
+import MemberCompaniesTable from '@/modules/about/components/MemberCompaniesTable';
+import { MEMBER_COMPANIES } from '@/modules/about/mocks/about.mock';
 
 import type { Metadata } from 'next';
 
@@ -120,48 +122,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-const MEMBER_COMPANIES = [
-  {
-    name: 'Công ty Cổ phần Đông Tây Land',
-    note: 'Trụ sở chính',
-    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
-  },
-  {
-    name: 'Công ty Cổ phần Bất động sản Đông Tây Property',
-    address: '1/21 Đông Tây 1, Khu nhà ở 4,8 ha, TP. Hồ Chí Minh',
-  },
-  {
-    name: 'Công ty Cổ phần Đông Tây Land Phú Mỹ Hưng',
-    address:
-      '1431 Nguyễn Văn Linh, Khu phố Mỹ Toàn 2-H4, Phường Tân Hưng, TP. Hồ Chí Minh',
-  },
-  {
-    name: 'Công ty Cổ phần Đông Tây Miền Bắc',
-    address: '17C2, KĐT Nam Trung Yên, Phường Yên Hòa, Hà Nội',
-  },
-  {
-    name: 'Công ty Cổ phần Đông Tây Global',
-    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
-  },
-  {
-    name: 'Công ty Cổ phần Đông Tây Hospitality',
-    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
-  },
-  {
-    name: 'Công ty TNHH Đầu tư Thương mại Du lịch Kim Sa',
-    address: 'Ấp Hồ Tràm, Xã Hồ Tràm, TP. Hồ Chí Minh',
-  },
-  {
-    name: 'Công ty Cổ phần Du lịch Long An (LATOURCO)',
-    address: 'Số 162 Hùng Vương, Phường Long An, Tỉnh Tây Ninh',
-  },
-  {
-    name: 'Công ty Cổ phần Đông Tây Holding',
-    address: '192 Trần Não, Khu phố 2, Phường An Khánh, TP. Hồ Chí Minh',
-  },
-  { name: 'Công ty Cổ phần Đầu tư Cần Giuộc', address: '' },
-  { name: 'Công ty Cổ phần Đầu tư Cần Đước', address: '' },
-];
+
 
 const SOCIAL_LINKS = [
   { label: 'Facebook', href: '#', icon: FaFacebookF, color: 'bg-blue-600' },
@@ -446,54 +407,7 @@ const LienHeChungToiPage = () => (
           Địa chỉ trụ sở của các công ty trong hệ thống Đông Tây Group.
         </p>
       </div>
-
-      <div className="overflow-x-auto rounded-2xl border border-gray-200">
-        <table className="w-full min-w-160 border-collapse text-left">
-          <thead className="bg-gray-50">
-            <tr className="text-theme-xs font-bold uppercase tracking-[0.15em] text-gray-500">
-              <th scope="col" className="w-14 px-4 py-4 text-center">
-                STT
-              </th>
-              <th scope="col" className="px-4 py-4">
-                Công ty
-              </th>
-              <th scope="col" className="px-4 py-4">
-                Địa chỉ
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100 bg-white">
-            {MEMBER_COMPANIES.map((company, index) => (
-              <tr key={company.name} className="align-top transition hover:bg-jade-50/40">
-                <td className="px-4 py-4 text-center text-theme-sm font-semibold text-gray-400">
-                  {index + 1}
-                </td>
-                <td className="px-4 py-4">
-                  <span className="block text-theme-sm font-bold text-gray-900">
-                    {company.name}
-                  </span>
-                  {company.note && (
-                    <span className="mt-1 inline-flex rounded-full bg-jade-50 px-2.5 py-0.5 text-theme-xs font-bold uppercase tracking-[0.15em] text-jade-700">
-                      {company.note}
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-4 text-theme-sm leading-relaxed text-gray-600">
-                  {company.address || (
-                    <span className="italic text-gray-400">Đang cập nhật</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <p className="mt-4 flex items-start gap-2 text-theme-xs leading-relaxed text-gray-500">
-        <FiMapPin aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400" />
-        Địa chỉ ghi &quot;Đang cập nhật&quot; là các đơn vị chưa công bố trụ sở trên
-        nguồn công khai — vui lòng liên hệ hotline để được hỗ trợ.
-      </p>
+      <MemberCompaniesTable />
     </section>
 
     {/* ============ 05 FAQ ============ */}

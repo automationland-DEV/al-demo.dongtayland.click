@@ -1,95 +1,42 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { FiArrowRight } from 'react-icons/fi';
-import {
-  HiOutlineAcademicCap,
-  HiOutlineArrowsRightLeft,
-  HiOutlineBuildingOffice2,
-  HiOutlineCalculator,
-  HiOutlineNewspaper,
-  HiOutlineUsers,
-} from 'react-icons/hi2';
+import { FiArrowRight, FiCheck, FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
+import { HiOutlineTrophy } from 'react-icons/hi2';
 
-import UserAvatar from '@/common/components/UserAvatar';
+import MemberCompaniesTable from '@/modules/about/components/MemberCompaniesTable';
+import PartnerSignupForm from '@/modules/about/components/PartnerSignupForm';
+import { MEMBER_COMPANIES, MOCK_ABOUT_CONTENT } from '@/modules/about/mocks/about.mock';
 
-import { MOCK_ABOUT_CONTENT } from '@/modules/about/mocks/about.mock';
+import type { Metadata } from 'next';
 
-/**
- * Trang /gioi-thieu - Editorial Magazine style.
- *
- * Cam hung tu cac magazine cao cap (NYT, Vogue, Aeon):
- *   - Hero voi anh bia lon, tieu de dep, byline
- *   - Pull-quote + dropcap intro
- *   - So lieu lon typography dam
- *   - Timeline doc (5 milestones)
- *   - Team grid (6 thanh vien) - avatar + quote
- *   - Gia tri cot loi (4 values)
- *   - Closing CTA 2 cot
- *
- * Server component vi day la trang tinh, khong can client state.
- * Mock data lay tu MOCK_ABOUT_CONTENT (khi co backend thay bang API).
- */
+export const metadata: Metadata = {
+  title: 'Về RealtyHub',
+  description:
+    'RealtyHub công khai giá niêm yết, pháp lý và mặt bằng của từng dự án. Nền tảng do Công ty Cổ phần Đông Tây Land vận hành.',
+};
 
 const ABOUT = MOCK_ABOUT_CONTENT;
 
-const HERO_HIGHLIGHTS = [
-  'Miễn phí tra cứu dự án',
-  'Giá và pháp lý công khai',
-  'Không môi giới ẩn danh',
-];
-
-const CAPABILITIES = [
-  {
-    icon: HiOutlineBuildingOffice2,
-    title: 'Giỏ hàng dự án',
-    description:
-      'Toàn bộ dự án đang mở bán kèm bảng giá, mặt bằng, tiến độ và pháp lý — cập nhật trực tiếp từ chủ đầu tư.',
-    href: '/gio-hang',
-  },
-  {
-    icon: HiOutlineArrowsRightLeft,
-    title: 'So sánh dự án',
-    description:
-      'Đặt các dự án cạnh nhau theo giá, diện tích, vị trí và chính sách bán hàng để thấy rõ khác biệt.',
-    href: '/so-sanh',
-  },
-  {
-    icon: HiOutlineCalculator,
-    title: 'Công cụ tính toán',
-    description:
-      'Tính khoản vay, lịch trả nợ, lịch âm và các tiện ích hỗ trợ ra quyết định trước khi xuống tiền.',
-    href: '/tien-ich',
-  },
-  {
-    icon: HiOutlineUsers,
-    title: 'CRM cho môi giới',
-    description:
-      'Quản lý khách hàng, lịch hẹn và tiến độ giao dịch trên cùng một nơi với giỏ hàng.',
-    href: '/crm',
-  },
-  {
-    icon: HiOutlineAcademicCap,
-    title: 'Đào tạo nghề',
-    description:
-      'Khóa học nền tảng và chuyên sâu dành cho môi giới mới vào nghề, có chứng nhận sau khi hoàn thành.',
-    href: '/dao-tao',
-  },
-  {
-    icon: HiOutlineNewspaper,
-    title: 'Tin tức thị trường',
-    description:
-      'Phân tích, nhận định và cập nhật chính sách để bạn nắm nhịp thị trường trước khi xuống tiền.',
-    href: '/tin-tuc',
-  },
-];
+const Eyebrow = ({ children, tone = 'dark' }: { children: string; tone?: 'dark' | 'light' }) => (
+  <span
+    className={`inline-flex items-center gap-2 text-theme-xs font-bold uppercase tracking-[0.22em] ${
+      tone === 'light' ? 'text-brand-300' : 'text-brand-600'
+    }`}
+  >
+    <span aria-hidden className="h-px w-8 bg-current opacity-60" />
+    {children}
+    <span aria-hidden className="h-px w-8 bg-current opacity-60" />
+  </span>
+);
 
 const GioiThieuPage = () => (
   <main className="bg-white">
-    {/* ============ HERO ============ */}
-    <section className="relative isolate overflow-hidden bg-gray-50">
-      {/* Anh bia hero - full width */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
+    {/* ============ 01 HERO ============
+        Lop phu chi 82-55% de anh nen con nhin thay - ban truoc dat 97% khien
+        anh thanh mang mau phang, mat han chieu sau. */}
+    <section className="relative isolate overflow-hidden bg-navy-900 pb-44 pt-20 text-white md:pb-52 md:pt-28">
+      <div aria-hidden className="absolute inset-0 -z-10">
         <Image
           src={ABOUT.hero.heroImage}
           alt=""
@@ -98,355 +45,513 @@ const GioiThieuPage = () => (
           sizes="100vw"
           className="animate-slow-zoom object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/80" />
+        <div className="absolute inset-0 bg-linear-to-r from-navy-900/95 via-navy-900/80 to-navy-900/45" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-navy-900 to-transparent" />
       </div>
 
-      <div className="site-container py-32 md:py-40 lg:py-48">
-        <div className="mx-auto max-w-3xl text-center text-white">
-          <span className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-theme-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
-            {ABOUT.hero.eyebrow}
-          </span>
+      <div className="site-container">
+        <div className="max-w-3xl">
+          <Eyebrow tone="light">{ABOUT.hero.eyebrow}</Eyebrow>
 
-          <h1
-            className="animate-fade-up mt-6 font-serif text-5xl font-light italic leading-[1.05] tracking-tight md:text-6xl lg:text-7xl"
-            style={{ animationDelay: '90ms' }}
-          >
+          <h1 className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight md:text-6xl">
             {ABOUT.hero.headline}
           </h1>
 
-          <p
-            className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl"
-            style={{ animationDelay: '180ms' }}
-          >
-            {ABOUT.hero.tagline}
+          <p className="mt-7 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg">
+            {ABOUT.hero.lead}
           </p>
 
-          <ul
-            className="animate-fade-up mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
-            style={{ animationDelay: '270ms' }}
-          >
-            {HERO_HIGHLIGHTS.map((item) => (
+          <ul className="mt-9 flex flex-wrap gap-2.5">
+            {ABOUT.hero.promises.map((promise) => (
               <li
-                key={item}
-                className="rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-theme-xs font-medium text-white/90 backdrop-blur-sm"
+                key={promise}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 py-2 pl-2 pr-4 text-theme-sm text-white backdrop-blur-sm"
               >
-                {item}
+                <span
+                  aria-hidden
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500"
+                >
+                  <FiCheck className="h-3 w-3" />
+                </span>
+                {promise}
               </li>
             ))}
           </ul>
 
-          <p
-            className="animate-fade-up mt-10 text-theme-xs uppercase tracking-[0.25em] text-white/60"
-            style={{ animationDelay: '360ms' }}
+          <Link
+            href={ABOUT.cta.buyerHref}
+            className="group mt-10 inline-flex items-center gap-2 rounded-full bg-brand-500 px-7 py-3.5 text-theme-sm font-semibold shadow-card-hover transition hover:bg-brand-600"
           >
-            {ABOUT.hero.byline}
-          </p>
+            {ABOUT.cta.buyerLabel}
+            <FiArrowRight aria-hidden className="transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
     </section>
 
-    {/* ============ SỨ MỆNH ============ */}
-    <section className="site-container py-20 md:py-28">
-      <div className="reveal grid gap-12 md:grid-cols-2 md:gap-16">
-        {/* Cot trai: Text + dropcap intro */}
-        <div className="md:pt-8">
-          <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-brand-600">
-            Sứ mệnh của chúng tôi
-          </span>
-          <h2 className="mt-3 font-serif text-3xl font-bold leading-tight text-gray-900 md:text-4xl">
-            {ABOUT.mission.title}
-          </h2>
-
-          {/* Dropcap lead paragraph */}
-          <p className="mt-8 text-lg leading-relaxed text-gray-800 md:text-xl">
-            <span className="float-left mr-3 font-serif text-7xl font-bold leading-[0.85] text-brand-600 md:text-8xl">
-              {ABOUT.mission.leadParagraph.charAt(0)}
-            </span>
-            {ABOUT.mission.leadParagraph.slice(1)}
-          </p>
-
-          {/* Body paragraphs */}
-          <div className="mt-6 space-y-5 text-base leading-relaxed text-gray-600 md:text-lg">
-            {ABOUT.mission.bodyParagraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-            ))}
+    {/* ============ 02 DẢI PHÁP NHÂN — the trang de len hero ============ */}
+    <section className="site-container -mt-28 md:-mt-32">
+      <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-gray-200 shadow-card-hover lg:grid-cols-4">
+        {ABOUT.hero.facts.map((fact) => (
+          <div key={fact.label} className="bg-white px-5 py-6 text-center md:px-6 md:py-7">
+            <dt className="text-theme-xs uppercase tracking-wide text-gray-500">{fact.label}</dt>
+            <dd className="mt-2 text-base font-bold leading-snug text-navy-800 md:text-lg">
+              {fact.value}
+            </dd>
           </div>
-        </div>
+        ))}
+      </dl>
+    </section>
 
-        {/* Cot phai: Anh lon + pull-quote overlay */}
-        <div className="relative">
-          <div className="group relative aspect-4/5 overflow-hidden rounded-2xl bg-gray-100 shadow-2xl md:aspect-3/4">
+    {/* ============ 03 CAM KẾT — lech truc: anh trai, danh sach phai ============ */}
+    <section className="site-container py-20 md:py-28">
+      <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="reveal relative lg:col-span-5">
+          <div className="relative aspect-4/5 overflow-hidden rounded-2xl bg-gray-100 shadow-card-hover">
             <Image
-              src={ABOUT.mission.missionImage}
-              alt="Trung tâm TP. Hồ Chí Minh nhìn từ sông Sài Gòn"
+              src={ABOUT.commitments.image}
+              alt=""
               fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="object-cover"
             />
+            <div className="absolute inset-0 bg-linear-to-t from-navy-900/80 via-transparent to-transparent" />
           </div>
-          {/* Pull-quote card overlay (editorial classic) */}
-          <div className="absolute -bottom-8 -left-4 max-w-xs rounded-2xl bg-white p-6 shadow-2xl md:-left-8 md:max-w-sm md:p-8">
-            <p className="font-serif text-xl italic leading-snug text-gray-900 md:text-2xl">
-              &ldquo;Minh bạch là nền tảng. Đồng cảm là sứ mệnh.&rdquo;
-            </p>
-            <p className="mt-3 text-theme-xs uppercase tracking-[0.2em] text-gray-500">
-              — Tôn chỉ RealtyHub
+
+          <div className="absolute -bottom-6 -right-4 max-w-xs rounded-2xl bg-brand-600 p-6 text-white shadow-card-hover md:-right-8">
+            <p className="text-3xl font-bold leading-none">24 giờ</p>
+            <p className="mt-2 text-theme-sm leading-relaxed text-white/85">
+              là thời gian tối đa để chúng tôi sửa một thông tin sai sau khi bạn báo.
             </p>
           </div>
         </div>
-      </div>
-    </section>
 
-    {/* ============ CHÚNG TÔI LÀM GÌ ============ */}
-    <section className="border-t border-gray-200 bg-gray-50/60 py-20 md:py-28">
-      <div className="site-container">
-        <div className="reveal mx-auto mb-14 max-w-2xl text-center md:mb-16">
-          <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-brand-600">
-            Chúng tôi làm gì
-          </span>
-          <h2 className="mt-3 font-serif text-3xl font-bold text-gray-900 md:text-4xl">
-            Sáu công cụ trên một nền tảng
+        <div className="min-w-0 lg:col-span-7">
+          <Eyebrow>Cam kết</Eyebrow>
+          <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-navy-800 md:text-4xl">
+            {ABOUT.commitments.title}
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-gray-600 md:text-lg">
-            Từ lúc tìm hiểu đến khi ký hợp đồng — mọi thứ bạn cần đều nằm trong
-            RealtyHub, không phải đi hỏi từng nơi.
+          <p className="mt-4 text-base leading-relaxed text-gray-600">
+            {ABOUT.commitments.subtitle}
           </p>
-        </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {CAPABILITIES.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="reveal group flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-xs transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-theme-md md:p-8"
-            >
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-500 group-hover:text-white">
-                <item.icon aria-hidden className="h-6 w-6" />
-              </span>
-
-              <h3 className="mt-5 font-serif text-xl font-bold text-gray-900">
-                {item.title}
-              </h3>
-              <p className="mt-3 flex-1 text-base leading-relaxed text-gray-600">
-                {item.description}
-              </p>
-
-              <span className="mt-5 inline-flex items-center gap-1.5 text-theme-sm font-semibold text-brand-600">
-                Xem chi tiết
-                <FiArrowRight
-                  aria-hidden
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* ============ SỐ LIỆU ============ */}
-    <section className="border-y border-gray-200 bg-gray-50/60 py-16 md:py-24">
-      <div className="site-container">
-        <div className="reveal mx-auto mb-12 max-w-2xl text-center">
-          <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-brand-600">
-            Con số biết nói
-          </span>
-          <h2 className="mt-3 font-serif text-3xl font-bold text-gray-900 md:text-4xl">
-            12 năm đồng hành, một niềm tin
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
-          {ABOUT.metrics.map((metric) => (
-            <div key={metric.label} className="reveal text-center">
-              <div className="font-serif text-5xl font-bold leading-none text-brand-600 md:text-7xl">
-                {metric.value}
-                {metric.suffix && (
-                  <span className="text-brand-500">{metric.suffix}</span>
-                )}
-              </div>
-              <div className="mt-3 text-theme-xs uppercase tracking-[0.2em] text-gray-600 md:text-theme-sm">
-                {metric.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* ============ HÀNH TRÌNH (TIMELINE) ============ */}
-    <section className="site-container py-20 md:py-28">
-      <div className="reveal mx-auto mb-16 max-w-2xl text-center">
-        <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-brand-600">
-          Hành trình
-        </span>
-        <h2 className="mt-3 font-serif text-3xl font-bold text-gray-900 md:text-4xl">
-          Từ ý tưởng nhỏ đến nền tảng quốc gia
-        </h2>
-        <p className="mt-4 text-base text-gray-600 md:text-lg">
-          Sáu năm, năm cột mốc, và hàng nghìn câu chuyện khách hàng đã viết nên RealtyHub.
-        </p>
-      </div>
-
-      {/* Timeline */}
-      <div className="relative mx-auto max-w-4xl">
-        {/* Duong doc noi cac moc */}
-        <div
-          aria-hidden
-          className="absolute left-4 top-0 h-full w-0.5 bg-gradient-to-b from-brand-200 via-brand-400 to-brand-200 md:left-1/2 md:-translate-x-1/2"
-        />
-
-        <ol className="space-y-12 md:space-y-16">
-          {ABOUT.milestones.map((milestone, idx) => {
-            const isEven = idx % 2 === 0;
-            return (
+          <ul className="mt-9 space-y-4">
+            {ABOUT.commitments.items.map((item, index) => (
               <li
-                key={milestone.year}
-                className="relative flex flex-col gap-4 pl-12 md:items-center md:gap-8 md:pl-0"
+                key={item.title}
+                className="reveal group relative flex gap-4 overflow-hidden rounded-xl border border-gray-200 bg-white p-5 transition hover:border-brand-200 hover:shadow-card"
               >
-                {/* Dot - tren dien thoai phai dat o `left-4` cho khop duong doc
-                    (cung `left-4`). De `left-0`, cham vua lech khoi duong vua
-                    bi cat mat 2px o mep man hinh vi no rong 36px ma le trang
-                    chi co 16px. */}
                 <span
                   aria-hidden
-                  className="absolute left-4 top-2 inline-flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-500 shadow-theme-md md:left-1/2"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-xl text-brand-600 transition group-hover:bg-brand-500 group-hover:text-white"
                 >
-                  <span className="h-2 w-2 rounded-full bg-white" />
+                  <item.icon />
                 </span>
 
-                {/* Card */}
-                <div
-                  className={`flex-1 rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-xs md:p-8 ${isEven ? 'md:mr-auto md:max-w-[calc(50%-3rem)] md:pr-12' : 'md:ml-auto md:max-w-[calc(50%-3rem)] md:pl-12'}`}
+                <div className="min-w-0">
+                  <p className="flex items-center gap-2 text-base font-bold text-navy-800">
+                    <FiCheck aria-hidden className="shrink-0 text-brand-500" />
+                    {item.title}
+                  </p>
+                  <p className="mt-1.5 text-theme-sm leading-relaxed text-gray-600">
+                    {item.description}
+                  </p>
+                </div>
+
+                <span
+                  aria-hidden
+                  className="absolute right-4 top-4 text-theme-xs font-bold tracking-[0.2em] text-gray-200"
                 >
-                  {/* Year - dam, lon, brand */}
-                  <div className="font-serif text-3xl font-bold text-brand-600 md:text-4xl">
-                    {milestone.year}
-                  </div>
-                  <h3 className="mt-2 font-serif text-xl font-bold text-gray-900 md:text-2xl">
-                    {milestone.title}
-                  </h3>
-                  <p className="mt-3 text-base leading-relaxed text-gray-600">
-                    {milestone.description}
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    {/* ============ 04 SỐ LIỆU — chu so co lon lam diem nhan ============ */}
+    <section className="site-container py-20 md:py-28">
+      <div className="relative overflow-hidden rounded-3xl bg-gray-50">
+        <div aria-hidden className="absolute inset-0">
+          <Image
+            src={ABOUT.stats.image}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-15"
+          />
+        </div>
+
+        <div className="relative px-6 py-14 md:px-12 md:py-16">
+          <div className="mb-12 text-center">
+            <Eyebrow>Số liệu</Eyebrow>
+            <h2 className="mt-5 text-3xl font-bold tracking-tight text-navy-800 md:text-4xl">
+              {ABOUT.stats.title}
+            </h2>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-theme-xs text-gray-600">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-jade-500" />
+              {ABOUT.stats.updatedAt}
+            </p>
+          </div>
+
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+            {ABOUT.stats.items.map((stat) => (
+              <div key={stat.label} className="reveal text-center">
+                <dd className="text-4xl font-bold leading-none tracking-tight text-brand-600 md:text-5xl">
+                  {stat.value}
+                </dd>
+                <dt className="mt-3 text-theme-sm font-bold text-navy-800">{stat.label}</dt>
+                <p className="mt-1 text-theme-xs text-gray-500">{stat.note}</p>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    {/* ============ 05 QUY TRÌNH — lech truc: buoc trai, anh phai ============ */}
+    <section className="border-y border-gray-200 bg-gray-50/70 py-20 md:py-28">
+      <div className="site-container grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="min-w-0 lg:col-span-7">
+          <Eyebrow>Quy trình</Eyebrow>
+          <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-navy-800 md:text-4xl">
+            {ABOUT.curation.title}
+          </h2>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-gray-600">
+            {ABOUT.curation.subtitle}
+          </p>
+
+          <ol className="mt-10 space-y-6">
+            {ABOUT.curation.steps.map((step, index) => (
+              <li key={step.title} className="reveal flex gap-5">
+                <span
+                  aria-hidden
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-brand-500 text-theme-sm font-bold text-brand-600"
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <div className="min-w-0 border-b border-gray-200 pb-6">
+                  <h3 className="text-base font-bold text-navy-800">{step.title}</h3>
+                  <p className="mt-1.5 text-theme-sm leading-relaxed text-gray-600">
+                    {step.description}
                   </p>
                 </div>
               </li>
-            );
-          })}
-        </ol>
+            ))}
+          </ol>
+        </div>
+
+        <div className="reveal lg:col-span-5">
+          <div className="relative aspect-3/4 overflow-hidden rounded-2xl bg-white shadow-card-hover">
+            <Image
+              src={ABOUT.curation.image}
+              alt="Mặt bằng phân lô được số hoá trên RealtyHub"
+              fill
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <p className="mt-3 text-center text-theme-xs text-gray-500">
+            Mặt bằng phân lô được số hoá theo bản chủ đầu tư công bố
+          </p>
+        </div>
       </div>
     </section>
 
-    {/* ============ ĐỘI NGŨ ============ */}
-    <section className="bg-gray-50/60 py-20 md:py-28">
-      <div className="site-container">
-        <div className="reveal mx-auto mb-16 max-w-2xl text-center">
-          <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-brand-600">
-            Đội ngũ
-          </span>
-          <h2 className="mt-3 font-serif text-3xl font-bold text-gray-900 md:text-4xl">
-            Những người đứng sau RealtyHub
+    {/* ============ 06 CÔNG CỤ — the dau chiem 2 cot lam diem nhan ============ */}
+    <section className="site-container py-20 md:py-28">
+      <div className="mb-14 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-2xl">
+          <Eyebrow>Sản phẩm</Eyebrow>
+          <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-navy-800 md:text-4xl">
+            {ABOUT.modules.title}
           </h2>
-          <p className="mt-4 text-base text-gray-600 md:text-lg">
-            Một đội ngũ đa ngành, cùng chung một niềm tin: công nghệ có thể giúp
-            thị trường bất động sản minh bạch hơn.
+          <p className="mt-4 text-base leading-relaxed text-gray-600">
+            {ABOUT.modules.subtitle}
           </p>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {ABOUT.team.map((member) => (
-            <article
-              key={member.publicId}
-              className="reveal group relative flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-theme-xs transition hover:-translate-y-1 hover:shadow-theme-md md:p-8"
-            >
-              <UserAvatar
-                name={member.name}
-                src={member.avatar}
-                size={88}
-              />
-
-              <h3 className="mt-5 font-serif text-xl font-bold text-gray-900">
-                {member.name}
-              </h3>
-              <p className="mt-1 text-theme-xs uppercase tracking-[0.2em] text-brand-600">
-                {member.role}
-              </p>
-
-              {member.quote && (
-                <blockquote className="mt-4 font-serif text-base italic leading-relaxed text-gray-600">
-                  {member.quote}
-                </blockquote>
-              )}
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* ============ GIÁ TRỊ CỐT LÕI ============ */}
-    <section className="site-container py-20 md:py-28">
-      <div className="reveal mx-auto mb-16 max-w-2xl text-center">
-        <span className="inline-block text-theme-xs font-semibold uppercase tracking-[0.25em] text-brand-600">
-          Giá trị cốt lõi
-        </span>
-        <h2 className="mt-3 font-serif text-3xl font-bold text-gray-900 md:text-4xl">
-          Bốn nguyên tắc dẫn lối
-        </h2>
+        <Link
+          href="/tinh-nang"
+          className="group inline-flex shrink-0 items-center gap-2 text-theme-sm font-semibold text-brand-600 transition hover:text-brand-700"
+        >
+          Xem toàn bộ tính năng
+          <FiArrowRight aria-hidden className="transition-transform group-hover:translate-x-1" />
+        </Link>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-        {ABOUT.values.map((value) => (
-          <article
-            key={value.publicId}
-            className="reveal group rounded-2xl border border-gray-100 bg-white p-6 shadow-theme-xs transition hover:-translate-y-1 hover:shadow-theme-md md:p-8"
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {ABOUT.modules.items.map((item, index) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`reveal group relative flex flex-col overflow-hidden rounded-2xl bg-navy-900 transition duration-300 hover:-translate-y-1 hover:shadow-card-hover ${
+              index === 0 ? 'sm:col-span-2 lg:col-span-2' : ''
+            }`}
           >
-            <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-500 group-hover:text-white md:h-14 md:w-14">
-              <value.icon aria-hidden className="h-6 w-6 md:h-7 md:w-7" />
-            </span>
-            <h3 className="mt-5 font-serif text-xl font-bold text-gray-900">
-              {value.title}
-            </h3>
-            <p className="mt-3 text-base leading-relaxed text-gray-600">
-              {value.description}
-            </p>
-          </article>
+            <div className={`relative ${index === 0 ? 'aspect-video' : 'aspect-16/10'}`}>
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                sizes={index === 0 ? '(min-width: 1024px) 66vw, 100vw' : '(min-width: 1024px) 33vw, 100vw'}
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-navy-900 via-navy-900/45 to-transparent" />
+            </div>
+
+            {/* Chu dat trong lop phu chu khong duoi anh: khoi lien mach, dac
+                hon hai o roi rac va anh duoc dung to hon. */}
+            <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+              <span
+                aria-hidden
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-xl text-white backdrop-blur-sm"
+              >
+                <item.icon />
+              </span>
+              <h3
+                className={`mt-4 font-bold text-white ${
+                  index === 0 ? 'text-xl md:text-2xl' : 'text-base'
+                }`}
+              >
+                {item.title}
+              </h3>
+              <p
+                className={`mt-2 leading-relaxed text-white/75 ${
+                  index === 0 ? 'max-w-lg text-theme-sm md:text-base' : 'text-theme-sm'
+                }`}
+              >
+                {item.description}
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-theme-sm font-semibold text-brand-300">
+                Xem chi tiết
+                <FiArrowRight
+                  aria-hidden
+                  className="transition-transform group-hover:translate-x-1"
+                />
+              </span>
+            </div>
+          </Link>
         ))}
       </div>
     </section>
 
-    {/* ============ CTA CUỐI ============ */}
-    <section className="bg-gray-900 py-20 text-white md:py-28">
+    {/* ============ 07 PHÁP NHÂN ============ */}
+    <section className="border-y border-gray-200 bg-gray-50/70 py-20 md:py-28">
       <div className="site-container">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-serif text-3xl font-light italic leading-tight md:text-5xl">
-            Cùng chúng tôi viết tiếp
-            <br />
-            <span className="font-bold">câu chuyện bất động sản Việt</span>
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <Eyebrow>Pháp nhân</Eyebrow>
+          <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-navy-800 md:text-4xl">
+            {ABOUT.company.title}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
-            Dù bạn là khách hàng đang tìm nhà, hay môi giới đang tìm nền tảng
-            chuyên nghiệp — RealtyHub luôn sẵn sàng đồng hành.
+          <p className="mt-4 text-base leading-relaxed text-gray-600">
+            {ABOUT.company.subtitle}
           </p>
+        </div>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="grid gap-6 lg:grid-cols-12">
+          <div className="reveal rounded-2xl border-t-4 border-brand-500 bg-white p-7 shadow-card lg:col-span-5">
+            <h3 className="text-lg font-bold text-navy-800">{ABOUT.company.legalName}</h3>
+
+            <dl className="mt-5 grid gap-4 sm:grid-cols-2">
+              {[
+                { label: 'Giấy phép ĐKKD', value: ABOUT.company.license },
+                { label: 'Đăng ký lần đầu', value: ABOUT.company.since },
+              ].map((row) => (
+                <div key={row.label} className="rounded-xl bg-gray-50 px-4 py-3">
+                  <dt className="text-theme-xs uppercase tracking-wide text-gray-500">
+                    {row.label}
+                  </dt>
+                  <dd className="mt-1 text-theme-sm font-bold text-navy-800">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <p className="mt-5 text-theme-sm text-gray-600">
+              <span className="text-gray-500">Đại diện pháp luật: </span>
+              <span className="font-semibold text-gray-800">
+                {ABOUT.company.representative}
+              </span>
+            </p>
+
+            <ul className="mt-6 space-y-3 border-t border-gray-100 pt-5 text-theme-sm">
+              <li className="flex items-start gap-2.5">
+                <FiMapPin aria-hidden className="mt-1 shrink-0 text-brand-500" />
+                <span className="text-gray-600">{ABOUT.company.headquarters}</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <FiPhone aria-hidden className="mt-1 shrink-0 text-brand-500" />
+                <span className="flex flex-wrap gap-x-3">
+                  {ABOUT.company.phones.map((phone) => (
+                    <a
+                      key={phone}
+                      href={`tel:${phone.replace(/\s/g, '')}`}
+                      className="font-semibold text-gray-700 transition hover:text-brand-600"
+                    >
+                      {phone}
+                    </a>
+                  ))}
+                </span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <FiMail aria-hidden className="mt-1 shrink-0 text-brand-500" />
+                <a
+                  href={`mailto:${ABOUT.company.email}`}
+                  className="text-gray-600 transition hover:text-brand-600"
+                >
+                  {ABOUT.company.email}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="reveal rounded-2xl border border-gray-200 bg-white p-7 lg:col-span-3">
+            <h3 className="text-theme-sm font-bold uppercase tracking-wide text-navy-800">
+              Văn phòng
+            </h3>
+            <ul className="mt-5 space-y-4 text-theme-sm">
+              {ABOUT.company.offices.map((office) => (
+                <li key={office.city} className="border-l-2 border-gray-200 pl-3">
+                  <span className="block font-bold text-gray-800">{office.city}</span>
+                  <span className="mt-0.5 block leading-relaxed text-gray-500">
+                    {office.address}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="reveal rounded-2xl bg-navy-800 p-7 text-white lg:col-span-4">
+            <h3 className="flex items-center gap-2 text-theme-sm font-bold uppercase tracking-wide">
+              <HiOutlineTrophy aria-hidden className="h-5 w-5 text-gold-400" />
+              Ghi nhận từ thị trường
+            </h3>
+            <ul className="mt-5 space-y-4">
+              {ABOUT.company.awards.map((award) => (
+                <li key={award.title} className="border-b border-white/10 pb-4 last:border-b-0">
+                  <span className="block text-theme-sm font-semibold leading-snug text-white">
+                    {award.title}
+                  </span>
+                  <span className="mt-1 block text-theme-xs text-gold-400">{award.period}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ============ 08 CÔNG TY THÀNH VIÊN ============ */}
+    <section id="cong-ty-thanh-vien" className="site-container py-20 md:py-28">
+      <div className="mx-auto mb-12 max-w-2xl text-center">
+        <Eyebrow>Hệ thống</Eyebrow>
+        <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-navy-800 md:text-4xl">
+          {MEMBER_COMPANIES.length} công ty thành viên
+        </h2>
+        <p className="mt-4 text-base leading-relaxed text-gray-600">
+          Địa chỉ trụ sở của các công ty trong hệ thống Đông Tây Group.
+        </p>
+      </div>
+
+      <MemberCompaniesTable />
+    </section>
+
+    {/* ============ 09 CÂU HỎI THẲNG ============ */}
+    <section className="site-container py-20 md:py-28">
+      <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-4">
+          <Eyebrow>Minh bạch</Eyebrow>
+          <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-navy-800 md:text-4xl">
+            {ABOUT.faq.title}
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-gray-600">{ABOUT.faq.subtitle}</p>
+
+          <div className="mt-8 rounded-2xl bg-brand-25 p-6">
+            <p className="text-theme-sm font-bold text-navy-800">Còn câu hỏi khác?</p>
+            <p className="mt-1.5 text-theme-sm leading-relaxed text-gray-600">
+              Gọi {ABOUT.company.phones[0]} hoặc gửi email — chúng tôi trả lời trong 24 giờ làm
+              việc.
+            </p>
             <Link
-              href="/gio-hang"
-              className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-theme-sm font-semibold text-gray-900 shadow-theme-sm transition hover:bg-gray-100"
+              href="/lien-he-chung-toi"
+              className="group mt-4 inline-flex items-center gap-1.5 text-theme-sm font-semibold text-brand-600"
             >
-              Khám phá dự án
+              Liên hệ chúng tôi
               <FiArrowRight
                 aria-hidden
-                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                className="transition-transform group-hover:translate-x-1"
               />
             </Link>
-            <Link
-              href="/tro-thanh-moi-gioi"
-              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-theme-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
-            >
-              Trở thành đối tác
-            </Link>
           </div>
+        </div>
+
+        <div className="min-w-0 lg:col-span-8">
+          <div className="divide-y divide-gray-200 overflow-hidden rounded-2xl border border-gray-200">
+            {ABOUT.faq.items.map((item, index) => (
+              <details
+                key={item.question}
+                open={index === 0}
+                className="group bg-white px-6 py-5 open:bg-gray-50/70"
+              >
+                <summary className="flex cursor-pointer items-center justify-between gap-4 text-base font-bold text-navy-800 marker:content-none">
+                  {item.question}
+                  <span
+                    aria-hidden
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-gray-300 text-lg leading-none text-gray-500 transition group-open:rotate-45 group-open:border-brand-500 group-open:bg-brand-500 group-open:text-white"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 pr-11 text-theme-sm leading-relaxed text-gray-600">
+                  {item.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ============ 10 CTA ============ */}
+    <section className="relative isolate overflow-hidden bg-navy-900 py-20 text-white md:py-28">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <Image
+          src="/images/heroes/tinh-nang.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-linear-to-r from-navy-900/96 via-navy-900/88 to-brand-900/80" />
+      </div>
+
+      <div className="site-container grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-6">
+          <Eyebrow tone="light">Bắt đầu</Eyebrow>
+          <h2 className="mt-5 text-3xl font-bold leading-tight tracking-tight md:text-4xl">
+            {ABOUT.cta.title}
+          </h2>
+          <p className="mt-5 text-base leading-relaxed text-white/75 md:text-lg">
+            {ABOUT.cta.body}
+          </p>
+
+          <Link
+            href={ABOUT.cta.buyerHref}
+            className="group mt-9 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-theme-sm font-semibold text-navy-800 transition hover:bg-white/90"
+          >
+            {ABOUT.cta.buyerLabel}
+            <FiArrowRight aria-hidden className="transition-transform group-hover:translate-x-1" />
+          </Link>
+
+          <p className="mt-10 border-t border-white/15 pt-6 text-theme-sm text-white/65">
+            {ABOUT.cta.agentNote}
+          </p>
+        </div>
+
+        <div className="lg:col-span-6">
+          <PartnerSignupForm />
         </div>
       </div>
     </section>
